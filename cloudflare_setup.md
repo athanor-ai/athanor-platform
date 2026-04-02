@@ -7,8 +7,8 @@ How we exposed the locally-running Athanor Next.js app via Cloudflare Tunnel for
 ## 1. Clone the repo and check out the implementation branch
 
 ```bash
-git clone https://github.com/athanor-ai/athanor.git
-cd athanor
+git clone https://github.com/athanor-ai/athanor-platform.git
+cd athanor-platform
 git checkout cofounder-cto/scaffold-athanor-platform
 ```
 
@@ -70,8 +70,8 @@ Pass the public URL to any remote browser, device, or automated test runner. The
 
 ```bash
 # 1. Clone & checkout
-git clone https://github.com/athanor-ai/athanor.git
-cd athanor
+git clone https://github.com/athanor-ai/athanor-platform.git
+cd athanor-platform
 git checkout cofounder-cto/scaffold-athanor-platform
 
 # 2. Install
