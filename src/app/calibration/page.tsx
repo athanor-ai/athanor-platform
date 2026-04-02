@@ -6,6 +6,12 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import { Card, CardHeader, CardTitle } from "@/components/ui/Card";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { LoadingState } from "@/components/ui/LoadingState";
+import {
+  REAL_HEATMAP_DATA,
+  getModelMeanScore,
+} from "@/data/heatmap";
+import { ATHANOR_MODELS } from "@/data/models";
+import { ATHANOR_ENVIRONMENTS } from "@/data/environments";
 import type { CalibrationProfile } from "@/types/database";
 
 function sigmoid(x: number, center: number, steepness: number): number {
@@ -327,6 +333,139 @@ export default function CalibrationPage() {
           </Card>
         </div>
       </div>
+
+      {/* Environment × Model Score Heatmap */}
+      <div className="mt-8">
+        <div className="mb-3 text-[11px] font-medium uppercase tracking-wider text-text-tertiary">
+          Environment &times; Model Score Heatmap — run-1 baseline scores from real dryruns
+        </div>
+        <Card>
+          <CardHeader>
+            <CardTitle>Cross-Environment Heatmap</CardTitle>
+            <span className="text-[11px] text-text-tertiary">
+              Mean scores from dryrun data across all 6 environments and 5 models
+            </span>
+          </CardHeader>
+          <div className="overflow-x-auto">
+            <table className="w-full text-xs">
+              <thead>
+                <tr className="border-b border-border">
+                  <th className="px-3 py-2 text-left text-[11px] font-medium text-text-tertiary">
+                    Environment
+                  </th>
+                  {ATHANOR_MODELS.map((m) => (
+                    <th
+                      key={m.slug}
+                      className="px-3 py-2 text-center text-[11px] font-medium text-text-tertiary"
+                    >
+                      {m.displayName}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {ATHANOR_ENVIRONMENTS.map((env) => (
+                  <tr key={env.id} className="border-b border-border/50">
+                    <td className="px-3 py-2 font-medium text-text-primary">
+                      {env.name}
+                    </td>
+                    {ATHANOR_MODELS.map((m) => {
+                      const score = getModelMeanScore(env.slug, m.slug);
+                      const bg = score !== null
+                        ? score >= 0.7
+                          ? "bg-green-900/30"
+                          : score >= 0.4
+                            ? "bg-yellow-900/20"
+                            : "bg-red-900/20"
+                        : "";
+                      return (
+                        <td
+                          key={m.slug}
+                          className={`px-3 py-2 text-center font-mono ${bg}`}
+                        >
+                          {score !== null ? score.toFixed(3) : "\u2014"}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </Card>
+      </div>
+
+      {/* Per-environment task-level heatmap */}
+      {ATHANOR_ENVIRONMENTS.map((env) => {
+        const envData = REAL_HEATMAP_DATA[env.slug];
+        if (!envData) return null;
+        const firstModel = ATHANOR_MODELS[0];
+        const taskList = envData[firstModel.slug] ?? [];
+        return (
+          <div key={env.id} className="mt-6">
+            <div className="mb-2 text-[11px] font-medium uppercase tracking-wider text-text-tertiary">
+              {env.name} — {taskList.length} tasks
+            </div>
+            <Card>
+              <div className="overflow-x-auto">
+                <table className="w-full text-[11px]">
+                  <thead>
+                    <tr className="border-b border-border">
+                      <th className="px-2 py-1.5 text-left font-medium text-text-tertiary">
+                        Task
+                      </th>
+                      {ATHANOR_MODELS.map((m) => (
+                        <th
+                          key={m.slug}
+                          className="px-2 py-1.5 text-center font-medium text-text-tertiary"
+                        >
+                          {m.displayName}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {taskList.map((cell) => (
+                      <tr
+                        key={cell.task}
+                        className="border-b border-border/30"
+                      >
+                        <td className="px-2 py-1 font-mono text-text-secondary">
+                          {cell.task}
+                        </td>
+                        {ATHANOR_MODELS.map((m) => {
+                          const modelTasks = envData[m.slug] ?? [];
+                          const entry = modelTasks.find(
+                            (t) => t.task === cell.task,
+                          );
+                          const s = entry?.score ?? null;
+                          const cellBg = s !== null
+                            ? s >= 0.9
+                              ? "bg-green-900/40 text-green-300"
+                              : s >= 0.5
+                                ? "bg-yellow-900/30 text-yellow-300"
+                                : s > 0
+                                  ? "bg-red-900/20 text-red-300"
+                                  : "text-text-tertiary"
+                            : "text-text-tertiary";
+                          return (
+                            <td
+                              key={m.slug}
+                              className={`px-2 py-1 text-center font-mono ${cellBg}`}
+                            >
+                              {s !== null ? s.toFixed(3) : "\u2014"}
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </Card>
+          </div>
+        );
+      })}
     </>
   );
 }

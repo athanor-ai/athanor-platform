@@ -1,0 +1,132 @@
+[
+  {
+    "task": "fix_raft_safety",
+    "score": 0.81983,
+    "status": "PASS"
+  },
+  {
+    "task": "implement_chain_replication",
+    "score": 0.470946,
+    "status": "PASS"
+  },
+  {
+    "task": "implement_pbft",
+    "score": 0.179925,
+    "status": "PASS"
+  },
+  {
+    "task": "fix_distributed_snapshot",
+    "score": 1,
+    "status": "PASS"
+  },
+  {
+    "task": "implement_epidemic_broadcast",
+    "score": 0.003796,
+    "status": "PASS"
+  },
+  {
+    "task": "implement_shard_migration",
+    "score": 1,
+    "status": "PASS"
+  },
+  {
+    "task": "implement_bft_kv_store",
+    "score": 0.40708,
+    "status": "PASS"
+  },
+  {
+    "task": "implement_crdt_raft",
+    "score": 0.751569,
+    "status": "PASS"
+  },
+  {
+    "task": "fix_distributed_lock",
+    "score": 0.679965,
+    "status": "PASS"
+  },
+  {
+    "task": "implement_consistent_broadcast",
+    "score": 1,
+    "status": "PASS"
+  },
+  {
+    "task": "hybrid_clock",
+    "score": 0.9172364032547359,
+    "status": "PASS"
+  },
+  {
+    "task": "implement_lsm_compaction",
+    "score": 1,
+    "status": "PASS"
+  },
+  {
+    "task": "implement_read_repair",
+    "score": 0,
+    "status": "PASS"
+  },
+  {
+    "task": "implement_raft_log",
+    "score": 1,
+    "status": "PASS"
+  },
+  {
+    "task": "swim_protocol",
+    "score": 0.9744145886708848,
+    "status": "PASS"
+  },
+  {
+    "task": "paxos_prepare",
+    "score": 1,
+    "status": "PASS"
+  },
+  {
+    "task": "fix_snapshot_replication",
+    "score": 0.306348,
+    "status": "PASS"
+  },
+  {
+    "task": "twopc_crash",
+    "score": 1,
+    "status": "PASS"
+  },
+  {
+    "task": "virtual_nodes",
+    "score": 0.8950064145964933,
+    "status": "PASS"
+  },
+  {
+    "task": "fix_raft_snapshot_crdt",
+    "score": 0.466935,
+    "status": "PASS"
+  },
+  {
+    "task": "fix_txn_coordinator",
+    "score": 1,
+    "status": "PASS"
+  },
+  {
+    "task": "fix_consistent_hash_replication",
+    "score": 1,
+    "status": "PASS"
+  },
+  {
+    "task": "verify_two_phase_commit",
+    "score": 1,
+    "status": "PASS"
+  },
+  {
+    "task": "verify_replicated_kv",
+    "score": 1,
+    "status": "PASS"
+  },
+  {
+    "task": "verify_distributed_lock",
+    "score": 1,
+    "status": "PASS"
+  },
+  {
+    "task": "verify_log_compaction",
+    "score": 0.6819547009985492,
+    "status": "PASS"
+  }
+]

@@ -1,0 +1,122 @@
+[
+  {
+    "task": "fix-cubic-slow-start",
+    "score": 0.758267,
+    "status": "PASS"
+  },
+  {
+    "task": "fix-fairness-under-competition",
+    "score": 0.409423,
+    "status": "PASS"
+  },
+  {
+    "task": "fix-cubic-units",
+    "score": 0.493585,
+    "status": "PASS"
+  },
+  {
+    "task": "fix-slow-convergence",
+    "score": 0.210974,
+    "status": "PASS"
+  },
+  {
+    "task": "fix-stale-ssthresh",
+    "score": 0.393633,
+    "status": "PASS"
+  },
+  {
+    "task": "fix-three-bugs",
+    "score": 0.641496,
+    "status": "PASS"
+  },
+  {
+    "task": "implement-bbr",
+    "score": 0,
+    "status": "PASS"
+  },
+  {
+    "task": "fix-timeout-handling",
+    "score": 0.493755,
+    "status": "PASS"
+  },
+  {
+    "task": "implement-compound",
+    "score": 0.410599,
+    "status": "PASS"
+  },
+  {
+    "task": "implement-cubic",
+    "score": 0.459475,
+    "status": "PASS"
+  },
+  {
+    "task": "implement-fast-recovery",
+    "score": 0.501097,
+    "status": "PASS"
+  },
+  {
+    "task": "implement-ledbat",
+    "score": 0.449224,
+    "status": "PASS"
+  },
+  {
+    "task": "implement-mult-decrease",
+    "score": 0.571482,
+    "status": "PASS"
+  },
+  {
+    "task": "implement-loss-differentiated",
+    "score": 0.500192,
+    "status": "PASS"
+  },
+  {
+    "task": "implement-vegas",
+    "score": 0.09575,
+    "status": "PASS"
+  },
+  {
+    "task": "tune-high-bdp",
+    "score": 0.75698,
+    "status": "PASS"
+  },
+  {
+    "task": "fix-aimd",
+    "score": 0.281522,
+    "status": "PASS"
+  },
+  {
+    "task": "implement-westwood",
+    "score": 0.46481,
+    "status": "PASS"
+  },
+  {
+    "task": "fix-recovery-deadlock",
+    "score": 0.492693,
+    "status": "PASS"
+  },
+  {
+    "task": "fix-competing-flows",
+    "score": 0.467163,
+    "status": "PASS"
+  },
+  {
+    "task": "implement-pcc",
+    "score": 0,
+    "status": "PASS"
+  },
+  {
+    "task": "verify-aimd-safety",
+    "score": 0,
+    "status": "PASS"
+  },
+  {
+    "task": "verify-flow-fairness",
+    "score": 0,
+    "status": "PASS"
+  },
+  {
+    "task": "verify-sliding-window",
+    "score": 0,
+    "status": "PASS"
+  }
+]

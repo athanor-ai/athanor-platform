@@ -1,0 +1,142 @@
+[
+  {
+    "task": "csparse_ipvec",
+    "score": 0.262288,
+    "status": "PASS"
+  },
+  {
+    "task": "csparse_gaxpy",
+    "score": 0.302021,
+    "status": "PASS"
+  },
+  {
+    "task": "csparse_lsolve",
+    "score": 0.419064,
+    "status": "PASS"
+  },
+  {
+    "task": "csparse_cumsum",
+    "score": 0.260128,
+    "status": "PASS"
+  },
+  {
+    "task": "csparse_dfs",
+    "score": 0,
+    "status": "PASS"
+  },
+  {
+    "task": "csparse_norm",
+    "score": 0.486115,
+    "status": "PASS"
+  },
+  {
+    "task": "csparse_lu",
+    "score": 0,
+    "status": "PASS"
+  },
+  {
+    "task": "csparse_pvec",
+    "score": 0.302708,
+    "status": "PASS"
+  },
+  {
+    "task": "csparse_reach",
+    "score": 0.173403,
+    "status": "PASS"
+  },
+  {
+    "task": "csparse_scatter",
+    "score": 0.177688,
+    "status": "PASS"
+  },
+  {
+    "task": "csparse_multiply",
+    "score": 0.1,
+    "status": "PASS"
+  },
+  {
+    "task": "csparse_symperm",
+    "score": 0.106348,
+    "status": "PASS"
+  },
+  {
+    "task": "csparse_spsolve",
+    "score": 0.148545,
+    "status": "PASS"
+  },
+  {
+    "task": "csparse_usolve",
+    "score": 0.373205,
+    "status": "PASS"
+  },
+  {
+    "task": "csparse_transpose",
+    "score": 0.287496,
+    "status": "PASS"
+  },
+  {
+    "task": "csc_col_norm",
+    "score": 0.430117,
+    "status": "PASS"
+  },
+  {
+    "task": "csc_matvec",
+    "score": 0.33642,
+    "status": "PASS"
+  },
+  {
+    "task": "csc_nnz",
+    "score": 0.206124,
+    "status": "PASS"
+  },
+  {
+    "task": "dense_to_csc",
+    "score": 0.299325,
+    "status": "PASS"
+  },
+  {
+    "task": "vec_add",
+    "score": 0.300346,
+    "status": "PASS"
+  },
+  {
+    "task": "csc_filter",
+    "score": 0.181719,
+    "status": "PASS"
+  },
+  {
+    "task": "vec_dot",
+    "score": 0.289521,
+    "status": "PASS"
+  },
+  {
+    "task": "vec_max",
+    "score": 0.425243,
+    "status": "PASS"
+  },
+  {
+    "task": "vec_scale",
+    "score": 0.738475,
+    "status": "PASS"
+  },
+  {
+    "task": "mat_diag",
+    "score": 0.253851,
+    "status": "PASS"
+  },
+  {
+    "task": "verus_vec_add_proof",
+    "score": 0,
+    "status": "PASS"
+  },
+  {
+    "task": "verus_perm_proof",
+    "score": 0,
+    "status": "PASS"
+  },
+  {
+    "task": "verus_cumsum_proof",
+    "score": 0,
+    "status": "PASS"
+  }
+]
