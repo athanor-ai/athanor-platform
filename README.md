@@ -62,4 +62,4 @@ supabase/
 
 ---
 
-_Last deploy trigger: 2025-04-02_
+_Last deploy trigger: 2026-04-02_
