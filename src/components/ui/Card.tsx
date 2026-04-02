@@ -5,11 +5,13 @@ export function Card({
   className,
   padding = "md",
   hover = false,
+  onClick,
 }: {
   children: React.ReactNode;
   className?: string;
   padding?: "none" | "sm" | "md" | "lg";
   hover?: boolean;
+  onClick?: () => void;
 }) {
   return (
     <div
@@ -24,6 +26,19 @@ export function Card({
         hover && "transition-colors duration-150 hover:border-accent/30 hover:bg-surface-overlay",
         className,
       )}
+      onClick={onClick}
+      role={onClick ? "button" : undefined}
+      tabIndex={onClick ? 0 : undefined}
+      onKeyDown={
+        onClick
+          ? (e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                onClick();
+              }
+            }
+          : undefined
+      }
     >
       {children}
     </div>

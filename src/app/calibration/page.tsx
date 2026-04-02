@@ -1,11 +1,10 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useCalibrationProfiles } from "@/hooks/useCalibration";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Card, CardHeader, CardTitle } from "@/components/ui/Card";
 import { StatusBadge } from "@/components/ui/StatusBadge";
-import { Button } from "@/components/ui/Button";
 import { LoadingState } from "@/components/ui/LoadingState";
 import type { CalibrationProfile } from "@/types/database";
 
@@ -156,9 +155,21 @@ function SigmoidPreview({
   );
 }
 
-function ProfileCard({ profile }: { profile: CalibrationProfile }) {
+function ProfileCard({
+  profile,
+  isSelected,
+  onSelect,
+}: {
+  profile: CalibrationProfile;
+  isSelected: boolean;
+  onSelect: () => void;
+}) {
   return (
-    <Card hover className="mb-3">
+    <Card
+      hover
+      className={`mb-3 cursor-pointer transition-colors ${isSelected ? "ring-1 ring-accent" : ""}`}
+      onClick={onSelect}
+    >
       <div className="flex items-start justify-between">
         <div>
           <div className="flex items-center gap-2">
@@ -167,6 +178,9 @@ function ProfileCard({ profile }: { profile: CalibrationProfile }) {
             </span>
             {profile.is_default && (
               <StatusBadge status="default" variant="accent" />
+            )}
+            {isSelected && !profile.is_default && (
+              <StatusBadge status="viewing" variant="accent" />
             )}
           </div>
           <p className="mt-1 text-xs leading-relaxed text-text-secondary">
@@ -216,10 +230,19 @@ export default function CalibrationPage() {
     () => calibration.data ?? [],
     [calibration.data],
   );
-  const defaultProfile = useMemo(
-    () => profiles.find((p) => p.is_default) ?? profiles[0],
+
+  // Default to the default profile, but allow clicking to switch
+  const defaultIdx = useMemo(
+    () => {
+      const idx = profiles.findIndex((p) => p.is_default);
+      return idx >= 0 ? idx : 0;
+    },
     [profiles],
   );
+
+  const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
+  const activeIdx = selectedIdx ?? defaultIdx;
+  const activeProfile = profiles[activeIdx];
 
   if (calibration.isPending) {
     return (
@@ -227,7 +250,6 @@ export default function CalibrationPage() {
         <PageHeader
           title="Calibration"
           description="Score calibration profiles for normalizing raw evaluation scores"
-          actions={<Button variant="primary">New Profile</Button>}
         />
         <LoadingState message="Loading calibration profiles..." />
       </>
@@ -239,14 +261,13 @@ export default function CalibrationPage() {
       <PageHeader
         title="Calibration"
         description="Score calibration profiles for normalizing raw evaluation scores"
-        actions={<Button variant="primary">New Profile</Button>}
       />
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-5">
         {/* Left: Profile list */}
         <div className="lg:col-span-3">
           <div className="mb-3 text-[11px] font-medium uppercase tracking-wider text-text-tertiary">
-            Profiles ({profiles.length})
+            Profiles ({profiles.length}) — click to preview
           </div>
           {profiles.length === 0 ? (
             <Card>
@@ -255,8 +276,13 @@ export default function CalibrationPage() {
               </div>
             </Card>
           ) : (
-            profiles.map((profile) => (
-              <ProfileCard key={profile.id} profile={profile} />
+            profiles.map((profile, idx) => (
+              <ProfileCard
+                key={profile.id}
+                profile={profile}
+                isSelected={idx === activeIdx}
+                onSelect={() => setSelectedIdx(idx)}
+              />
             ))
           )}
         </div>
@@ -269,20 +295,20 @@ export default function CalibrationPage() {
           <Card>
             <CardHeader>
               <CardTitle>
-                {defaultProfile?.name ?? "Sigmoid"} Curve
+                {activeProfile?.name ?? "Sigmoid"} Curve
               </CardTitle>
-              {defaultProfile && (
+              {activeProfile && (
                 <span className="text-[11px] text-text-tertiary">
-                  center={defaultProfile.sigmoid_center} steepness=
-                  {defaultProfile.sigmoid_steepness}
+                  center={activeProfile.sigmoid_center} steepness=
+                  {activeProfile.sigmoid_steepness}
                 </span>
               )}
             </CardHeader>
-            {defaultProfile ? (
+            {activeProfile ? (
               <div className="flex justify-center">
                 <SigmoidPreview
-                  center={defaultProfile.sigmoid_center}
-                  steepness={defaultProfile.sigmoid_steepness}
+                  center={activeProfile.sigmoid_center}
+                  steepness={activeProfile.sigmoid_steepness}
                 />
               </div>
             ) : (
@@ -290,11 +316,11 @@ export default function CalibrationPage() {
                 No profile selected
               </div>
             )}
-            {defaultProfile && (
+            {activeProfile && (
               <div className="mt-3 rounded-md bg-surface-overlay px-3 py-2 text-[11px] text-text-tertiary">
                 <span className="font-mono">
-                  y = 1 / (1 + exp(-{defaultProfile.sigmoid_steepness} * (x -{" "}
-                  {defaultProfile.sigmoid_center})))
+                  y = 1 / (1 + exp(-{activeProfile.sigmoid_steepness} * (x -{" "}
+                  {activeProfile.sigmoid_center})))
                 </span>
               </div>
             )}

@@ -2,33 +2,11 @@
 
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Card, CardTitle } from "@/components/ui/Card";
+import { CopyButton } from "@/components/ui/CopyButton";
 
-export default function TrainingPage() {
-  return (
-    <>
-      <PageHeader
-        title="Training"
-        description="RL wrapper and infrastructure integration guides for Athanor verification environments"
-      />
+const DOCKER_PULL = "docker pull athanor/rl-wrapper:latest";
 
-      <div className="space-y-6">
-        {/* Docker Integration */}
-        <Card padding="lg">
-          <CardTitle>Docker Integration</CardTitle>
-          <p className="mt-2 text-xs leading-relaxed text-text-secondary">
-            Build and run training containers using the Athanor RL wrapper image.
-            The wrapper provides a standardized interface for connecting your
-            reinforcement learning agent to any Athanor environment — from Lean
-            theorem proving to hardware verification with EBMC.
-          </p>
-          <pre className="mt-4 overflow-x-auto rounded-md bg-surface p-4 font-mono text-xs leading-relaxed text-text-secondary">
-{`docker pull athanor/rl-wrapper:latest`}
-          </pre>
-          <p className="mt-4 text-xs leading-relaxed text-text-secondary">
-            Example Dockerfile for a Lean theorem proving training container:
-          </p>
-          <pre className="mt-2 overflow-x-auto rounded-md bg-surface p-4 font-mono text-xs leading-relaxed text-text-secondary">
-{`FROM athanor/rl-wrapper:latest
+const DOCKERFILE = `FROM athanor/rl-wrapper:latest
 
 WORKDIR /app
 COPY requirements.txt .
@@ -40,20 +18,9 @@ COPY agent/ ./agent/
 ENV ATHANOR_ENV=lean-theorem-proving
 ENV ATHANOR_MODEL=claude-3.5-sonnet
 
-CMD ["python", "train.py"]`}
-          </pre>
-        </Card>
+CMD ["python", "train.py"]`;
 
-        {/* Kubernetes Deployment */}
-        <Card padding="lg">
-          <CardTitle>Kubernetes Deployment</CardTitle>
-          <p className="mt-2 text-xs leading-relaxed text-text-secondary">
-            Deploy training jobs to a Kubernetes cluster for scalable,
-            distributed RL training runs. The following manifest defines a
-            basic Job spec targeting the Cedar policy verification environment.
-          </p>
-          <pre className="mt-4 overflow-x-auto rounded-md bg-surface p-4 font-mono text-xs leading-relaxed text-text-secondary">
-{`apiVersion: batch/v1
+const K8S_MANIFEST = `apiVersion: batch/v1
 kind: Job
 metadata:
   name: athanor-rl-training
@@ -82,27 +49,11 @@ spec:
             - name: ATHANOR_ENV
               value: "cedar-policy-verification"
             - name: ATHANOR_MODEL
-              value: "claude-3.5-sonnet"`}
-          </pre>
-        </Card>
+              value: "claude-3.5-sonnet"`;
 
-        {/* Python SDK */}
-        <Card padding="lg">
-          <CardTitle>Python SDK</CardTitle>
-          <p className="mt-2 text-xs leading-relaxed text-text-secondary">
-            Install the Athanor Python SDK for programmatic access to
-            environments, runs, and baselines. The SDK provides a high-level
-            interface for training loop integration across all six core
-            environments.
-          </p>
-          <pre className="mt-4 overflow-x-auto rounded-md bg-surface p-4 font-mono text-xs leading-relaxed text-text-secondary">
-{`pip install athanor-sdk`}
-          </pre>
-          <p className="mt-4 text-xs leading-relaxed text-text-secondary">
-            Example: running a C-to-Rust safe translation evaluation:
-          </p>
-          <pre className="mt-2 overflow-x-auto rounded-md bg-surface p-4 font-mono text-xs leading-relaxed text-text-secondary">
-{`import athanor
+const PIP_INSTALL = "pip install athanor-sdk";
+
+const PYTHON_SDK = `import athanor
 
 client = athanor.Client(api_key="sk-...")
 
@@ -120,8 +71,69 @@ run = client.runs.create(
 for result in run.stream():
     print(f"Task {result.task_id}: {result.calibrated_score:.3f}")
 
-print(f"Final mean score: {run.mean_score:.3f}")`}
-          </pre>
+print(f"Final mean score: {run.mean_score:.3f}")`;
+
+function CodeBlock({ code }: { code: string }) {
+  return (
+    <div className="group relative mt-4">
+      <CopyButton text={code} />
+      <pre className="overflow-x-auto rounded-md bg-surface p-4 font-mono text-xs leading-relaxed text-text-secondary">
+        {code}
+      </pre>
+    </div>
+  );
+}
+
+export default function TrainingPage() {
+  return (
+    <>
+      <PageHeader
+        title="Training"
+        description="RL wrapper and infrastructure integration guides for Athanor verification environments"
+      />
+
+      <div className="space-y-6">
+        {/* Docker Integration */}
+        <Card padding="lg">
+          <CardTitle>Docker Integration</CardTitle>
+          <p className="mt-2 text-xs leading-relaxed text-text-secondary">
+            Build and run training containers using the Athanor RL wrapper image.
+            The wrapper provides a standardized interface for connecting your
+            reinforcement learning agent to any Athanor environment — from Lean
+            theorem proving to hardware verification with EBMC.
+          </p>
+          <CodeBlock code={DOCKER_PULL} />
+          <p className="mt-4 text-xs leading-relaxed text-text-secondary">
+            Example Dockerfile for a Lean theorem proving training container:
+          </p>
+          <CodeBlock code={DOCKERFILE} />
+        </Card>
+
+        {/* Kubernetes Deployment */}
+        <Card padding="lg">
+          <CardTitle>Kubernetes Deployment</CardTitle>
+          <p className="mt-2 text-xs leading-relaxed text-text-secondary">
+            Deploy training jobs to a Kubernetes cluster for scalable,
+            distributed RL training runs. The following manifest defines a
+            basic Job spec targeting the Cedar policy verification environment.
+          </p>
+          <CodeBlock code={K8S_MANIFEST} />
+        </Card>
+
+        {/* Python SDK */}
+        <Card padding="lg">
+          <CardTitle>Python SDK</CardTitle>
+          <p className="mt-2 text-xs leading-relaxed text-text-secondary">
+            Install the Athanor Python SDK for programmatic access to
+            environments, runs, and baselines. The SDK provides a high-level
+            interface for training loop integration across all six core
+            environments.
+          </p>
+          <CodeBlock code={PIP_INSTALL} />
+          <p className="mt-4 text-xs leading-relaxed text-text-secondary">
+            Example: running a C-to-Rust safe translation evaluation:
+          </p>
+          <CodeBlock code={PYTHON_SDK} />
         </Card>
 
         {/* Environment-specific notes */}

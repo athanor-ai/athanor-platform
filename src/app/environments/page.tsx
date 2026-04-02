@@ -6,7 +6,6 @@ import { useTasks } from "@/hooks/useTasks";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Card, CardHeader, CardTitle } from "@/components/ui/Card";
 import { StatusBadge } from "@/components/ui/StatusBadge";
-import { Button } from "@/components/ui/Button";
 import { LoadingState } from "@/components/ui/LoadingState";
 import { EmptyState } from "@/components/ui/EmptyState";
 
@@ -22,7 +21,6 @@ export default function EnvironmentsPage() {
         <PageHeader
           title="Environments"
           description="Versioned evaluation sandboxes for formal verification and systems RL training"
-          actions={<Button variant="primary">New Environment</Button>}
         />
         <LoadingState message="Loading environments..." />
       </>
@@ -47,12 +45,10 @@ export default function EnvironmentsPage() {
         <PageHeader
           title="Environments"
           description="Versioned evaluation sandboxes for formal verification and systems RL training"
-          actions={<Button variant="primary">New Environment</Button>}
         />
         <EmptyState
-          title="No environments yet"
-          description="Create your first evaluation environment to start evaluating agents."
-          action={<Button variant="primary">New Environment</Button>}
+          title="No environments available"
+          description="Environments will appear here once configured by your organization."
         />
       </>
     );
@@ -63,10 +59,9 @@ export default function EnvironmentsPage() {
       <PageHeader
         title="Environments"
         description="Versioned evaluation sandboxes for formal verification and systems RL training"
-        actions={<Button variant="primary">New Environment</Button>}
       />
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         {envList.map((env) => (
           <Link key={env.id} href={`/environments/${env.id}`}>
             <Card hover>

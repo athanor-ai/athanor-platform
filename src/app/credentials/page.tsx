@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useCallback } from "react";
 import { useCredentials } from "@/hooks/useCredentials";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Card } from "@/components/ui/Card";
@@ -45,6 +46,15 @@ function ProviderAvatar({ name }: { name: string }) {
 }
 
 function ConnectedCard({ provider, credential }: { provider: typeof PROVIDERS[number]; credential: Credential }) {
+  const [showRevoke, setShowRevoke] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyLabel = useCallback(() => {
+    void navigator.clipboard.writeText(credential.label);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }, [credential.label]);
+
   return (
     <Card padding="lg">
       <div className="flex items-start gap-3">
@@ -65,7 +75,17 @@ function ConnectedCard({ provider, credential }: { provider: typeof PROVIDERS[nu
       <div className="mt-4 space-y-2">
         <div className="flex items-center justify-between">
           <span className="text-[11px] text-text-tertiary">Label</span>
-          <span className="text-xs text-text-secondary">{credential.label}</span>
+          <button
+            className="cursor-pointer text-xs text-text-secondary transition-colors hover:text-accent"
+            onClick={handleCopyLabel}
+            title="Copy label to clipboard"
+          >
+            {copied ? "Copied!" : credential.label}
+          </button>
+        </div>
+        <div className="flex items-center justify-between">
+          <span className="text-[11px] text-text-tertiary">Key</span>
+          <span className="font-mono text-xs text-text-tertiary">{credential.encrypted_key}</span>
         </div>
         <div className="flex items-center justify-between">
           <span className="text-[11px] text-text-tertiary">Last Verified</span>
@@ -77,15 +97,38 @@ function ConnectedCard({ provider, credential }: { provider: typeof PROVIDERS[nu
         </div>
       </div>
 
-      <div className="mt-4 flex items-center gap-2">
-        <Button size="sm">Edit</Button>
-        <Button size="sm" variant="danger">Revoke</Button>
+      <div className="mt-4">
+        {showRevoke ? (
+          <div className="flex items-center gap-2">
+            <span className="text-[11px] text-error">Revoke this key?</span>
+            <Button
+              size="sm"
+              variant="danger"
+              onClick={() => setShowRevoke(false)}
+            >
+              Cancel
+            </Button>
+            <span className="text-[11px] text-text-tertiary">
+              (API integration required)
+            </span>
+          </div>
+        ) : (
+          <Button
+            size="sm"
+            variant="danger"
+            onClick={() => setShowRevoke(true)}
+          >
+            Revoke
+          </Button>
+        )}
       </div>
     </Card>
   );
 }
 
 function NotConfiguredCard({ provider }: { provider: typeof PROVIDERS[number] }) {
+  const [showHelp, setShowHelp] = useState(false);
+
   return (
     <Card padding="lg">
       <div className="flex items-start gap-3">
@@ -104,7 +147,24 @@ function NotConfiguredCard({ provider }: { provider: typeof PROVIDERS[number] })
       </div>
 
       <div className="mt-4">
-        <Button variant="primary" size="sm">Connect</Button>
+        {showHelp ? (
+          <div className="space-y-2">
+            <p className="text-[11px] text-text-secondary">
+              To connect {provider.name}, add your API key via the Athanor CLI
+              or REST API:
+            </p>
+            <pre className="overflow-x-auto rounded-md bg-surface p-2 font-mono text-[11px] text-text-tertiary">
+              {`athanor credentials set ${provider.key} --key "sk-..."`}
+            </pre>
+            <Button size="sm" variant="ghost" onClick={() => setShowHelp(false)}>
+              Dismiss
+            </Button>
+          </div>
+        ) : (
+          <Button variant="secondary" size="sm" onClick={() => setShowHelp(true)}>
+            How to connect
+          </Button>
+        )}
       </div>
     </Card>
   );

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEnvironments } from "@/hooks/useEnvironments";
 import { useRuns } from "@/hooks/useRuns";
 import { useTasks } from "@/hooks/useTasks";
@@ -15,6 +16,7 @@ import { LoadingState } from "@/components/ui/LoadingState";
 import type { Run } from "@/types/database";
 
 export default function OverviewPage() {
+  const router = useRouter();
   const environments = useEnvironments();
   const runs = useRuns();
   const tasks = useTasks();
@@ -45,8 +47,7 @@ export default function OverviewPage() {
 
   const activeEnvCount = envList.filter((e) => e.status === "active").length;
   const totalTasks = taskList.length;
-
-  const recentRunCount = runList.length;
+  const totalRuns = runList.length;
 
   const defaultProfile = profileList.find((p) => p.is_default);
   const defaultCalibrationName = defaultProfile?.name ?? "None";
@@ -125,9 +126,9 @@ export default function OverviewPage() {
           subtext={`Across ${envList.length} environments`}
         />
         <MetricCard
-          label="Recent Runs"
-          value={recentRunCount}
-          subtext="Last 7 days"
+          label="Total Runs"
+          value={totalRuns}
+          subtext={`${runList.filter((r) => r.status === "completed").length} completed`}
         />
         <MetricCard
           label="Default Calibration"
@@ -150,7 +151,11 @@ export default function OverviewPage() {
             </Button>
           </Link>
         </CardHeader>
-        <DataTable columns={runColumns} data={recentRuns} />
+        <DataTable
+          columns={runColumns}
+          data={recentRuns}
+          onRowClick={(run) => router.push(`/runs/${run.id}`)}
+        />
       </Card>
 
       {/* Quick actions */}
@@ -159,8 +164,8 @@ export default function OverviewPage() {
           <CardTitle>Quick Actions</CardTitle>
         </CardHeader>
         <div className="flex flex-wrap gap-3">
-          <Link href="/runs?action=new">
-            <Button variant="primary">New Run</Button>
+          <Link href="/environments">
+            <Button variant="primary">Browse Environments</Button>
           </Link>
           <Link href="/tasks">
             <Button variant="secondary">Browse Tasks</Button>

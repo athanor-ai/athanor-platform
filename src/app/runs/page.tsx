@@ -119,11 +119,6 @@ export default function RunsPage() {
         <PageHeader
           title="Runs"
           description="Evaluation run history and active executions"
-          actions={
-            <Link href="/runs?action=new">
-              <Button variant="primary">New Run</Button>
-            </Link>
-          }
         />
         <LoadingState message="Loading runs..." />
       </>
@@ -136,18 +131,13 @@ export default function RunsPage() {
         <PageHeader
           title="Runs"
           description="Evaluation run history and active executions"
-          actions={
-            <Link href="/runs?action=new">
-              <Button variant="primary">New Run</Button>
-            </Link>
-          }
         />
         <EmptyState
           title="No runs yet"
-          description="Start a new evaluation run to measure agent performance across Athanor environment tasks."
+          description="Select an environment to start evaluating agent performance."
           action={
-            <Link href="/runs?action=new">
-              <Button variant="primary">New Run</Button>
+            <Link href="/environments">
+              <Button variant="primary">Browse Environments</Button>
             </Link>
           }
         />
@@ -161,8 +151,10 @@ export default function RunsPage() {
         title="Runs"
         description="Evaluation run history and active executions"
         actions={
-          <Link href="/runs?action=new">
-            <Button variant="primary">New Run</Button>
+          <Link href="/environments">
+            <Button variant="secondary" size="sm">
+              Browse Environments
+            </Button>
           </Link>
         }
       />
