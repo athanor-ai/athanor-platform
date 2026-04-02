@@ -29,6 +29,7 @@ export const queryKeys = {
   calibration: {
     all: ["calibration"] as const,
     profiles: ["calibration", "profiles"] as const,
+    heatmaps: ["calibration", "heatmaps"] as const,
     detail: (id: string) => ["calibration", id] as const,
   },
   baselines: {

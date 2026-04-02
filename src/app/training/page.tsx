@@ -16,7 +16,7 @@ COPY train.py .
 COPY agent/ ./agent/
 
 ENV ATHANOR_ENV=lean-theorem-proving
-ENV ATHANOR_MODEL=claude-3.5-sonnet
+ENV ATHANOR_MODEL=claude-sonnet-4.6
 
 CMD ["python", "train.py"]`;
 
@@ -49,7 +49,7 @@ spec:
             - name: ATHANOR_ENV
               value: "cedar-policy-verification"
             - name: ATHANOR_MODEL
-              value: "claude-3.5-sonnet"`;
+              value: "claude-sonnet-4.6"`;
 
 const PIP_INSTALL = "pip install tahoe-sdk";
 
@@ -63,7 +63,7 @@ env = client.environments.get("c-to-rust")
 # Start an evaluation run
 run = client.runs.create(
     environment_id=env.id,
-    model_name="claude-3.5-sonnet",
+    model_name="claude-sonnet-4.6",
     config={"temperature": 0.0, "max_tokens": 4096},
 )
 

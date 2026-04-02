@@ -202,7 +202,7 @@ client = tahoe.Client(api_key="sk-...")
 env = client.environments.get("lean-theorem-proving")
 run = client.runs.create(
     environment_id=env.id,
-    model_name="claude-3.5-sonnet",
+    model_name="claude-sonnet-4.6",
 )`}
       </pre>
       <h4 className="text-sm font-medium text-text-primary">

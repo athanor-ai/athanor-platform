@@ -11,29 +11,29 @@ import type { Credential } from "@/types/database";
 
 const PROVIDERS = [
   {
-    key: "openai" as const,
-    name: "OpenAI",
-    description: "GPT-4, GPT-4o, o1",
-  },
-  {
     key: "anthropic" as const,
     name: "Anthropic",
-    description: "Claude 3.5, Claude 3 Opus",
+    description: "Claude Sonnet 4.6",
+  },
+  {
+    key: "mistral" as const,
+    name: "Mistral AI",
+    description: "Mistral Large 3",
+  },
+  {
+    key: "moonshot" as const,
+    name: "Moonshot AI",
+    description: "Kimi K2.5",
   },
   {
     key: "gemini" as const,
     name: "Google Gemini",
-    description: "Gemini 2.0, Gemini Pro",
-  },
-  {
-    key: "azure_openai" as const,
-    name: "Azure OpenAI",
-    description: "Azure-hosted OpenAI models",
+    description: "Gemini 3.1 Pro, Gemini 2.5 Flash",
   },
   {
     key: "bedrock" as const,
     name: "AWS Bedrock",
-    description: "Claude, Titan, and more via AWS",
+    description: "Claude, Mistral, and more via AWS",
   },
 ];
 
