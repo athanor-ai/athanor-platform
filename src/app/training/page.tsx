@@ -88,8 +88,8 @@ export default function TrainingPage() {
   return (
     <>
       <PageHeader
-        title="Training"
-        description="RL wrapper and infrastructure integration guides for Athanor environments via Tahoe"
+        title="Integration"
+        description="Connect your RL training pipeline to your provisioned Athanor environments"
       />
 
       <div className="space-y-6">
@@ -124,9 +124,9 @@ export default function TrainingPage() {
         <Card padding="lg">
           <CardTitle>Python SDK</CardTitle>
           <p className="mt-2 text-xs leading-relaxed text-text-secondary">
-            Install the Tahoe Python SDK for programmatic access to
-            environments, runs, and baselines. The SDK provides a high-level
-            interface for training loop integration across all six core
+            Install the Tahoe Python SDK to submit runs, stream results,
+            and pull traces from your shipped environments. The SDK
+            wraps the Tahoe REST API with typed helpers for all six
             Athanor environments.
           </p>
           <CodeBlock code={PIP_INSTALL} />
@@ -140,8 +140,9 @@ export default function TrainingPage() {
         <Card padding="lg">
           <CardTitle>Environment-Specific Notes</CardTitle>
           <p className="mt-2 text-xs leading-relaxed text-text-secondary">
-            Each environment has unique resource requirements and execution
-            characteristics:
+            Each shipped environment has unique resource requirements and
+            execution characteristics. Refer to these notes when configuring
+            your training containers:
           </p>
           <div className="mt-4 space-y-3">
             <div className="rounded-md bg-surface p-3">

@@ -17,13 +17,13 @@ import {
 import { ATHANOR_ENVIRONMENTS } from "@/data/environments";
 
 const navItems = [
-  { label: "Overview", href: "/overview", icon: PiHouseSimple },
+  { label: "Dashboard", href: "/overview", icon: PiHouseSimple },
   { label: "Environments", href: "/environments", icon: PiCube },
   { label: "Tasks", href: "/tasks", icon: PiListChecks },
   { label: "Runs", href: "/runs", icon: PiPlay },
   { label: "Calibration", href: "/calibration", icon: PiWaveSine },
   { label: "Baselines", href: "/baselines", icon: PiChartBar },
-  { label: "Training", href: "/training", icon: PiBrain },
+  { label: "Integration", href: "/training", icon: PiBrain },
   { label: "Credentials", href: "/credentials", icon: PiKey },
   { label: "Docs", href: "/docs", icon: PiBookOpen },
 ];
@@ -87,7 +87,7 @@ export function Sidebar() {
           </div>
           <div className="min-w-0 flex-1">
             <div className="truncate text-xs text-text-primary">Athanor Labs</div>
-            <div className="text-[10px] text-text-tertiary">{ATHANOR_ENVIRONMENTS.length} environments</div>
+            <div className="text-[10px] text-text-tertiary">{ATHANOR_ENVIRONMENTS.length} shipped environments</div>
           </div>
         </Link>
       </div>

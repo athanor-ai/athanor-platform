@@ -18,21 +18,24 @@ const EXPANDED_CONTENT: Record<string, React.ReactNode> = {
   "getting-started": (
     <div className="space-y-4 text-xs leading-relaxed text-text-secondary">
       <p>
-        Tahoe is Athanor&apos;s private customer console for monitoring RL
-        training environments across formal verification, systems engineering,
-        and safe code generation. This guide walks you through the key concepts.
+        Tahoe is the private monitoring console for approved Athanor customers.
+        Use it to inspect your shipped environments, review evaluation runs,
+        examine agent traces and tool usage, and calibrate scoring. This guide
+        walks you through the core workflow.
       </p>
       <h4 className="text-sm font-medium text-text-primary">Core workflow</h4>
       <ol className="ml-4 list-decimal space-y-1">
-        <li>Choose an environment from the six available suites.</li>
-        <li>Run an evaluation against a set of tasks within that environment.</li>
+        <li>Monitor your shipped environments and their versioned task suites.</li>
+        <li>Review evaluation runs as agents execute against tasks.</li>
         <li>
-          Review calibrated scores — raw scores are transformed through
+          Inspect agent traces, tool-use summaries, and per-task scores.
+        </li>
+        <li>
+          Review calibrated scores — raw results are transformed through
           configurable sigmoid profiles.
         </li>
         <li>
-          Compare results against baselines to track model improvement over
-          time.
+          Compare against baselines to track model improvement over time.
         </li>
       </ol>
       <h4 className="text-sm font-medium text-text-primary">
@@ -149,8 +152,9 @@ const EXPANDED_CONTENT: Record<string, React.ReactNode> = {
   "api-reference": (
     <div className="space-y-4 text-xs leading-relaxed text-text-secondary">
       <p>
-        The Tahoe REST API provides programmatic access to environments,
-        runs, calibration profiles, baselines, and results.
+        The Tahoe REST API provides authenticated access to your
+        provisioned environments, runs, traces, calibration profiles,
+        baselines, and results. All endpoints require a valid API key.
       </p>
       <h4 className="text-sm font-medium text-text-primary">
         Key endpoints
@@ -162,6 +166,7 @@ const EXPANDED_CONTENT: Record<string, React.ReactNode> = {
           { method: "GET", path: "/api/v1/tasks", desc: "List tasks (filterable by environment)" },
           { method: "GET", path: "/api/v1/runs", desc: "List evaluation runs" },
           { method: "GET", path: "/api/v1/runs/:id/results", desc: "Get per-task results for a run" },
+          { method: "GET", path: "/api/v1/runs/:id/traces", desc: "Get agent traces and tool-use logs" },
           { method: "GET", path: "/api/v1/baselines", desc: "List baseline comparisons" },
           { method: "GET", path: "/api/v1/calibration/profiles", desc: "List calibration profiles" },
         ].map((ep) => (
@@ -184,9 +189,9 @@ const EXPANDED_CONTENT: Record<string, React.ReactNode> = {
   "training-integration": (
     <div className="space-y-4 text-xs leading-relaxed text-text-secondary">
       <p>
-        Athanor environments integrate with RL training pipelines through the
-        Tahoe SDK — Docker containers, Kubernetes job specs, and the Python
-        client. See the Training page for complete examples.
+        Connect your RL training pipeline to Athanor environments through the
+        Tahoe SDK. Supports Docker containers, Kubernetes job specs, and the
+        Python client. See the Integration page for complete examples.
       </p>
       <h4 className="text-sm font-medium text-text-primary">Quick start</h4>
       <pre className="overflow-x-auto rounded-md bg-surface p-3 font-mono text-[11px] text-text-tertiary">
@@ -226,7 +231,7 @@ export default function DocsPage() {
     <>
       <PageHeader
         title="Documentation"
-        description="Guides, references, and API documentation for the Tahoe console"
+        description="Private documentation for approved Tahoe customers"
       />
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">

@@ -32,8 +32,8 @@ export default function OverviewPage() {
     return (
       <>
         <PageHeader
-          title="Overview"
-          description="Environment status and evaluation overview"
+          title="Dashboard"
+          description="Monitor your shipped environments, active runs, and scoring"
         />
         <LoadingState message="Loading dashboard..." />
       </>
@@ -47,7 +47,10 @@ export default function OverviewPage() {
 
   const activeEnvCount = envList.filter((e) => e.status === "active").length;
   const totalTasks = taskList.length;
-  const totalRuns = runList.length;
+  const runningCount = runList.filter((r) => r.status === "running").length;
+  const completedCount = runList.filter(
+    (r) => r.status === "completed",
+  ).length;
 
   const defaultProfile = profileList.find((p) => p.is_default);
   const defaultCalibrationName = defaultProfile?.name ?? "None";
@@ -65,7 +68,7 @@ export default function OverviewPage() {
   const runColumns: Column<Run>[] = [
     {
       key: "model",
-      header: "Model",
+      header: "Agent / Model",
       render: (run) => (
         <span className="font-mono text-xs text-text-primary">
           {run.model_name}
@@ -88,7 +91,7 @@ export default function OverviewPage() {
     },
     {
       key: "score",
-      header: "Score",
+      header: "Mean Score",
       render: (run) => (
         <span className="font-mono text-xs text-text-primary">
           {run.mean_score !== null ? run.mean_score.toFixed(2) : "\u2014"}
@@ -109,29 +112,33 @@ export default function OverviewPage() {
   return (
     <>
       <PageHeader
-        title="Overview"
-        description="Environment status and evaluation overview"
+        title="Dashboard"
+        description="Monitor your shipped environments, active runs, and scoring"
       />
 
       {/* Metric cards */}
       <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <MetricCard
-          label="Active Environments"
+          label="Shipped Environments"
           value={activeEnvCount}
-          subtext={`${envList.length} total`}
+          subtext={`${envList.length} provisioned`}
         />
         <MetricCard
-          label="Total Tasks"
+          label="Registered Tasks"
           value={totalTasks}
           subtext={`Across ${envList.length} environments`}
         />
         <MetricCard
-          label="Total Runs"
-          value={totalRuns}
-          subtext={`${runList.filter((r) => r.status === "completed").length} completed`}
+          label="Runs"
+          value={runList.length}
+          subtext={
+            runningCount > 0
+              ? `${runningCount} active · ${completedCount} completed`
+              : `${completedCount} completed`
+          }
         />
         <MetricCard
-          label="Default Calibration"
+          label="Scoring Profile"
           value={defaultCalibrationName}
           subtext={
             defaultProfile
@@ -141,13 +148,13 @@ export default function OverviewPage() {
         />
       </div>
 
-      {/* Recent runs table */}
+      {/* Recent run activity */}
       <Card className="mb-6">
         <CardHeader>
-          <CardTitle>Recent Runs</CardTitle>
+          <CardTitle>Recent Run Activity</CardTitle>
           <Link href="/runs">
             <Button variant="ghost" size="sm">
-              View all
+              View all runs
             </Button>
           </Link>
         </CardHeader>
@@ -158,20 +165,23 @@ export default function OverviewPage() {
         />
       </Card>
 
-      {/* Quick actions */}
+      {/* Quick navigation */}
       <Card>
         <CardHeader>
-          <CardTitle>Quick Actions</CardTitle>
+          <CardTitle>Quick Navigation</CardTitle>
         </CardHeader>
         <div className="flex flex-wrap gap-3">
           <Link href="/environments">
-            <Button variant="primary">Browse Environments</Button>
+            <Button variant="primary">Environments</Button>
           </Link>
-          <Link href="/tasks">
-            <Button variant="secondary">Browse Tasks</Button>
+          <Link href="/runs">
+            <Button variant="secondary">Run History</Button>
+          </Link>
+          <Link href="/calibration">
+            <Button variant="secondary">Scoring Profiles</Button>
           </Link>
           <Link href="/baselines">
-            <Button variant="secondary">View Baselines</Button>
+            <Button variant="secondary">Baselines</Button>
           </Link>
         </div>
       </Card>

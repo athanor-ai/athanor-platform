@@ -178,7 +178,7 @@ export default function CredentialsPage() {
       <>
         <PageHeader
           title="Credentials"
-          description="Manage API keys for model providers"
+          description="Manage API keys for the model providers used in your evaluation runs"
         />
         <LoadingState message="Loading credentials..." />
       </>

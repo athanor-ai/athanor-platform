@@ -104,7 +104,7 @@ export default function BaselinesPage() {
       <>
         <PageHeader
           title="Baselines"
-          description="Model performance baselines across all environments"
+          description="Reference baselines for comparing agent performance across your environments"
         />
         <LoadingState message="Loading baselines..." />
       </>

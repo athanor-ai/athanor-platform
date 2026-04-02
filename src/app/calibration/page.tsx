@@ -249,7 +249,7 @@ export default function CalibrationPage() {
       <>
         <PageHeader
           title="Calibration"
-          description="Score calibration profiles for normalizing raw evaluation scores"
+          description="Configure how raw task scores are transformed into calibrated results"
         />
         <LoadingState message="Loading calibration profiles..." />
       </>

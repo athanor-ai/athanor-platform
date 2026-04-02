@@ -47,7 +47,7 @@ export default function RunsPage() {
     },
     {
       key: "model",
-      header: "Model",
+      header: "Agent / Model",
       render: (run) => (
         <span className="text-xs font-medium text-accent">
           {run.model_name}
@@ -118,7 +118,7 @@ export default function RunsPage() {
       <>
         <PageHeader
           title="Runs"
-          description="Evaluation run history and active executions"
+          description="Monitor active and completed evaluation runs — click a row to inspect traces and scores"
         />
         <LoadingState message="Loading runs..." />
       </>
@@ -130,11 +130,11 @@ export default function RunsPage() {
       <>
         <PageHeader
           title="Runs"
-          description="Evaluation run history and active executions"
+          description="Monitor active and completed evaluation runs — click a row to inspect traces and scores"
         />
         <EmptyState
           title="No runs yet"
-          description="Select an environment to start evaluating agent performance."
+          description="Runs will appear here once agents begin executing against your shipped environments."
           action={
             <Link href="/environments">
               <Button variant="primary">Browse Environments</Button>

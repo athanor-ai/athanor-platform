@@ -106,7 +106,7 @@ export default function TasksPage() {
       <>
         <PageHeader
           title="Tasks"
-          description="Browse and filter evaluation tasks across environments"
+          description="Browse and filter registered tasks across your shipped environments"
         />
         <LoadingState message="Loading tasks..." />
       </>
@@ -118,11 +118,11 @@ export default function TasksPage() {
       <>
         <PageHeader
           title="Tasks"
-          description="Browse and filter evaluation tasks across environments"
+          description="Browse and filter registered tasks across your shipped environments"
         />
         <EmptyState
           title="No tasks found"
-          description="Tasks will appear here once environments have been configured with evaluation tasks."
+          description="Tasks will appear here once Athanor provisions environments for your account."
         />
       </>
     );

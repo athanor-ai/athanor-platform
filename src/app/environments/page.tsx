@@ -20,7 +20,7 @@ export default function EnvironmentsPage() {
       <>
         <PageHeader
           title="Environments"
-          description="Versioned evaluation sandboxes for formal verification and systems RL training"
+          description="Athanor environments shipped to your organization"
         />
         <LoadingState message="Loading environments..." />
       </>
@@ -44,11 +44,11 @@ export default function EnvironmentsPage() {
       <>
         <PageHeader
           title="Environments"
-          description="Versioned evaluation sandboxes for formal verification and systems RL training"
+          description="Athanor environments shipped to your organization"
         />
         <EmptyState
           title="No environments available"
-          description="Environments will appear here once configured by your organization."
+          description="No environments have been provisioned for your account yet. Contact Athanor to get started."
         />
       </>
     );
