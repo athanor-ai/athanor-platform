@@ -51,11 +51,11 @@ spec:
             - name: ATHANOR_MODEL
               value: "claude-3.5-sonnet"`;
 
-const PIP_INSTALL = "pip install athanor-sdk";
+const PIP_INSTALL = "pip install tahoe-sdk";
 
-const PYTHON_SDK = `import athanor
+const PYTHON_SDK = `import tahoe
 
-client = athanor.Client(api_key="sk-...")
+client = tahoe.Client(api_key="sk-...")
 
 # Connect to the C-to-Rust environment
 env = client.environments.get("c-to-rust")
@@ -89,7 +89,7 @@ export default function TrainingPage() {
     <>
       <PageHeader
         title="Training"
-        description="RL wrapper and infrastructure integration guides for Athanor verification environments"
+        description="RL wrapper and infrastructure integration guides for Athanor environments via Tahoe"
       />
 
       <div className="space-y-6">
@@ -99,8 +99,8 @@ export default function TrainingPage() {
           <p className="mt-2 text-xs leading-relaxed text-text-secondary">
             Build and run training containers using the Athanor RL wrapper image.
             The wrapper provides a standardized interface for connecting your
-            reinforcement learning agent to any Athanor environment — from Lean
-            theorem proving to hardware verification with EBMC.
+            reinforcement learning agent to any Athanor environment — from
+            Lean theorem proving to hardware verification with EBMC.
           </p>
           <CodeBlock code={DOCKER_PULL} />
           <p className="mt-4 text-xs leading-relaxed text-text-secondary">
@@ -124,10 +124,10 @@ export default function TrainingPage() {
         <Card padding="lg">
           <CardTitle>Python SDK</CardTitle>
           <p className="mt-2 text-xs leading-relaxed text-text-secondary">
-            Install the Athanor Python SDK for programmatic access to
+            Install the Tahoe Python SDK for programmatic access to
             environments, runs, and baselines. The SDK provides a high-level
             interface for training loop integration across all six core
-            environments.
+            Athanor environments.
           </p>
           <CodeBlock code={PIP_INSTALL} />
           <p className="mt-4 text-xs leading-relaxed text-text-secondary">
@@ -140,8 +140,8 @@ export default function TrainingPage() {
         <Card padding="lg">
           <CardTitle>Environment-Specific Notes</CardTitle>
           <p className="mt-2 text-xs leading-relaxed text-text-secondary">
-            Each Athanor environment has unique resource requirements and
-            execution characteristics:
+            Each environment has unique resource requirements and execution
+            characteristics:
           </p>
           <div className="mt-4 space-y-3">
             <div className="rounded-md bg-surface p-3">

@@ -104,7 +104,7 @@ export default function BaselinesPage() {
       <>
         <PageHeader
           title="Baselines"
-          description="Model performance baselines across Athanor environments"
+          description="Model performance baselines across all environments"
         />
         <LoadingState message="Loading baselines..." />
       </>
@@ -115,7 +115,7 @@ export default function BaselinesPage() {
     <>
       <PageHeader
         title="Baselines"
-        description="Model performance baselines across Athanor environments"
+        description="Model performance baselines across all environments"
       />
 
       <div className="mb-6 grid grid-cols-2 gap-4 lg:grid-cols-4">

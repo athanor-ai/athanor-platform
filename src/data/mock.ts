@@ -1,8 +1,8 @@
 /**
- * Athanor-specific seed / demo data.
+ * Tahoe seed / demo data.
  *
  * All environment, task, run, and baseline records are derived from the
- * canonical environment definitions in `./environments.ts`.  When we
+ * canonical Athanor environment definitions in `./environments.ts`.  When we
  * cut over to real Supabase data the hooks simply stop importing from
  * here — the page model stays the same.
  */
@@ -379,7 +379,7 @@ export const mockCalibrationProfiles: CalibrationProfile[] = [
     organization_id: "org-001",
     name: "Default Sigmoid",
     description:
-      "Standard sigmoid calibration with moderate steepness for general-purpose evaluation across all Athanor environments.",
+      "Standard sigmoid calibration with moderate steepness for general-purpose evaluation across all environments.",
     sigmoid_center: 0.5,
     sigmoid_steepness: 10.0,
     time_weight: 0.3,
@@ -707,7 +707,7 @@ export const mockDocsPages: DocsPage[] = [
     slug: "getting-started",
     title: "Getting Started",
     content:
-      "Welcome to the Athanor platform — versioned RL training environments for formal verification, systems engineering, and safe code generation.",
+      "Welcome to Tahoe — Athanor's private console for monitoring versioned RL training environments across formal verification, systems engineering, and safe code generation.",
     category: "quickstart",
     sort_order: 0,
     created_at: weekAgo,
@@ -718,7 +718,7 @@ export const mockDocsPages: DocsPage[] = [
     slug: "environments-overview",
     title: "Environments Overview",
     content:
-      "Athanor ships six core environments: Lean Theorem Proving, Cedar Policy Verification, Distributed Consensus, Congestion Control, C-to-Rust, and Hardware Verification (EBMC). Each is a versioned, reproducible sandbox with its own task families and scoring criteria.",
+      "Tahoe connects to six core Athanor environments: Lean Theorem Proving, Cedar Policy Verification, Distributed Consensus, Congestion Control, C-to-Rust, and Hardware Verification (EBMC). Each is a versioned, reproducible sandbox with its own task families and scoring criteria.",
     category: "concepts",
     sort_order: 1,
     created_at: weekAgo,
@@ -740,7 +740,7 @@ export const mockDocsPages: DocsPage[] = [
     slug: "api-reference",
     title: "API Reference",
     content:
-      "REST API documentation for programmatic access to Athanor environments, runs, calibration profiles, baselines, and results.",
+      "REST API documentation for programmatic access to Tahoe — environments, runs, calibration profiles, baselines, and results.",
     category: "reference",
     sort_order: 3,
     created_at: weekAgo,
@@ -751,7 +751,7 @@ export const mockDocsPages: DocsPage[] = [
     slug: "training-integration",
     title: "Training Integration",
     content:
-      "Guide for integrating Athanor environments with RL training pipelines. Covers Docker containers, Kubernetes job specs, and the Python SDK for connecting training loops to Lean, Cedar, Consensus, Congestion-Control, C-to-Rust, and EBMC environments.",
+      "Guide for integrating Athanor environments with RL training pipelines via the Tahoe SDK. Covers Docker containers, Kubernetes job specs, and the Python SDK for connecting training loops to Lean, Cedar, Consensus, Congestion-Control, C-to-Rust, and EBMC environments.",
     category: "guides",
     sort_order: 4,
     created_at: weekAgo,

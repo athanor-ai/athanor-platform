@@ -37,10 +37,10 @@ export function Sidebar() {
       <div className="flex h-12 items-center border-b border-border px-4">
         <Link href="/overview" className="flex items-center gap-2">
           <div className="flex h-6 w-6 items-center justify-center rounded-sm bg-accent">
-            <span className="text-xs font-bold text-background">A</span>
+            <span className="text-xs font-bold text-background">T</span>
           </div>
           <span className="text-sm font-semibold tracking-tight text-text-primary">
-            Athanor
+            Tahoe
           </span>
         </Link>
       </div>

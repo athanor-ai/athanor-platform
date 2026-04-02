@@ -1,10 +1,10 @@
 /**
- * Athanor environment definitions — single source of truth.
+ * Athanor environment definitions — single source of truth for Tahoe.
  *
  * These map 1-to-1 with the six real environments in the athanor-ai GitHub org.
- * Every page (overview, environments, tasks, runs, baselines, training) derives
- * its data from these definitions so that swapping to live API data later only
- * requires changing the fetch layer, not the page model.
+ * Every Tahoe page (overview, environments, tasks, runs, baselines, training)
+ * derives its data from these definitions so that swapping to live API data
+ * later only requires changing the fetch layer, not the page model.
  */
 
 /* ------------------------------------------------------------------ */

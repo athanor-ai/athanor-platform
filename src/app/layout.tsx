@@ -15,9 +15,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Athanor — RL Training Environments",
+  title: "Tahoe — Athanor Evaluation Console",
   description:
-    "Customer console for Athanor's versioned RL training environments for formal verification, systems engineering, and safe code generation.",
+    "Tahoe is Athanor's private customer console for monitoring RL training environments, reviewing evaluation runs, and tracking calibrated scores across formal verification and systems engineering tasks.",
 };
 
 export default function RootLayout({

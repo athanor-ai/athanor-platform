@@ -150,11 +150,11 @@ function NotConfiguredCard({ provider }: { provider: typeof PROVIDERS[number] })
         {showHelp ? (
           <div className="space-y-2">
             <p className="text-[11px] text-text-secondary">
-              To connect {provider.name}, add your API key via the Athanor CLI
+              To connect {provider.name}, add your API key via the Tahoe CLI
               or REST API:
             </p>
             <pre className="overflow-x-auto rounded-md bg-surface p-2 font-mono text-[11px] text-text-tertiary">
-              {`athanor credentials set ${provider.key} --key "sk-..."`}
+              {`tahoe credentials set ${provider.key} --key "sk-..."`}
             </pre>
             <Button size="sm" variant="ghost" onClick={() => setShowHelp(false)}>
               Dismiss

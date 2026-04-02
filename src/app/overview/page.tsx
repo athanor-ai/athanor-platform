@@ -33,7 +33,7 @@ export default function OverviewPage() {
       <>
         <PageHeader
           title="Overview"
-          description="Athanor verification environment status at a glance"
+          description="Environment status and evaluation overview"
         />
         <LoadingState message="Loading dashboard..." />
       </>
@@ -110,7 +110,7 @@ export default function OverviewPage() {
     <>
       <PageHeader
         title="Overview"
-        description="Athanor verification environment status at a glance"
+        description="Environment status and evaluation overview"
       />
 
       {/* Metric cards */}

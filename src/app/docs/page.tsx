@@ -18,9 +18,9 @@ const EXPANDED_CONTENT: Record<string, React.ReactNode> = {
   "getting-started": (
     <div className="space-y-4 text-xs leading-relaxed text-text-secondary">
       <p>
-        Athanor provides versioned RL training environments for formal
-        verification, systems engineering, and safe code generation. This guide
-        walks you through the key concepts.
+        Tahoe is Athanor&apos;s private customer console for monitoring RL
+        training environments across formal verification, systems engineering,
+        and safe code generation. This guide walks you through the key concepts.
       </p>
       <h4 className="text-sm font-medium text-text-primary">Core workflow</h4>
       <ol className="ml-4 list-decimal space-y-1">
@@ -54,8 +54,9 @@ const EXPANDED_CONTENT: Record<string, React.ReactNode> = {
   "environments-overview": (
     <div className="space-y-4 text-xs leading-relaxed text-text-secondary">
       <p>
-        Athanor ships six core environments. Each is a versioned, reproducible
-        sandbox with domain-specific task families and scoring criteria.
+        Tahoe connects to six core Athanor environments. Each is a versioned,
+        reproducible sandbox with domain-specific task families and scoring
+        criteria.
       </p>
       {ATHANOR_ENVIRONMENTS.map((env) => (
         <div key={env.id} className="rounded-md bg-surface p-3">
@@ -148,7 +149,7 @@ const EXPANDED_CONTENT: Record<string, React.ReactNode> = {
   "api-reference": (
     <div className="space-y-4 text-xs leading-relaxed text-text-secondary">
       <p>
-        The Athanor REST API provides programmatic access to environments,
+        The Tahoe REST API provides programmatic access to environments,
         runs, calibration profiles, baselines, and results.
       </p>
       <h4 className="text-sm font-medium text-text-primary">
@@ -183,16 +184,16 @@ const EXPANDED_CONTENT: Record<string, React.ReactNode> = {
   "training-integration": (
     <div className="space-y-4 text-xs leading-relaxed text-text-secondary">
       <p>
-        Athanor environments integrate with RL training pipelines through three
-        interfaces: Docker containers, Kubernetes job specs, and the Python SDK.
-        See the Training page for complete examples.
+        Athanor environments integrate with RL training pipelines through the
+        Tahoe SDK — Docker containers, Kubernetes job specs, and the Python
+        client. See the Training page for complete examples.
       </p>
       <h4 className="text-sm font-medium text-text-primary">Quick start</h4>
       <pre className="overflow-x-auto rounded-md bg-surface p-3 font-mono text-[11px] text-text-tertiary">
-{`pip install athanor-sdk
+{`pip install tahoe-sdk
 
-import athanor
-client = athanor.Client(api_key="sk-...")
+import tahoe
+client = tahoe.Client(api_key="sk-...")
 env = client.environments.get("lean-theorem-proving")
 run = client.runs.create(
     environment_id=env.id,
@@ -225,7 +226,7 @@ export default function DocsPage() {
     <>
       <PageHeader
         title="Documentation"
-        description="Guides, references, and API documentation for Athanor verification environments"
+        description="Guides, references, and API documentation for the Tahoe console"
       />
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
