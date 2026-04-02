@@ -1,3 +1,12 @@
+/**
+ * Athanor-specific seed / demo data.
+ *
+ * All environment, task, run, and baseline records are derived from the
+ * canonical environment definitions in `./environments.ts`.  When we
+ * cut over to real Supabase data the hooks simply stop importing from
+ * here — the page model stays the same.
+ */
+
 import type {
   Organization,
   Environment,
@@ -10,11 +19,20 @@ import type {
   Credential,
   DocsPage,
 } from "@/types/database";
+import { ATHANOR_ENVIRONMENTS } from "./environments";
+
+/* ------------------------------------------------------------------ */
+/*  Timestamps                                                         */
+/* ------------------------------------------------------------------ */
 
 const now = new Date().toISOString();
 const hourAgo = new Date(Date.now() - 3600000).toISOString();
 const dayAgo = new Date(Date.now() - 86400000).toISOString();
 const weekAgo = new Date(Date.now() - 604800000).toISOString();
+
+/* ------------------------------------------------------------------ */
+/*  Organization                                                       */
+/* ------------------------------------------------------------------ */
 
 export const mockOrganization: Organization = {
   id: "org-001",
@@ -25,101 +43,127 @@ export const mockOrganization: Organization = {
   updated_at: now,
 };
 
-export const mockEnvironments: Environment[] = [
-  {
-    id: "env-001",
+/* ------------------------------------------------------------------ */
+/*  Environments  (derived from ATHANOR_ENVIRONMENTS)                  */
+/* ------------------------------------------------------------------ */
+
+export const mockEnvironments: Environment[] = ATHANOR_ENVIRONMENTS.map(
+  (def) => ({
+    id: def.id,
     organization_id: "org-001",
-    name: "WebArena",
-    slug: "webarena",
-    description:
-      "Realistic web browsing environment for evaluating autonomous agents on complex web tasks including shopping, forum posting, and content management.",
-    engine: "playwright",
-    status: "active",
-    config: { viewport: "1280x720", timeout_ms: 30000 },
+    name: def.name,
+    slug: def.slug,
+    description: def.description,
+    engine: def.engine,
+    status: "active" as const,
+    config: { repo: def.repo, domain: def.domain },
     created_at: weekAgo,
     updated_at: dayAgo,
-  },
-  {
-    id: "env-002",
-    organization_id: "org-001",
-    name: "SWE-bench",
-    slug: "swe-bench",
-    description:
-      "Software engineering benchmark environment for evaluating code generation, bug fixing, and repository-level tasks from real GitHub issues.",
-    engine: "docker",
-    status: "active",
-    config: { language: "python", max_file_edits: 50 },
-    created_at: weekAgo,
-    updated_at: hourAgo,
-  },
-  {
-    id: "env-003",
-    organization_id: "org-001",
-    name: "OSWorld",
-    slug: "osworld",
-    description:
-      "Full operating system environment with desktop GUI for evaluating multimodal agents on real-world computer use tasks.",
-    engine: "vm",
-    status: "active",
-    config: { os: "ubuntu-22.04", memory_gb: 8 },
-    created_at: dayAgo,
-    updated_at: dayAgo,
-  },
-  {
-    id: "env-004",
-    organization_id: "org-001",
-    name: "ToolBench",
-    slug: "toolbench",
-    description:
-      "API tool-use evaluation environment with 16k+ real-world APIs across multiple domains and complexity levels.",
-    engine: "sandbox",
-    status: "draft",
-    config: { api_pool_size: 500 },
-    created_at: dayAgo,
-    updated_at: now,
-  },
-];
+  }),
+);
+
+/* ------------------------------------------------------------------ */
+/*  Environment versions                                               */
+/* ------------------------------------------------------------------ */
 
 export const mockEnvironmentVersions: EnvironmentVersion[] = [
+  // Lean Theorem Proving
   {
-    id: "ver-001",
-    environment_id: "env-001",
-    version_tag: "v2.1.0",
-    changelog: "Added e-commerce tasks, improved screenshot capture reliability",
-    docker_image: "athanor/webarena:2.1.0",
+    id: "ver-lean-01",
+    environment_id: "env-lean",
+    version_tag: "v1.2.0",
+    changelog:
+      "Added 150 new Mathlib4 tactic-generation tasks, improved timeout handling for long proofs",
+    docker_image: "athanor/lean-theorem-proving:1.2.0",
     status: "published",
     published_at: dayAgo,
     created_at: dayAgo,
     updated_at: dayAgo,
   },
   {
-    id: "ver-002",
-    environment_id: "env-001",
-    version_tag: "v2.0.0",
-    changelog: "Initial public release with 812 web tasks",
-    docker_image: "athanor/webarena:2.0.0",
+    id: "ver-lean-02",
+    environment_id: "env-lean",
+    version_tag: "v1.1.0",
+    changelog:
+      "Initial public release with 320 proof synthesis tasks from Mathlib4",
+    docker_image: "athanor/lean-theorem-proving:1.1.0",
     status: "published",
     published_at: weekAgo,
     created_at: weekAgo,
     updated_at: weekAgo,
   },
+  // Cedar Policy Verification
   {
-    id: "ver-003",
-    environment_id: "env-002",
-    version_tag: "v1.4.0",
-    changelog: "Added 300 new verified instances from recent GitHub issues",
-    docker_image: "athanor/swe-bench:1.4.0",
+    id: "ver-cedar-01",
+    environment_id: "env-cedar",
+    version_tag: "v1.0.0",
+    changelog:
+      "Initial release with 200 policy authoring and entailment-checking tasks",
+    docker_image: "athanor/cedar-policy-verification:1.0.0",
+    status: "published",
+    published_at: weekAgo,
+    created_at: weekAgo,
+    updated_at: weekAgo,
+  },
+  // Distributed Consensus
+  {
+    id: "ver-consensus-01",
+    environment_id: "env-consensus",
+    version_tag: "v0.9.0",
+    changelog:
+      "Beta release with Raft and Paxos protocol design tasks plus fault-injection scenarios",
+    docker_image: "athanor/distributed-consensus:0.9.0",
+    status: "published",
+    published_at: dayAgo,
+    created_at: dayAgo,
+    updated_at: dayAgo,
+  },
+  // Congestion Control
+  {
+    id: "ver-congestion-01",
+    environment_id: "env-congestion",
+    version_tag: "v1.0.0",
+    changelog:
+      "Initial release with BBR, CUBIC, and custom algorithm design tasks in ns-3 sim",
+    docker_image: "athanor/congestion-control:1.0.0",
+    status: "published",
+    published_at: weekAgo,
+    created_at: weekAgo,
+    updated_at: weekAgo,
+  },
+  // C-to-Rust
+  {
+    id: "ver-c2rust-01",
+    environment_id: "env-c2rust",
+    version_tag: "v1.1.0",
+    changelog:
+      "Added FFI boundary verification tasks and expanded safe-translation corpus to 180 programs",
+    docker_image: "athanor/c-to-rust:1.1.0",
     status: "published",
     published_at: hourAgo,
     created_at: hourAgo,
     updated_at: hourAgo,
   },
   {
-    id: "ver-004",
-    environment_id: "env-003",
-    version_tag: "v1.0.0-beta",
-    changelog: "Beta release with 369 desktop tasks",
-    docker_image: "athanor/osworld:1.0.0-beta",
+    id: "ver-c2rust-02",
+    environment_id: "env-c2rust",
+    version_tag: "v1.0.0",
+    changelog:
+      "Initial release with 120 C-to-Rust translation tasks from real-world C codebases",
+    docker_image: "athanor/c-to-rust:1.0.0",
+    status: "published",
+    published_at: weekAgo,
+    created_at: weekAgo,
+    updated_at: weekAgo,
+  },
+  // Hardware Verification
+  {
+    id: "ver-hwcbmc-01",
+    environment_id: "env-hwcbmc",
+    version_tag: "v0.8.0-beta",
+    changelog:
+      "Beta release with 95 RTL property-checking and bounded model-checking tasks",
+    docker_image: "athanor/hw-cbmc:0.8.0-beta",
     status: "draft",
     published_at: null,
     created_at: dayAgo,
@@ -127,128 +171,207 @@ export const mockEnvironmentVersions: EnvironmentVersion[] = [
   },
 ];
 
+/* ------------------------------------------------------------------ */
+/*  Tasks — realistic examples for each environment                    */
+/* ------------------------------------------------------------------ */
+
 export const mockTasks: Task[] = [
+  /* ---------- Lean Theorem Proving ---------- */
   {
-    id: "task-001",
-    environment_id: "env-001",
-    name: "Find cheapest laptop on Amazon",
-    slug: "find-cheapest-laptop",
+    id: "task-lean-001",
+    environment_id: "env-lean",
+    name: "Prove commutativity of natural number addition",
+    slug: "nat-add-comm",
     description:
-      "Navigate to Amazon, search for laptops under $500, sort by price, and report the cheapest option with specs.",
+      "Construct a Lean 4 tactic proof that Nat.add is commutative, using only core Mathlib tactics.",
     difficulty: "medium",
-    category: "shopping",
-    max_steps: 50,
-    reward_range: { min: 0, max: 1 },
-    metadata: { site: "amazon.com", expected_duration_s: 120 },
-    created_at: weekAgo,
-    updated_at: weekAgo,
-  },
-  {
-    id: "task-002",
-    environment_id: "env-001",
-    name: "Post a reply on Reddit",
-    slug: "post-reddit-reply",
-    description:
-      "Navigate to a specific Reddit thread, compose and submit a contextually relevant reply.",
-    difficulty: "easy",
-    category: "social",
-    max_steps: 30,
-    reward_range: { min: 0, max: 1 },
-    metadata: { site: "reddit.com" },
-    created_at: weekAgo,
-    updated_at: weekAgo,
-  },
-  {
-    id: "task-003",
-    environment_id: "env-001",
-    name: "Book a hotel room in NYC",
-    slug: "book-hotel-nyc",
-    description:
-      "Search for hotel rooms in New York City for specific dates, compare prices, and complete a booking flow.",
-    difficulty: "hard",
-    category: "booking",
-    max_steps: 80,
-    reward_range: { min: 0, max: 1 },
-    metadata: { site: "booking.com", dates: "2025-03-15 to 2025-03-18" },
-    created_at: weekAgo,
-    updated_at: weekAgo,
-  },
-  {
-    id: "task-004",
-    environment_id: "env-002",
-    name: "Fix TypeError in django/utils/text.py",
-    slug: "fix-typeerror-django-utils",
-    description:
-      "Resolve a TypeError in Django's text utility module caused by incorrect string encoding handling.",
-    difficulty: "medium",
-    category: "bug-fix",
-    max_steps: 100,
-    reward_range: { min: 0, max: 1 },
-    metadata: { repo: "django/django", issue: "#34521" },
-    created_at: weekAgo,
-    updated_at: weekAgo,
-  },
-  {
-    id: "task-005",
-    environment_id: "env-002",
-    name: "Add pagination to API endpoint",
-    slug: "add-pagination-api",
-    description:
-      "Implement cursor-based pagination for the /api/users endpoint in a Flask application.",
-    difficulty: "hard",
-    category: "feature",
-    max_steps: 150,
-    reward_range: { min: 0, max: 1 },
-    metadata: { repo: "pallets/flask", issue: "#5102" },
-    created_at: dayAgo,
-    updated_at: dayAgo,
-  },
-  {
-    id: "task-006",
-    environment_id: "env-003",
-    name: "Create a spreadsheet chart",
-    slug: "create-spreadsheet-chart",
-    description:
-      "Open LibreOffice Calc, enter data into cells, and create a bar chart visualization.",
-    difficulty: "easy",
-    category: "productivity",
+    category: "tactic-generation",
     max_steps: 40,
     reward_range: { min: 0, max: 1 },
-    metadata: { app: "libreoffice-calc" },
-    created_at: dayAgo,
-    updated_at: dayAgo,
+    metadata: { lib: "Mathlib4", module: "Mathlib.Data.Nat.Basic" },
+    created_at: weekAgo,
+    updated_at: weekAgo,
   },
   {
-    id: "task-007",
-    environment_id: "env-002",
-    name: "Refactor test suite to use fixtures",
-    slug: "refactor-test-fixtures",
+    id: "task-lean-002",
+    environment_id: "env-lean",
+    name: "Synthesize proof of list reverse involution",
+    slug: "list-reverse-invol",
     description:
-      "Convert inline test setup in a pytest test file to use shared fixtures and parametrize decorators.",
-    difficulty: "medium",
-    category: "refactor",
+      "Generate a complete proof term showing that List.reverse (List.reverse l) = l for all lists l.",
+    difficulty: "hard",
+    category: "proof-synthesis",
     max_steps: 80,
     reward_range: { min: 0, max: 1 },
-    metadata: { repo: "psf/requests", issue: "#6401" },
+    metadata: { lib: "Mathlib4", module: "Mathlib.Data.List.Basic" },
+    created_at: weekAgo,
+    updated_at: weekAgo,
+  },
+
+  /* ---------- Cedar Policy Verification ---------- */
+  {
+    id: "task-cedar-001",
+    environment_id: "env-cedar",
+    name: "Author RBAC policy for document sharing",
+    slug: "rbac-doc-sharing",
+    description:
+      "Write a Cedar policy that permits read access to documents when the principal has role 'viewer' or 'editor' in the resource's parent folder.",
+    difficulty: "easy",
+    category: "policy-authoring",
+    max_steps: 20,
+    reward_range: { min: 0, max: 1 },
+    metadata: { schema: "document-sharing-v2" },
+    created_at: weekAgo,
+    updated_at: weekAgo,
+  },
+  {
+    id: "task-cedar-002",
+    environment_id: "env-cedar",
+    name: "Verify policy entailment for multi-tenant isolation",
+    slug: "multitenant-entailment",
+    description:
+      "Determine whether a given policy set guarantees that principals from tenant A can never access resources belonging to tenant B.",
+    difficulty: "hard",
+    category: "entailment-checking",
+    max_steps: 60,
+    reward_range: { min: 0, max: 1 },
+    metadata: { schema: "multi-tenant-saas-v1" },
     created_at: dayAgo,
     updated_at: dayAgo,
   },
+
+  /* ---------- Distributed Consensus ---------- */
   {
-    id: "task-008",
-    environment_id: "env-001",
-    name: "Fill out a government form",
-    slug: "fill-government-form",
+    id: "task-consensus-001",
+    environment_id: "env-consensus",
+    name: "Design leader election for 5-node Raft cluster",
+    slug: "raft-leader-election",
     description:
-      "Navigate a government website, locate the correct form, fill in all required fields, and submit.",
+      "Implement the leader-election phase of Raft for a 5-node cluster, handling split votes and term increments correctly.",
+    difficulty: "medium",
+    category: "protocol-design",
+    max_steps: 100,
+    reward_range: { min: 0, max: 1 },
+    metadata: { protocol: "raft", nodes: 5 },
+    created_at: weekAgo,
+    updated_at: weekAgo,
+  },
+  {
+    id: "task-consensus-002",
+    environment_id: "env-consensus",
+    name: "Prove safety invariant under network partition",
+    slug: "safety-partition",
+    description:
+      "Prove that the consensus protocol maintains the safety invariant (no two leaders in the same term) when an asymmetric network partition occurs.",
     difficulty: "expert",
-    category: "forms",
+    category: "safety-invariant",
+    max_steps: 150,
+    reward_range: { min: 0, max: 1 },
+    metadata: { protocol: "raft", fault: "asymmetric-partition" },
+    created_at: dayAgo,
+    updated_at: dayAgo,
+  },
+
+  /* ---------- Congestion Control ---------- */
+  {
+    id: "task-congestion-001",
+    environment_id: "env-congestion",
+    name: "Tune BBR parameters for high-latency link",
+    slug: "bbr-high-latency",
+    description:
+      "Adjust BBR pacing gain and cwnd parameters to maximize throughput on a 200 ms RTT, 100 Mbps bottleneck link with 1% random loss.",
+    difficulty: "medium",
+    category: "algorithm-design",
+    max_steps: 60,
+    reward_range: { min: 0, max: 1 },
+    metadata: { simulator: "ns-3", topology: "dumbbell", rtt_ms: 200 },
+    created_at: weekAgo,
+    updated_at: weekAgo,
+  },
+  {
+    id: "task-congestion-002",
+    environment_id: "env-congestion",
+    name: "Achieve Jain fairness index > 0.95 for 10 competing flows",
+    slug: "fairness-10-flows",
+    description:
+      "Design or configure a congestion control algorithm that achieves Jain fairness index above 0.95 when 10 flows compete on a shared bottleneck.",
+    difficulty: "hard",
+    category: "fairness-tuning",
+    max_steps: 80,
+    reward_range: { min: 0, max: 1 },
+    metadata: { simulator: "ns-3", flows: 10 },
+    created_at: dayAgo,
+    updated_at: dayAgo,
+  },
+
+  /* ---------- C-to-Rust ---------- */
+  {
+    id: "task-c2rust-001",
+    environment_id: "env-c2rust",
+    name: "Translate zlib inflate to safe Rust",
+    slug: "zlib-inflate-safe",
+    description:
+      "Convert the zlib inflate() function from C to idiomatic safe Rust, eliminating all unsafe blocks while preserving byte-exact output.",
+    difficulty: "hard",
+    category: "safe-translation",
     max_steps: 120,
     reward_range: { min: 0, max: 1 },
-    metadata: { site: "usa.gov" },
+    metadata: { source: "zlib-1.3", function: "inflate" },
+    created_at: weekAgo,
+    updated_at: weekAgo,
+  },
+  {
+    id: "task-c2rust-002",
+    environment_id: "env-c2rust",
+    name: "Verify FFI boundary for OpenSSL EVP interface",
+    slug: "openssl-evp-ffi",
+    description:
+      "Create correct Rust FFI bindings for OpenSSL's EVP_DigestInit / Update / Final and prove memory safety at the boundary.",
+    difficulty: "expert",
+    category: "ffi-boundary",
+    max_steps: 100,
+    reward_range: { min: 0, max: 1 },
+    metadata: { source: "openssl-3.x", api: "EVP_Digest" },
+    created_at: dayAgo,
+    updated_at: dayAgo,
+  },
+
+  /* ---------- Hardware Verification (EBMC) ---------- */
+  {
+    id: "task-hwcbmc-001",
+    environment_id: "env-hwcbmc",
+    name: "Check FIFO overflow assertion on AXI bus",
+    slug: "axi-fifo-overflow",
+    description:
+      "Use EBMC to verify that the AXI-stream FIFO never overflows under all valid input sequences within a 20-cycle bound.",
+    difficulty: "medium",
+    category: "property-checking",
+    max_steps: 50,
+    reward_range: { min: 0, max: 1 },
+    metadata: { design: "axi-stream-fifo", bound: 20 },
+    created_at: weekAgo,
+    updated_at: weekAgo,
+  },
+  {
+    id: "task-hwcbmc-002",
+    environment_id: "env-hwcbmc",
+    name: "Synthesize liveness assertion for arbiter grant",
+    slug: "arbiter-liveness",
+    description:
+      "Automatically synthesize a SystemVerilog assertion that captures the liveness property: every request is eventually granted within N cycles.",
+    difficulty: "hard",
+    category: "assertion-synthesis",
+    max_steps: 70,
+    reward_range: { min: 0, max: 1 },
+    metadata: { design: "round-robin-arbiter", ports: 4 },
     created_at: dayAgo,
     updated_at: dayAgo,
   },
 ];
+
+/* ------------------------------------------------------------------ */
+/*  Calibration profiles                                               */
+/* ------------------------------------------------------------------ */
 
 export const mockCalibrationProfiles: CalibrationProfile[] = [
   {
@@ -256,7 +379,7 @@ export const mockCalibrationProfiles: CalibrationProfile[] = [
     organization_id: "org-001",
     name: "Default Sigmoid",
     description:
-      "Standard sigmoid calibration with moderate steepness for general-purpose evaluation.",
+      "Standard sigmoid calibration with moderate steepness for general-purpose evaluation across all Athanor environments.",
     sigmoid_center: 0.5,
     sigmoid_steepness: 10.0,
     time_weight: 0.3,
@@ -269,9 +392,9 @@ export const mockCalibrationProfiles: CalibrationProfile[] = [
   {
     id: "cal-002",
     organization_id: "org-001",
-    name: "Strict Binary",
+    name: "Strict Binary (Verification)",
     description:
-      "Near-binary calibration that heavily penalizes partial completions. Use for pass/fail evaluations.",
+      "Near-binary calibration for pass/fail verification tasks — proofs either check or they don't. Best for Lean, Cedar, and EBMC environments.",
     sigmoid_center: 0.5,
     sigmoid_steepness: 50.0,
     time_weight: 0.1,
@@ -284,9 +407,9 @@ export const mockCalibrationProfiles: CalibrationProfile[] = [
   {
     id: "cal-003",
     organization_id: "org-001",
-    name: "Lenient Gradient",
+    name: "Lenient Gradient (Iterative)",
     description:
-      "Gradual calibration curve that rewards partial progress. Best for development and iteration cycles.",
+      "Gradual calibration curve that rewards partial progress. Best for C-to-Rust translation and congestion-control tuning where incremental improvement matters.",
     sigmoid_center: 0.3,
     sigmoid_steepness: 5.0,
     time_weight: 0.5,
@@ -298,19 +421,23 @@ export const mockCalibrationProfiles: CalibrationProfile[] = [
   },
 ];
 
+/* ------------------------------------------------------------------ */
+/*  Runs                                                               */
+/* ------------------------------------------------------------------ */
+
 export const mockRuns: Run[] = [
   {
     id: "run-001",
     organization_id: "org-001",
-    environment_id: "env-001",
-    calibration_profile_id: "cal-001",
+    environment_id: "env-lean",
+    calibration_profile_id: "cal-002",
     model_name: "claude-3.5-sonnet",
     status: "completed",
     started_at: hourAgo,
     completed_at: now,
-    total_tasks: 25,
-    completed_tasks: 25,
-    mean_score: 0.72,
+    total_tasks: 40,
+    completed_tasks: 40,
+    mean_score: 0.68,
     config: { temperature: 0.0, max_tokens: 4096 },
     created_at: hourAgo,
     updated_at: now,
@@ -318,15 +445,15 @@ export const mockRuns: Run[] = [
   {
     id: "run-002",
     organization_id: "org-001",
-    environment_id: "env-002",
-    calibration_profile_id: "cal-001",
+    environment_id: "env-cedar",
+    calibration_profile_id: "cal-002",
     model_name: "gpt-4o",
     status: "running",
     started_at: hourAgo,
     completed_at: null,
     total_tasks: 50,
     completed_tasks: 31,
-    mean_score: 0.45,
+    mean_score: 0.55,
     config: { temperature: 0.0, max_tokens: 8192 },
     created_at: hourAgo,
     updated_at: now,
@@ -334,15 +461,15 @@ export const mockRuns: Run[] = [
   {
     id: "run-003",
     organization_id: "org-001",
-    environment_id: "env-001",
-    calibration_profile_id: "cal-002",
+    environment_id: "env-c2rust",
+    calibration_profile_id: "cal-003",
     model_name: "gemini-2.0-flash",
     status: "completed",
     started_at: dayAgo,
     completed_at: dayAgo,
-    total_tasks: 25,
-    completed_tasks: 25,
-    mean_score: 0.58,
+    total_tasks: 30,
+    completed_tasks: 30,
+    mean_score: 0.42,
     config: { temperature: 0.0 },
     created_at: dayAgo,
     updated_at: dayAgo,
@@ -350,14 +477,14 @@ export const mockRuns: Run[] = [
   {
     id: "run-004",
     organization_id: "org-001",
-    environment_id: "env-003",
+    environment_id: "env-consensus",
     calibration_profile_id: null,
     model_name: "claude-3.5-sonnet",
     status: "failed",
     started_at: dayAgo,
     completed_at: dayAgo,
-    total_tasks: 10,
-    completed_tasks: 3,
+    total_tasks: 15,
+    completed_tasks: 4,
     mean_score: null,
     config: { temperature: 0.2 },
     created_at: dayAgo,
@@ -366,31 +493,51 @@ export const mockRuns: Run[] = [
   {
     id: "run-005",
     organization_id: "org-001",
-    environment_id: "env-002",
-    calibration_profile_id: "cal-003",
-    model_name: "gpt-4-turbo",
+    environment_id: "env-hwcbmc",
+    calibration_profile_id: "cal-001",
+    model_name: "gpt-4o",
     status: "pending",
     started_at: null,
     completed_at: null,
-    total_tasks: 100,
+    total_tasks: 95,
     completed_tasks: 0,
     mean_score: null,
     config: { temperature: 0.0, max_tokens: 4096 },
     created_at: now,
     updated_at: now,
   },
+  {
+    id: "run-006",
+    organization_id: "org-001",
+    environment_id: "env-congestion",
+    calibration_profile_id: "cal-003",
+    model_name: "claude-3.5-sonnet",
+    status: "completed",
+    started_at: dayAgo,
+    completed_at: dayAgo,
+    total_tasks: 20,
+    completed_tasks: 20,
+    mean_score: 0.61,
+    config: { temperature: 0.0, max_tokens: 4096 },
+    created_at: dayAgo,
+    updated_at: dayAgo,
+  },
 ];
+
+/* ------------------------------------------------------------------ */
+/*  Run results (sample results for run-001 — Lean Theorem Proving)    */
+/* ------------------------------------------------------------------ */
 
 export const mockRunResults: RunResult[] = [
   {
     id: "rr-001",
     run_id: "run-001",
-    task_id: "task-001",
-    raw_score: 0.85,
-    calibrated_score: 0.78,
-    steps_used: 32,
-    max_steps: 50,
-    duration_ms: 45200,
+    task_id: "task-lean-001",
+    raw_score: 0.92,
+    calibrated_score: 0.88,
+    steps_used: 18,
+    max_steps: 40,
+    duration_ms: 32400,
     trajectory: [],
     error: null,
     created_at: now,
@@ -398,41 +545,45 @@ export const mockRunResults: RunResult[] = [
   {
     id: "rr-002",
     run_id: "run-001",
-    task_id: "task-002",
-    raw_score: 1.0,
-    calibrated_score: 0.95,
-    steps_used: 12,
-    max_steps: 30,
-    duration_ms: 18300,
+    task_id: "task-lean-002",
+    raw_score: 0.45,
+    calibrated_score: 0.38,
+    steps_used: 80,
+    max_steps: 80,
+    duration_ms: 95200,
     trajectory: [],
     error: null,
     created_at: now,
   },
   {
     id: "rr-003",
-    run_id: "run-001",
-    task_id: "task-003",
-    raw_score: 0.3,
-    calibrated_score: 0.22,
-    steps_used: 80,
-    max_steps: 80,
-    duration_ms: 98700,
+    run_id: "run-003",
+    task_id: "task-c2rust-001",
+    raw_score: 0.6,
+    calibrated_score: 0.52,
+    steps_used: 98,
+    max_steps: 120,
+    duration_ms: 72800,
     trajectory: [],
     error: null,
-    created_at: now,
+    created_at: dayAgo,
   },
 ];
+
+/* ------------------------------------------------------------------ */
+/*  Baselines                                                          */
+/* ------------------------------------------------------------------ */
 
 export const mockBaselineRuns: BaselineRun[] = [
   {
     id: "bl-001",
     organization_id: "org-001",
-    environment_id: "env-001",
+    environment_id: "env-lean",
     model_name: "claude-3.5-sonnet",
-    label: "Claude 3.5 Sonnet - WebArena (Jan 2025)",
+    label: "Claude 3.5 Sonnet — Lean Theorem Proving (Q1 2025)",
     status: "completed",
-    mean_score: 0.72,
-    median_score: 0.75,
+    mean_score: 0.68,
+    median_score: 0.72,
     config: { temperature: 0.0, runs: 3 },
     created_at: weekAgo,
     updated_at: weekAgo,
@@ -440,12 +591,12 @@ export const mockBaselineRuns: BaselineRun[] = [
   {
     id: "bl-002",
     organization_id: "org-001",
-    environment_id: "env-001",
+    environment_id: "env-lean",
     model_name: "gpt-4o",
-    label: "GPT-4o - WebArena (Jan 2025)",
+    label: "GPT-4o — Lean Theorem Proving (Q1 2025)",
     status: "completed",
-    mean_score: 0.65,
-    median_score: 0.68,
+    mean_score: 0.59,
+    median_score: 0.62,
     config: { temperature: 0.0, runs: 3 },
     created_at: weekAgo,
     updated_at: weekAgo,
@@ -453,12 +604,12 @@ export const mockBaselineRuns: BaselineRun[] = [
   {
     id: "bl-003",
     organization_id: "org-001",
-    environment_id: "env-002",
+    environment_id: "env-cedar",
     model_name: "claude-3.5-sonnet",
-    label: "Claude 3.5 Sonnet - SWE-bench (Jan 2025)",
+    label: "Claude 3.5 Sonnet — Cedar Policy Verification (Q1 2025)",
     status: "completed",
-    mean_score: 0.49,
-    median_score: 0.51,
+    mean_score: 0.74,
+    median_score: 0.77,
     config: { temperature: 0.0, runs: 3 },
     created_at: weekAgo,
     updated_at: weekAgo,
@@ -466,12 +617,12 @@ export const mockBaselineRuns: BaselineRun[] = [
   {
     id: "bl-004",
     organization_id: "org-001",
-    environment_id: "env-002",
+    environment_id: "env-c2rust",
     model_name: "gpt-4o",
-    label: "GPT-4o - SWE-bench (Jan 2025)",
+    label: "GPT-4o — C-to-Rust (Q1 2025)",
     status: "completed",
-    mean_score: 0.41,
-    median_score: 0.43,
+    mean_score: 0.38,
+    median_score: 0.41,
     config: { temperature: 0.0, runs: 3 },
     created_at: weekAgo,
     updated_at: weekAgo,
@@ -479,17 +630,47 @@ export const mockBaselineRuns: BaselineRun[] = [
   {
     id: "bl-005",
     organization_id: "org-001",
-    environment_id: "env-001",
+    environment_id: "env-consensus",
     model_name: "gemini-2.0-flash",
-    label: "Gemini 2.0 Flash - WebArena (Jan 2025)",
+    label: "Gemini 2.0 Flash — Distributed Consensus (Q1 2025)",
     status: "completed",
-    mean_score: 0.58,
-    median_score: 0.60,
+    mean_score: 0.47,
+    median_score: 0.50,
+    config: { temperature: 0.0, runs: 3 },
+    created_at: weekAgo,
+    updated_at: weekAgo,
+  },
+  {
+    id: "bl-006",
+    organization_id: "org-001",
+    environment_id: "env-congestion",
+    model_name: "claude-3.5-sonnet",
+    label: "Claude 3.5 Sonnet — Congestion Control (Q1 2025)",
+    status: "completed",
+    mean_score: 0.61,
+    median_score: 0.63,
+    config: { temperature: 0.0, runs: 3 },
+    created_at: weekAgo,
+    updated_at: weekAgo,
+  },
+  {
+    id: "bl-007",
+    organization_id: "org-001",
+    environment_id: "env-hwcbmc",
+    model_name: "gpt-4o",
+    label: "GPT-4o — Hardware Verification EBMC (Q1 2025)",
+    status: "completed",
+    mean_score: 0.33,
+    median_score: 0.35,
     config: { temperature: 0.0, runs: 3 },
     created_at: weekAgo,
     updated_at: weekAgo,
   },
 ];
+
+/* ------------------------------------------------------------------ */
+/*  Credentials  (unchanged — provider-level, not benchmark-specific)  */
+/* ------------------------------------------------------------------ */
 
 export const mockCredentials: Credential[] = [
   {
@@ -516,12 +697,17 @@ export const mockCredentials: Credential[] = [
   },
 ];
 
+/* ------------------------------------------------------------------ */
+/*  Docs pages                                                         */
+/* ------------------------------------------------------------------ */
+
 export const mockDocsPages: DocsPage[] = [
   {
     id: "doc-001",
     slug: "getting-started",
     title: "Getting Started",
-    content: "Welcome to the Athanor platform...",
+    content:
+      "Welcome to the Athanor platform — versioned RL training environments for formal verification, systems engineering, and safe code generation.",
     category: "quickstart",
     sort_order: 0,
     created_at: weekAgo,
@@ -531,7 +717,8 @@ export const mockDocsPages: DocsPage[] = [
     id: "doc-002",
     slug: "environments-overview",
     title: "Environments Overview",
-    content: "Environments are versioned evaluation sandboxes...",
+    content:
+      "Athanor ships six core environments: Lean Theorem Proving, Cedar Policy Verification, Distributed Consensus, Congestion Control, C-to-Rust, and Hardware Verification (EBMC). Each is a versioned, reproducible sandbox with its own task families and scoring criteria.",
     category: "concepts",
     sort_order: 1,
     created_at: weekAgo,
@@ -541,7 +728,8 @@ export const mockDocsPages: DocsPage[] = [
     id: "doc-003",
     slug: "calibration-guide",
     title: "Calibration Guide",
-    content: "Calibration profiles control how raw scores are transformed...",
+    content:
+      "Calibration profiles control how raw scores are transformed into calibrated scores. The 'Strict Binary' profile works well for verification environments (Lean, Cedar, EBMC) where proofs either check or don't. The 'Lenient Gradient' profile is better for translation and tuning environments (C-to-Rust, Congestion Control) where partial progress matters.",
     category: "concepts",
     sort_order: 2,
     created_at: weekAgo,
@@ -551,7 +739,8 @@ export const mockDocsPages: DocsPage[] = [
     id: "doc-004",
     slug: "api-reference",
     title: "API Reference",
-    content: "REST API documentation for programmatic access...",
+    content:
+      "REST API documentation for programmatic access to Athanor environments, runs, calibration profiles, baselines, and results.",
     category: "reference",
     sort_order: 3,
     created_at: weekAgo,
@@ -561,7 +750,8 @@ export const mockDocsPages: DocsPage[] = [
     id: "doc-005",
     slug: "training-integration",
     title: "Training Integration",
-    content: "Guide for integrating Athanor environments with RL training pipelines...",
+    content:
+      "Guide for integrating Athanor environments with RL training pipelines. Covers Docker containers, Kubernetes job specs, and the Python SDK for connecting training loops to Lean, Cedar, Consensus, Congestion-Control, C-to-Rust, and EBMC environments.",
     category: "guides",
     sort_order: 4,
     created_at: weekAgo,

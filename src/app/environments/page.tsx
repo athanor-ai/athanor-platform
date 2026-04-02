@@ -21,7 +21,7 @@ export default function EnvironmentsPage() {
       <>
         <PageHeader
           title="Environments"
-          description="Versioned evaluation sandboxes for RL agent benchmarking"
+          description="Versioned evaluation sandboxes for formal verification and systems RL training"
           actions={<Button variant="primary">New Environment</Button>}
         />
         <LoadingState message="Loading environments..." />
@@ -46,12 +46,12 @@ export default function EnvironmentsPage() {
       <>
         <PageHeader
           title="Environments"
-          description="Versioned evaluation sandboxes for RL agent benchmarking"
+          description="Versioned evaluation sandboxes for formal verification and systems RL training"
           actions={<Button variant="primary">New Environment</Button>}
         />
         <EmptyState
           title="No environments yet"
-          description="Create your first evaluation environment to start benchmarking agents."
+          description="Create your first evaluation environment to start evaluating agents."
           action={<Button variant="primary">New Environment</Button>}
         />
       </>
@@ -62,7 +62,7 @@ export default function EnvironmentsPage() {
     <>
       <PageHeader
         title="Environments"
-        description="Versioned evaluation sandboxes for RL agent benchmarking"
+        description="Versioned evaluation sandboxes for formal verification and systems RL training"
         actions={<Button variant="primary">New Environment</Button>}
       />
 

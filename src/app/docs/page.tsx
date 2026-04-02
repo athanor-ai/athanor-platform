@@ -21,7 +21,7 @@ export default function DocsPage() {
     <>
       <PageHeader
         title="Documentation"
-        description="Guides, references, and API documentation"
+        description="Guides, references, and API documentation for Athanor verification environments"
       />
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
@@ -72,25 +72,29 @@ export default function DocsPage() {
                 <p>{selectedPage.content}</p>
                 <p>
                   The Athanor platform provides a unified interface for
-                  evaluating AI agents across diverse environments. Each
-                  environment is a versioned, reproducible sandbox that
-                  encapsulates a specific domain of tasks -- from web browsing
-                  and software engineering to desktop automation and API tool use.
+                  evaluating AI agents across six core verification and systems
+                  environments: Lean Theorem Proving, Cedar Policy Verification,
+                  Distributed Consensus, Congestion Control, C-to-Rust, and
+                  Hardware Verification (EBMC). Each environment is a versioned,
+                  reproducible sandbox with domain-specific task families and
+                  scoring criteria.
                 </p>
                 <p>
                   Evaluation runs execute a model against a set of tasks within
                   an environment, producing raw scores that are then transformed
-                  through configurable calibration profiles. This two-stage
-                  scoring approach separates the objective measurement of task
-                  completion from the subjective weighting of partial progress,
-                  time efficiency, and step economy.
+                  through configurable calibration profiles. Verification-focused
+                  environments (Lean, Cedar, EBMC) work best with the Strict
+                  Binary calibration profile, while iterative environments
+                  (C-to-Rust, Congestion Control) benefit from the Lenient
+                  Gradient profile that rewards partial progress.
                 </p>
                 <p>
                   Baselines establish reference performance levels for known
-                  models, enabling relative comparisons across model versions,
-                  prompting strategies, and fine-tuning approaches. The platform
-                  tracks baseline runs independently from evaluation runs to
-                  maintain a stable reference point as environments evolve.
+                  models across all six environments, enabling relative
+                  comparisons across model versions, prompting strategies, and
+                  fine-tuning approaches. The platform tracks baseline runs
+                  independently from evaluation runs to maintain a stable
+                  reference point as environments evolve.
                 </p>
                 <p>
                   For programmatic access, the REST API and Python SDK provide

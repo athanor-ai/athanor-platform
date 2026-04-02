@@ -144,7 +144,7 @@ export default function RunsPage() {
         />
         <EmptyState
           title="No runs yet"
-          description="Start a new evaluation run to benchmark agent performance across tasks."
+          description="Start a new evaluation run to measure agent performance across Athanor environment tasks."
           action={
             <Link href="/runs?action=new">
               <Button variant="primary">New Run</Button>
