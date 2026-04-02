@@ -8,7 +8,6 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { Card } from "@/components/ui/Card";
 import { DataTable, type Column } from "@/components/ui/DataTable";
 import { StatusBadge } from "@/components/ui/StatusBadge";
-import { Button } from "@/components/ui/Button";
 import { LoadingState } from "@/components/ui/LoadingState";
 import type { BaselineRun } from "@/types/database";
 
@@ -105,8 +104,7 @@ export default function BaselinesPage() {
       <>
         <PageHeader
           title="Baselines"
-          description="Model performance baselines across environments"
-          actions={<Button variant="primary">New Baseline</Button>}
+          description="Reference baselines for comparing agent performance across your environments"
         />
         <LoadingState message="Loading baselines..." />
       </>
@@ -117,8 +115,7 @@ export default function BaselinesPage() {
     <>
       <PageHeader
         title="Baselines"
-        description="Model performance baselines across environments"
-        actions={<Button variant="primary">New Baseline</Button>}
+        description="Model performance baselines across all environments"
       />
 
       <div className="mb-6 grid grid-cols-2 gap-4 lg:grid-cols-4">

@@ -14,15 +14,16 @@ import {
   PiKey,
   PiBookOpen,
 } from "react-icons/pi";
+import { ATHANOR_ENVIRONMENTS } from "@/data/environments";
 
 const navItems = [
-  { label: "Overview", href: "/overview", icon: PiHouseSimple },
+  { label: "Dashboard", href: "/overview", icon: PiHouseSimple },
   { label: "Environments", href: "/environments", icon: PiCube },
   { label: "Tasks", href: "/tasks", icon: PiListChecks },
   { label: "Runs", href: "/runs", icon: PiPlay },
   { label: "Calibration", href: "/calibration", icon: PiWaveSine },
   { label: "Baselines", href: "/baselines", icon: PiChartBar },
-  { label: "Training", href: "/training", icon: PiBrain },
+  { label: "Integration", href: "/training", icon: PiBrain },
   { label: "Credentials", href: "/credentials", icon: PiKey },
   { label: "Docs", href: "/docs", icon: PiBookOpen },
 ];
@@ -36,10 +37,10 @@ export function Sidebar() {
       <div className="flex h-12 items-center border-b border-border px-4">
         <Link href="/overview" className="flex items-center gap-2">
           <div className="flex h-6 w-6 items-center justify-center rounded-sm bg-accent">
-            <span className="text-xs font-bold text-background">A</span>
+            <span className="text-xs font-bold text-background">T</span>
           </div>
           <span className="text-sm font-semibold tracking-tight text-text-primary">
-            Athanor
+            Tahoe
           </span>
         </Link>
       </div>
@@ -78,15 +79,17 @@ export function Sidebar() {
         </ul>
       </nav>
 
-      {/* Footer */}
+      {/* Footer — org identity */}
       <div className="border-t border-border px-4 py-3">
-        <div className="flex items-center gap-2">
-          <div className="h-6 w-6 rounded-full bg-surface-overlay" />
-          <div className="flex-1 min-w-0">
-            <div className="truncate text-xs text-text-primary">Athanor Labs</div>
-            <div className="text-[10px] text-text-tertiary">Pro plan</div>
+        <Link href="/overview" className="flex items-center gap-2">
+          <div className="flex h-6 w-6 items-center justify-center rounded-full bg-accent/20 text-[10px] font-bold text-accent">
+            A
           </div>
-        </div>
+          <div className="min-w-0 flex-1">
+            <div className="truncate text-xs text-text-primary">Athanor Labs</div>
+            <div className="text-[10px] text-text-tertiary">{ATHANOR_ENVIRONMENTS.length} shipped environments</div>
+          </div>
+        </Link>
       </div>
     </aside>
   );

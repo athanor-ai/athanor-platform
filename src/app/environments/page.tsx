@@ -6,7 +6,6 @@ import { useTasks } from "@/hooks/useTasks";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Card, CardHeader, CardTitle } from "@/components/ui/Card";
 import { StatusBadge } from "@/components/ui/StatusBadge";
-import { Button } from "@/components/ui/Button";
 import { LoadingState } from "@/components/ui/LoadingState";
 import { EmptyState } from "@/components/ui/EmptyState";
 
@@ -21,8 +20,7 @@ export default function EnvironmentsPage() {
       <>
         <PageHeader
           title="Environments"
-          description="Versioned evaluation sandboxes for RL agent benchmarking"
-          actions={<Button variant="primary">New Environment</Button>}
+          description="Athanor environments shipped to your organization"
         />
         <LoadingState message="Loading environments..." />
       </>
@@ -46,13 +44,11 @@ export default function EnvironmentsPage() {
       <>
         <PageHeader
           title="Environments"
-          description="Versioned evaluation sandboxes for RL agent benchmarking"
-          actions={<Button variant="primary">New Environment</Button>}
+          description="Athanor environments shipped to your organization"
         />
         <EmptyState
-          title="No environments yet"
-          description="Create your first evaluation environment to start benchmarking agents."
-          action={<Button variant="primary">New Environment</Button>}
+          title="No environments available"
+          description="No environments have been provisioned for your account yet. Contact Athanor to get started."
         />
       </>
     );
@@ -62,11 +58,10 @@ export default function EnvironmentsPage() {
     <>
       <PageHeader
         title="Environments"
-        description="Versioned evaluation sandboxes for RL agent benchmarking"
-        actions={<Button variant="primary">New Environment</Button>}
+        description="Versioned evaluation sandboxes for formal verification and systems RL training"
       />
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         {envList.map((env) => (
           <Link key={env.id} href={`/environments/${env.id}`}>
             <Card hover>

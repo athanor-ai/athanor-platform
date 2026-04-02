@@ -15,9 +15,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Athanor — RL Training Environments",
+  title: "Tahoe — Athanor Customer Console",
   description:
-    "Customer console for Athanor's versioned RL training environments. Evaluate, calibrate, and benchmark AI agents.",
+    "Private monitoring console for approved Athanor customers. Monitor shipped environments, inspect evaluation runs, review agent traces and tool usage, and calibrate scoring across formal verification and systems engineering tasks.",
 };
 
 export default function RootLayout({
