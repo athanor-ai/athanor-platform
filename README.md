@@ -59,3 +59,7 @@ src/
 supabase/
 └── migrations/       # Database schema migrations
 ```
+
+---
+
+_Last deploy trigger: 2025-04-02_
