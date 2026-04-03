@@ -129,13 +129,19 @@ export async function POST(request: NextRequest) {
 
   switch (action) {
     case "grant-access": {
-      const { organization_id, environment_id, access_level } = params;
-      if (!organization_id || !environment_id) {
-        return NextResponse.json({ error: "Missing organization_id or environment_id" }, { status: 400 });
+      const { organization_id, environment_id, environment_slug, access_level } = params;
+      // Support both ID and slug lookup
+      let envId = environment_id;
+      if (!envId && environment_slug) {
+        const { data: env } = await service.from("environments").select("id").eq("slug", environment_slug).single();
+        envId = env?.id;
+      }
+      if (!organization_id || !envId) {
+        return NextResponse.json({ error: "Missing organization_id or environment_id/slug" }, { status: 400 });
       }
       const { error } = await service.from("organization_environments").upsert({
         organization_id,
-        environment_id,
+        environment_id: envId,
         access_level: access_level || "full",
       });
       if (error) return NextResponse.json({ error: error.message }, { status: 500 });
@@ -143,14 +149,76 @@ export async function POST(request: NextRequest) {
     }
 
     case "revoke-access": {
-      const { organization_id, environment_id } = params;
+      const { organization_id, environment_id, environment_slug } = params;
+      let envId = environment_id;
+      if (!envId && environment_slug) {
+        const { data: env } = await service.from("environments").select("id").eq("slug", environment_slug).single();
+        envId = env?.id;
+      }
       const { error } = await service
         .from("organization_environments")
         .delete()
         .eq("organization_id", organization_id)
-        .eq("environment_id", environment_id);
+        .eq("environment_id", envId);
       if (error) return NextResponse.json({ error: error.message }, { status: 500 });
       return NextResponse.json({ success: true, action: "revoke-access" });
+    }
+
+    case "add-user": {
+      const { organization_id, email } = params;
+      if (!organization_id || !email) {
+        return NextResponse.json({ error: "Missing organization_id or email" }, { status: 400 });
+      }
+      const emailLower = email.trim().toLowerCase();
+      // Create Supabase auth user
+      const nodeCrypto = await import("crypto");
+      const secret = process.env.CREDENTIAL_ENCRYPTION_KEY || "fallback";
+      const password = nodeCrypto.createHmac("sha256", secret).update(`athanor-bridge:${emailLower}`).digest("hex").slice(0, 32);
+
+      const { data: authData, error: authError } = await service.auth.admin.createUser({
+        email: emailLower,
+        password,
+        email_confirm: true,
+      });
+      if (authError) return NextResponse.json({ error: authError.message }, { status: 400 });
+
+      await service.from("profiles").insert({
+        id: authData.user.id,
+        organization_id,
+        email: emailLower,
+        role: "member",
+      });
+
+      // Add to Cloudflare
+      try {
+        const { addAccessEmails } = await import("@/lib/cloudflare-access");
+        await addAccessEmails([emailLower]);
+      } catch { /* non-fatal */ }
+
+      return NextResponse.json({ success: true, action: "add-user", email: emailLower });
+    }
+
+    case "remove-user": {
+      const { organization_id, email } = params;
+      if (!organization_id || !email) {
+        return NextResponse.json({ error: "Missing organization_id or email" }, { status: 400 });
+      }
+      const emailLower = email.trim().toLowerCase();
+
+      // Find profile
+      const { data: profile } = await service.from("profiles").select("id").eq("email", emailLower).eq("organization_id", organization_id).single();
+      if (profile) {
+        await service.auth.admin.deleteUser(profile.id);
+        // Profile cascade-deletes via FK
+      }
+
+      // Remove from Cloudflare
+      try {
+        const { removeAccessEmails } = await import("@/lib/cloudflare-access");
+        await removeAccessEmails([emailLower]);
+      } catch { /* non-fatal */ }
+
+      return NextResponse.json({ success: true, action: "remove-user", email: emailLower });
     }
 
     case "set-plan": {

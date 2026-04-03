@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  const { orgName, emails, environmentIds } = await request.json();
+  const { orgName, emails, environmentIds, environmentSlugs } = await request.json();
 
   if (!orgName || !emails?.length) {
     return NextResponse.json(
@@ -101,9 +101,19 @@ export async function POST(request: NextRequest) {
     }
   }
 
-  // 3. Grant environment access
+  // 3. Grant environment access (support both IDs and slugs)
   const envGranted: string[] = [];
-  for (const envId of (environmentIds || [])) {
+
+  // Resolve slugs to IDs
+  let envIds = environmentIds || [];
+  if (environmentSlugs?.length) {
+    for (const slug of environmentSlugs) {
+      const { data: env } = await supabase.from("environments").select("id").eq("slug", slug).single();
+      if (env) envIds.push(env.id);
+    }
+  }
+
+  for (const envId of envIds) {
     const { error } = await supabase
       .from("organization_environments")
       .insert({

@@ -6,6 +6,60 @@ import { Card, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { ATHANOR_ENVIRONMENTS } from "@/data/environments";
 
+function AddUserInline({ orgId, orgName, onDone }: { orgId: string; orgName: string; onDone: () => void }) {
+  const [show, setShow] = useState(false);
+  const [email, setEmail] = useState("");
+  const [adding, setAdding] = useState(false);
+
+  if (!show) {
+    return (
+      <button
+        onClick={() => setShow(true)}
+        className="mt-1 text-[10px] text-accent/60 hover:text-accent transition-colors"
+      >
+        + Add user
+      </button>
+    );
+  }
+
+  return (
+    <div className="mt-1 flex gap-1.5 items-center">
+      <input
+        type="email"
+        placeholder="email@company.com"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        className="flex-1 px-2 py-1 rounded border border-border-primary bg-surface-primary text-[11px] text-text-primary placeholder:text-text-tertiary font-mono"
+        autoFocus
+      />
+      <button
+        disabled={adding || !email.trim()}
+        onClick={async () => {
+          setAdding(true);
+          await fetch("/api/admin", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action: "add-user", organization_id: orgId, email: email.trim() }),
+          });
+          setEmail("");
+          setShow(false);
+          setAdding(false);
+          onDone();
+        }}
+        className="px-2 py-1 rounded text-[10px] font-medium bg-accent/20 text-accent hover:bg-accent/30 transition-colors disabled:opacity-40"
+      >
+        {adding ? "..." : "Add"}
+      </button>
+      <button
+        onClick={() => { setShow(false); setEmail(""); }}
+        className="text-[10px] text-text-tertiary hover:text-text-secondary"
+      >
+        Cancel
+      </button>
+    </div>
+  );
+}
+
 interface OrgUser {
   email: string;
   role: string;
@@ -46,20 +100,20 @@ export default function AdminPage() {
 
   useEffect(() => { fetchOrgs(); }, [fetchOrgs]);
 
-  const grantAccess = async (orgId: string, envId: string) => {
+  const grantAccess = async (orgId: string, envSlug: string) => {
     await fetch("/api/admin", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "grant-access", organization_id: orgId, environment_id: envId }),
+      body: JSON.stringify({ action: "grant-access", organization_id: orgId, environment_slug: envSlug }),
     });
     fetchOrgs();
   };
 
-  const revokeAccess = async (orgId: string, envId: string) => {
+  const revokeAccess = async (orgId: string, envSlug: string) => {
     await fetch("/api/admin", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "revoke-access", organization_id: orgId, environment_id: envId }),
+      body: JSON.stringify({ action: "revoke-access", organization_id: orgId, environment_slug: envSlug }),
     });
     fetchOrgs();
   };
@@ -78,9 +132,9 @@ export default function AdminPage() {
     setInviting(true);
     setInviteResult(null);
     try {
-      const envIds = ATHANOR_ENVIRONMENTS
+      const envSlugs = ATHANOR_ENVIRONMENTS
         .filter((e) => inviteEnvs.has(e.slug))
-        .map((e) => e.id);
+        .map((e) => e.slug);
 
       const res = await fetch("/api/admin/invite", {
         method: "POST",
@@ -88,7 +142,7 @@ export default function AdminPage() {
         body: JSON.stringify({
           orgName: inviteOrg,
           emails,
-          environmentIds: envIds,
+          environmentSlugs: envSlugs,
         }),
       });
       const data = await res.json();
@@ -136,10 +190,6 @@ export default function AdminPage() {
       </>
     );
   }
-
-  const envIdMap = new Map(
-    ATHANOR_ENVIRONMENTS.map((e) => [e.slug, e.id]),
-  );
 
   return (
     <>
@@ -247,8 +297,8 @@ export default function AdminPage() {
                       key={env.slug}
                       onClick={() =>
                         hasAccess
-                          ? revokeAccess(org.id, envIdMap.get(env.slug) || env.id)
-                          : grantAccess(org.id, envIdMap.get(env.slug) || env.id)
+                          ? revokeAccess(org.id, env.slug)
+                          : grantAccess(org.id, env.slug)
                       }
                       className={`px-2 py-1 rounded text-[10px] font-medium transition-colors ${
                         hasAccess
@@ -273,7 +323,7 @@ export default function AdminPage() {
                     {org.users.map((u) => (
                       <div key={u.email} className="flex items-center gap-2 text-[11px]">
                         <span className={`w-1.5 h-1.5 rounded-full ${u.status === "active" ? "bg-green-400" : "bg-yellow-400"}`} />
-                        <span className="font-mono text-text-secondary">{u.email}</span>
+                        <span className="font-mono text-text-secondary flex-1">{u.email}</span>
                         <span className="text-text-tertiary">{u.role}</span>
                         <span className={`px-1.5 py-0.5 rounded text-[9px] font-medium ${
                           u.status === "active"
@@ -282,8 +332,28 @@ export default function AdminPage() {
                         }`}>
                           {u.status}
                         </span>
+                        {org.plan !== "internal" && (
+                          <button
+                            onClick={async () => {
+                              if (!confirm(`Remove ${u.email} from ${org.name}?`)) return;
+                              await fetch("/api/admin", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ action: "remove-user", organization_id: org.id, email: u.email }),
+                              });
+                              fetchOrgs();
+                            }}
+                            className="text-red-400/40 hover:text-red-400 transition-colors"
+                            title={`Remove ${u.email}`}
+                          >
+                            &times;
+                          </button>
+                        )}
                       </div>
                     ))}
+                    {org.plan !== "internal" && (
+                      <AddUserInline orgId={org.id} orgName={org.name} onDone={fetchOrgs} />
+                    )}
                   </div>
                 </div>
               )}
