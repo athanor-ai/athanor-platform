@@ -17,7 +17,7 @@ function getServiceClient() {
 }
 
 const ADMIN_EMAILS = new Set([
-  "aidan@athanor.com",
+  "aidan@athanorl.com",
   "hongsksam@gmail.com",
 ]);
 
