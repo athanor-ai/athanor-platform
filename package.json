@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "sync-scores": "bun run scripts/sync-scores.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.10.0",
