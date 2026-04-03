@@ -133,7 +133,7 @@ export interface BaselineTaskResult {
 export interface Credential {
   id: string;
   organization_id: string;
-  provider: "openai" | "anthropic" | "gemini" | "azure_openai" | "bedrock";
+  provider: "anthropic" | "google" | "mistral" | "moonshot";
   label: string;
   encrypted_key: string;
   is_active: boolean;
