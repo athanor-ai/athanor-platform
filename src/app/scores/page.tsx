@@ -201,14 +201,6 @@ function relativeTaskCellClass(score: number | null, rowScores: (number | null)[
   return "bg-red-900/30 text-red-400";
 }
 
-// Legacy (for summary table)
-function taskCellClass(s: number | null): string {
-  if (s === null) return "text-text-tertiary";
-  if (s >= 0.9) return "bg-green-900/40 text-green-300";
-  if (s >= 0.5) return "bg-yellow-900/30 text-yellow-300";
-  if (s > 0) return "bg-red-900/20 text-red-300";
-  return "bg-red-900/30 text-red-400";
-}
 
 /* ------------------------------------------------------------------ */
 /*  Slider gradient helper                                             */

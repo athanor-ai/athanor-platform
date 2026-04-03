@@ -97,7 +97,7 @@ export async function executeRun(
     ].join(" && ");
 
     // 6. Execute via SSH and stream output
-    const completed = await executeSSHWithProgress(
+    await executeSSHWithProgress(
       evalCmd,
       runId,
       supabase,

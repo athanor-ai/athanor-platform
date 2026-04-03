@@ -20,10 +20,6 @@ interface RevokeCredentialInput {
   id: string;
 }
 
-function generateId(): string {
-  return `cred-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
-}
-
 /**
  * Mutations for managing credentials in local (mock) state.
  *

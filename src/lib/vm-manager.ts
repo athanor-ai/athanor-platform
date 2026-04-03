@@ -23,9 +23,11 @@ const VM_NAME = process.env.AZURE_VM_NAME || "standard-env-runner";
 
 // Safety limits
 const MAX_RUN_DURATION_MS = 4 * 60 * 60 * 1000; // 4 hours max per run
-const MAX_VM_UPTIME_MS = 6 * 60 * 60 * 1000; // 6 hours max before forced shutdown
-const MAX_DISK_USAGE_GB = 50; // Alert if disk usage exceeds this
-const MAX_WORKDIR_SIZE_GB = 10; // Clean workdirs if they exceed this
+/* eslint-disable @typescript-eslint/no-unused-vars */
+const _MAX_VM_UPTIME_MS = 6 * 60 * 60 * 1000; // 6 hours max before forced shutdown
+const _MAX_DISK_USAGE_GB = 50; // Alert if disk usage exceeds this
+const _MAX_WORKDIR_SIZE_GB = 10; // Clean workdirs if they exceed this
+/* eslint-enable @typescript-eslint/no-unused-vars */
 
 export type VMStatus = "running" | "deallocated" | "starting" | "stopping" | "unknown";
 

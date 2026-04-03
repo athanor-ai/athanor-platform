@@ -7,7 +7,7 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { Card } from "@/components/ui/Card";
 import { DataTable, type Column } from "@/components/ui/DataTable";
-import { StatusBadge } from "@/components/ui/StatusBadge";
+// StatusBadge removed: baselines are always complete
 import { LoadingState } from "@/components/ui/LoadingState";
 import type { BaselineRun } from "@/types/database";
 
