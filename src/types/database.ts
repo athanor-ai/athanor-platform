@@ -130,12 +130,32 @@ export interface BaselineTaskResult {
   created_at: string;
 }
 
+/**
+ * Supported credential provider identifiers.
+ *
+ * "Direct" providers (Anthropic, Google, Mistral, Moonshot) use a single
+ * API key. "Proxy / compatible" providers (OpenAI, LiteLLM, Azure, Bedrock)
+ * require both an API key and a base URL so the backend can route requests
+ * through the correct endpoint.
+ */
+export type CredentialProvider =
+  | "anthropic"
+  | "google"
+  | "mistral"
+  | "moonshot"
+  | "openai"
+  | "litellm"
+  | "azure"
+  | "bedrock";
+
 export interface Credential {
   id: string;
   organization_id: string;
-  provider: "anthropic" | "google" | "mistral" | "moonshot";
+  provider: CredentialProvider;
   label: string;
   encrypted_key: string;
+  /** Base URL for OpenAI-compatible, LiteLLM, Azure, or Bedrock endpoints. */
+  base_url: string | null;
   is_active: boolean;
   last_verified_at: string | null;
   created_at: string;

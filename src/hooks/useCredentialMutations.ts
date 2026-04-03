@@ -1,17 +1,19 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "@/lib/query-keys";
-import type { Credential } from "@/types/database";
+import type { Credential, CredentialProvider } from "@/types/database";
 
 interface AddCredentialInput {
-  provider: Credential["provider"];
+  provider: CredentialProvider;
   label: string;
   apiKey: string;
+  baseUrl?: string;
 }
 
 interface UpdateCredentialInput {
   id: string;
   label: string;
   apiKey: string;
+  baseUrl?: string;
 }
 
 interface RevokeCredentialInput {
@@ -49,6 +51,7 @@ export function useCredentialMutations() {
         provider: input.provider,
         label: input.label,
         encrypted_key: masked,
+        base_url: input.baseUrl?.trim() || null,
         is_active: true,
         last_verified_at: now,
         created_at: now,
@@ -64,7 +67,11 @@ export function useCredentialMutations() {
   });
 
   const updateCredential = useMutation({
-    mutationFn: async (input: UpdateCredentialInput): Promise<UpdateCredentialInput & { masked: string; updatedAt: string }> => {
+    mutationFn: async (
+      input: UpdateCredentialInput,
+    ): Promise<
+      UpdateCredentialInput & { masked: string; updatedAt: string }
+    > => {
       await new Promise((r) => setTimeout(r, 300));
 
       const masked =
@@ -84,6 +91,7 @@ export function useCredentialMutations() {
                   ...c,
                   label: result.label,
                   encrypted_key: result.masked,
+                  base_url: result.baseUrl?.trim() || null,
                   last_verified_at: result.updatedAt,
                   updated_at: result.updatedAt,
                 }

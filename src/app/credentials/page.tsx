@@ -8,38 +8,11 @@ import { Card } from "@/components/ui/Card";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { Button } from "@/components/ui/Button";
 import { LoadingState } from "@/components/ui/LoadingState";
-import type { Credential } from "@/types/database";
-
-/* ------------------------------------------------------------------ */
-/*  Provider definitions — aligned with real Athanor model lineup      */
-/* ------------------------------------------------------------------ */
-
-const PROVIDERS = [
-  {
-    key: "anthropic" as const,
-    name: "Anthropic",
-    description: "Claude Sonnet 4.6",
-    placeholder: "sk-ant-api03-...",
-  },
-  {
-    key: "google" as const,
-    name: "Google",
-    description: "Gemini 3.1 Pro, Gemini 2.5 Flash",
-    placeholder: "AIza...",
-  },
-  {
-    key: "mistral" as const,
-    name: "Mistral",
-    description: "Mistral Large 3",
-    placeholder: "sk-...",
-  },
-  {
-    key: "moonshot" as const,
-    name: "Moonshot",
-    description: "Kimi K2.5",
-    placeholder: "sk-...",
-  },
-];
+import {
+  PROVIDERS,
+  type ProviderConfig,
+} from "@/data/providers";
+import type { Credential, CredentialProvider } from "@/types/database";
 
 /* ------------------------------------------------------------------ */
 /*  Provider avatar                                                    */
@@ -54,7 +27,32 @@ function ProviderAvatar({ name }: { name: string }) {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Credential form (add / edit)                                       */
+/*  Category label                                                     */
+/* ------------------------------------------------------------------ */
+
+function CategoryLabel({
+  category,
+}: {
+  category: "direct" | "proxy";
+}) {
+  if (category === "direct") {
+    return (
+      <span className="inline-flex items-center gap-1 text-[10px] font-medium uppercase tracking-wider text-text-tertiary">
+        <span className="h-1.5 w-1.5 rounded-full bg-success" />
+        Direct API
+      </span>
+    );
+  }
+  return (
+    <span className="inline-flex items-center gap-1 text-[10px] font-medium uppercase tracking-wider text-text-tertiary">
+      <span className="h-1.5 w-1.5 rounded-full bg-info" />
+      Key + Base URL
+    </span>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Credential form (add / edit) with key + optional base URL          */
 /* ------------------------------------------------------------------ */
 
 function CredentialForm({
@@ -62,7 +60,7 @@ function CredentialForm({
   existingCredential,
   onClose,
 }: {
-  provider: (typeof PROVIDERS)[number];
+  provider: ProviderConfig;
   existingCredential?: Credential;
   onClose: () => void;
 }) {
@@ -71,6 +69,9 @@ function CredentialForm({
     existingCredential?.label ?? `${provider.name} API Key`,
   );
   const [apiKey, setApiKey] = useState("");
+  const [baseUrl, setBaseUrl] = useState(
+    existingCredential?.base_url ?? (provider.requiresBaseUrl ? provider.baseUrlPlaceholder : ""),
+  );
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -89,6 +90,7 @@ function CredentialForm({
 
       const trimmedKey = apiKey.trim();
       const trimmedLabel = label.trim();
+      const trimmedBaseUrl = baseUrl.trim();
 
       if (!trimmedLabel) {
         setError("Label is required.");
@@ -102,10 +104,19 @@ function CredentialForm({
         setError("API key seems too short. Please check and try again.");
         return;
       }
+      if (provider.requiresBaseUrl && !trimmedBaseUrl) {
+        setError(`Base URL is required for ${provider.name}. ${provider.baseUrlHelp}`);
+        return;
+      }
 
       if (isEditing && existingCredential) {
         updateCredential.mutate(
-          { id: existingCredential.id, label: trimmedLabel, apiKey: trimmedKey },
+          {
+            id: existingCredential.id,
+            label: trimmedLabel,
+            apiKey: trimmedKey,
+            baseUrl: trimmedBaseUrl || undefined,
+          },
           {
             onSuccess: () => {
               setSuccess(true);
@@ -116,7 +127,12 @@ function CredentialForm({
         );
       } else {
         addCredential.mutate(
-          { provider: provider.key as Credential["provider"], label: trimmedLabel, apiKey: trimmedKey },
+          {
+            provider: provider.key as CredentialProvider,
+            label: trimmedLabel,
+            apiKey: trimmedKey,
+            baseUrl: trimmedBaseUrl || undefined,
+          },
           {
             onSuccess: () => {
               setSuccess(true);
@@ -127,7 +143,7 @@ function CredentialForm({
         );
       }
     },
-    [apiKey, label, isEditing, existingCredential, addCredential, updateCredential, onClose, provider.key],
+    [apiKey, label, baseUrl, isEditing, existingCredential, addCredential, updateCredential, onClose, provider],
   );
 
   if (success) {
@@ -145,6 +161,7 @@ function CredentialForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-3">
+      {/* Label */}
       <div>
         <label htmlFor={`label-${provider.key}`} className="mb-1 block text-[11px] font-medium text-text-secondary">
           Label
@@ -160,9 +177,10 @@ function CredentialForm({
         />
       </div>
 
+      {/* API Key */}
       <div>
         <label htmlFor={`key-${provider.key}`} className="mb-1 block text-[11px] font-medium text-text-secondary">
-          API Key
+          {provider.keyLabel}
         </label>
         <input
           ref={inputRef}
@@ -171,11 +189,47 @@ function CredentialForm({
           value={apiKey}
           onChange={(e) => setApiKey(e.target.value)}
           className="w-full rounded-md border border-border bg-surface px-3 py-2 font-mono text-sm text-text-primary placeholder:text-text-tertiary focus:border-accent focus:outline-none"
-          placeholder={provider.placeholder}
+          placeholder={provider.keyPlaceholder}
           autoComplete="off"
           disabled={isPending}
         />
+        {provider.envVars.key && (
+          <p className="mt-1 text-[10px] text-text-tertiary">
+            Maps to <code className="rounded bg-surface-overlay px-1 py-0.5 font-mono">{provider.envVars.key}</code>
+          </p>
+        )}
       </div>
+
+      {/* Base URL (conditional) */}
+      {provider.requiresBaseUrl && (
+        <div>
+          <label htmlFor={`base-${provider.key}`} className="mb-1 flex items-center gap-1.5 text-[11px] font-medium text-text-secondary">
+            Base URL
+            <span className="rounded-sm bg-warning/15 px-1 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-warning">
+              Required
+            </span>
+          </label>
+          <input
+            id={`base-${provider.key}`}
+            type="url"
+            value={baseUrl}
+            onChange={(e) => setBaseUrl(e.target.value)}
+            className="w-full rounded-md border border-border bg-surface px-3 py-2 font-mono text-sm text-text-primary placeholder:text-text-tertiary focus:border-accent focus:outline-none"
+            placeholder={provider.baseUrlPlaceholder}
+            disabled={isPending}
+          />
+          {provider.baseUrlHelp && (
+            <p className="mt-1 text-[10px] text-text-tertiary">
+              {provider.baseUrlHelp}
+            </p>
+          )}
+          {provider.envVars.base && (
+            <p className="mt-0.5 text-[10px] text-text-tertiary">
+              Maps to <code className="rounded bg-surface-overlay px-1 py-0.5 font-mono">{provider.envVars.base}</code>
+            </p>
+          )}
+        </div>
+      )}
 
       {error && (
         <p className="text-xs text-error">{error}</p>
@@ -201,7 +255,7 @@ function ConnectedCard({
   provider,
   credential,
 }: {
-  provider: (typeof PROVIDERS)[number];
+  provider: ProviderConfig;
   credential: Credential;
 }) {
   const [mode, setMode] = useState<"view" | "edit" | "revoke">("view");
@@ -257,6 +311,7 @@ function ConnectedCard({
               {provider.name}
             </span>
             <StatusBadge status="Connected" variant="success" />
+            <CategoryLabel category={provider.category} />
           </div>
           <p className="mt-0.5 text-xs text-text-tertiary">
             {provider.description}
@@ -281,6 +336,14 @@ function ConnectedCard({
             {credential.encrypted_key}
           </span>
         </div>
+        {credential.base_url && (
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] text-text-tertiary">Base URL</span>
+            <span className="max-w-[200px] truncate font-mono text-xs text-text-tertiary">
+              {credential.base_url}
+            </span>
+          </div>
+        )}
         <div className="flex items-center justify-between">
           <span className="text-[11px] text-text-tertiary">Last Verified</span>
           <span className="text-xs text-text-secondary">
@@ -342,7 +405,7 @@ function ConnectedCard({
 function NotConfiguredCard({
   provider,
 }: {
-  provider: (typeof PROVIDERS)[number];
+  provider: ProviderConfig;
 }) {
   const [showForm, setShowForm] = useState(false);
 
@@ -356,11 +419,20 @@ function NotConfiguredCard({
               {provider.name}
             </span>
             <StatusBadge status="Not Configured" variant="neutral" />
+            <CategoryLabel category={provider.category} />
           </div>
           <p className="mt-0.5 text-xs text-text-tertiary">
             {provider.description}
           </p>
         </div>
+      </div>
+
+      {/* Model hint */}
+      <div className="mt-3 rounded-md bg-surface-overlay px-3 py-2">
+        <p className="text-[10px] text-text-tertiary">
+          <span className="font-medium text-text-secondary">Models: </span>
+          {provider.modelHint}
+        </p>
       </div>
 
       <div className="mt-4">
@@ -375,7 +447,7 @@ function NotConfiguredCard({
             size="sm"
             onClick={() => setShowForm(true)}
           >
-            Add API Key
+            {provider.requiresBaseUrl ? "Configure Key + Base URL" : "Add API Key"}
           </Button>
         )}
       </div>
@@ -408,26 +480,74 @@ export default function CredentialsPage() {
     credentialList.map((c) => [c.provider, c]),
   );
 
+  const directProviders = PROVIDERS.filter((p) => p.category === "direct");
+  const proxyProviders = PROVIDERS.filter((p) => p.category === "proxy");
+  const configuredCount = credentialList.length;
+  const totalProviders = PROVIDERS.length;
+
   return (
     <>
       <PageHeader
         title="Credentials"
-        description="Manage API keys for model providers"
+        description="Manage API keys for model providers used in evaluation runs"
+        actions={
+          <div className="flex items-center gap-2 text-xs text-text-secondary">
+            <span className="rounded-md bg-surface-overlay px-2 py-1 font-mono">
+              {configuredCount}/{totalProviders}
+            </span>
+            <span>configured</span>
+          </div>
+        }
       />
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {PROVIDERS.map((provider) => {
-          const credential = credentialMap.get(provider.key);
-          return credential ? (
-            <ConnectedCard
-              key={provider.key}
-              provider={provider}
-              credential={credential}
-            />
-          ) : (
-            <NotConfiguredCard key={provider.key} provider={provider} />
-          );
-        })}
+      {/* Direct API providers */}
+      <div className="mb-8">
+        <div className="mb-3 flex items-center gap-2">
+          <h2 className="text-sm font-medium text-text-primary">Direct API Providers</h2>
+          <span className="text-[10px] text-text-tertiary">API key only</span>
+        </div>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2">
+          {directProviders.map((provider) => {
+            const credential = credentialMap.get(provider.key);
+            return credential ? (
+              <ConnectedCard
+                key={provider.key}
+                provider={provider}
+                credential={credential}
+              />
+            ) : (
+              <NotConfiguredCard key={provider.key} provider={provider} />
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Proxy / compatible providers */}
+      <div>
+        <div className="mb-3 flex items-center gap-2">
+          <h2 className="text-sm font-medium text-text-primary">
+            Proxy &amp; OpenAI-Compatible Providers
+          </h2>
+          <span className="text-[10px] text-text-tertiary">API key + base URL required</span>
+        </div>
+        <p className="mb-4 text-xs text-text-secondary">
+          Configure these to access models through OpenAI-compatible endpoints, LiteLLM gateways, Azure deployments, or AWS Bedrock.
+          Many models (Mistral, Kimi, Claude) can be accessed through these proxy providers as well as directly.
+        </p>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2">
+          {proxyProviders.map((provider) => {
+            const credential = credentialMap.get(provider.key);
+            return credential ? (
+              <ConnectedCard
+                key={provider.key}
+                provider={provider}
+                credential={credential}
+              />
+            ) : (
+              <NotConfiguredCard key={provider.key} provider={provider} />
+            );
+          })}
+        </div>
       </div>
     </>
   );
