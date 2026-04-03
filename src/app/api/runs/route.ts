@@ -60,11 +60,19 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  // TODO: enqueue to execution backend (SQS, Bull, webhook)
-  // For now, the run stays "pending" until the executor picks it up
+  // Fire-and-forget: kick off execution in the background.
+  // The executeRun function handles VM lifecycle, SSH, cleanup, and
+  // updates the run record in Supabase as it progresses.
+  // We don't await it -- the client polls for status via GET /api/runs/:id.
+  const autoShutdown = config?.auto_shutdown !== false;
+  import("@/lib/run-executor").then(({ executeRun }) => {
+    executeRun(data.id, { autoShutdown }).catch((e) => {
+      console.error(`Background execution failed for run ${data.id}:`, e);
+    });
+  });
 
   return NextResponse.json(
-    { ...data, message: "Run queued for execution" },
+    { ...data, message: "Run queued. Server starting..." },
     { status: 201 },
   );
 }
