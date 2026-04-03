@@ -56,10 +56,63 @@ export default function AdminPage() {
     fetchOrgs();
   };
 
+  // Invite customer
+  const [showInvite, setShowInvite] = useState(false);
+  const [inviteEmail, setInviteEmail] = useState("");
+  const [inviteOrg, setInviteOrg] = useState("");
+  const [inviteEnvs, setInviteEnvs] = useState<Set<string>>(new Set());
+  const [inviting, setInviting] = useState(false);
+  const [inviteResult, setInviteResult] = useState<string | null>(null);
+
+  const handleInvite = async () => {
+    if (!inviteEmail || !inviteOrg) return;
+    setInviting(true);
+    setInviteResult(null);
+    try {
+      // 1. Create account + org
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: inviteEmail,
+          password: crypto.randomUUID().slice(0, 16), // temp password, they'll reset
+          orgName: inviteOrg,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+
+      // 2. Grant env access for selected envs
+      for (const envSlug of inviteEnvs) {
+        const envDef = ATHANOR_ENVIRONMENTS.find((e) => e.slug === envSlug);
+        if (envDef) {
+          await fetch("/api/admin", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              action: "grant-access",
+              organization_id: data.organization_id,
+              environment_id: envDef.id,
+            }),
+          });
+        }
+      }
+
+      setInviteResult(`Customer created: ${inviteEmail} (${inviteOrg}) with ${inviteEnvs.size} env(s). They can now log in and reset their password.`);
+      setInviteEmail("");
+      setInviteOrg("");
+      setInviteEnvs(new Set());
+      fetchOrgs();
+    } catch (e) {
+      setInviteResult(`Error: ${e instanceof Error ? e.message : String(e)}`);
+    } finally {
+      setInviting(false);
+    }
+  };
+
   if (loading) return <div className="p-8 text-text-secondary">Loading...</div>;
   if (error) return <div className="p-8 text-red-500">{error}</div>;
 
-  // Map env slugs to IDs for the grant buttons
   const envIdMap = new Map(
     ATHANOR_ENVIRONMENTS.map((e) => [e.slug, e.id]),
   );
@@ -71,6 +124,71 @@ export default function AdminPage() {
         description="Manage customer organizations and environment access"
       />
 
+      {/* Invite Customer */}
+      <div className="mb-6">
+        {!showInvite ? (
+          <Button variant="primary" size="sm" onClick={() => setShowInvite(true)}>
+            + Invite Customer
+          </Button>
+        ) : (
+          <Card>
+            <div className="p-4 space-y-3">
+              <p className="text-sm font-medium text-text-primary">New Customer</p>
+              <div className="flex gap-2">
+                <input
+                  type="email"
+                  placeholder="customer@company.com"
+                  value={inviteEmail}
+                  onChange={(e) => setInviteEmail(e.target.value)}
+                  className="flex-1 px-3 py-1.5 rounded-md border border-border-primary bg-surface-primary text-sm text-text-primary placeholder:text-text-tertiary"
+                />
+                <input
+                  type="text"
+                  placeholder="Company Name"
+                  value={inviteOrg}
+                  onChange={(e) => setInviteOrg(e.target.value)}
+                  className="flex-1 px-3 py-1.5 rounded-md border border-border-primary bg-surface-primary text-sm text-text-primary placeholder:text-text-tertiary"
+                />
+              </div>
+              <div>
+                <p className="text-[11px] text-text-tertiary mb-1">Grant access to:</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {ATHANOR_ENVIRONMENTS.map((env) => (
+                    <button
+                      key={env.slug}
+                      onClick={() => {
+                        const next = new Set(inviteEnvs);
+                        next.has(env.slug) ? next.delete(env.slug) : next.add(env.slug);
+                        setInviteEnvs(next);
+                      }}
+                      className={`px-2 py-1 rounded text-[10px] font-medium transition-colors ${
+                        inviteEnvs.has(env.slug)
+                          ? "bg-green-900/30 text-green-300"
+                          : "bg-surface-secondary text-text-tertiary hover:bg-surface-tertiary"
+                      }`}
+                    >
+                      {inviteEnvs.has(env.slug) ? "✓" : "+"} {env.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="flex gap-2 items-center">
+                <Button variant="primary" size="sm" onClick={handleInvite} disabled={inviting || !inviteEmail || !inviteOrg}>
+                  {inviting ? "Creating..." : "Create Account & Grant Access"}
+                </Button>
+                <Button variant="ghost" size="sm" onClick={() => setShowInvite(false)}>
+                  Cancel
+                </Button>
+              </div>
+              {inviteResult && (
+                <p className={`text-xs ${inviteResult.startsWith("Error") ? "text-red-400" : "text-green-400"}`}>
+                  {inviteResult}
+                </p>
+              )}
+            </div>
+          </Card>
+        )}
+
       <div className="space-y-4">
         {orgs.map((org) => (
           <Card key={org.id}>
@@ -79,16 +197,14 @@ export default function AdminPage() {
                 <div>
                   <CardTitle>{org.name}</CardTitle>
                   <p className="text-xs text-text-tertiary mt-1">
-                    {org.slug} | plan: {org.plan} | created: {new Date(org.created_at).toLocaleDateString()}
+                    {org.slug} | {org.environments.length} env(s) | joined {new Date(org.created_at).toLocaleDateString()}
                   </p>
                 </div>
-                <span className={`px-2 py-0.5 rounded text-[10px] font-medium ${
-                  org.plan === "internal" ? "bg-purple-900/30 text-purple-300" :
-                  org.plan === "pro" ? "bg-green-900/30 text-green-300" :
-                  "bg-surface-secondary text-text-tertiary"
-                }`}>
-                  {org.plan}
-                </span>
+                {org.plan === "internal" && (
+                  <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-purple-900/30 text-purple-300">
+                    internal
+                  </span>
+                )}
               </div>
             </CardHeader>
             <div className="px-6 pb-4">
