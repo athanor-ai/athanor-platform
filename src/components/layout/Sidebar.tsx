@@ -13,6 +13,7 @@ import {
   PiBrain,
   PiKey,
   PiBookOpen,
+  PiRocketLaunch,
 } from "react-icons/pi";
 import { ATHANOR_ENVIRONMENTS } from "@/data/environments";
 
@@ -21,6 +22,7 @@ const navItems = [
   { label: "Environments", href: "/environments", icon: PiCube },
   { label: "Tasks", href: "/tasks", icon: PiListChecks },
   { label: "Runs", href: "/runs", icon: PiPlay },
+  { label: "Launch Run", href: "/launch", icon: PiRocketLaunch },
   { label: "Scores", href: "/scores", icon: PiWaveSine },
   { label: "Baselines", href: "/baselines", icon: PiChartBar },
   { label: "Integration", href: "/training", icon: PiBrain },

@@ -9,7 +9,7 @@ import { useCalibrationProfiles } from "@/hooks/useCalibration";
 import {
   REAL_HEATMAP_DATA,
 } from "@/data/heatmap";
-import { ATHANOR_MODELS } from "@/data/models";
+import { BASELINE_MODELS } from "@/data/models";
 import { ATHANOR_ENVIRONMENTS } from "@/data/environments";
 import {
   calibrateScore,
@@ -217,7 +217,7 @@ export default function ScoresPage() {
     const result: Record<string, Record<string, number | null>> = {};
     for (const env of ATHANOR_ENVIRONMENTS) {
       result[env.slug] = {};
-      for (const model of ATHANOR_MODELS) {
+      for (const model of BASELINE_MODELS) {
         result[env.slug][model.slug] = getCalibratedMeanScore(
           env.slug,
           model.slug,
@@ -385,7 +385,7 @@ export default function ScoresPage() {
                   <th className="px-3 py-2 text-left text-[11px] font-medium text-text-tertiary">
                     Environment
                   </th>
-                  {ATHANOR_MODELS.map((m) => (
+                  {BASELINE_MODELS.map((m) => (
                     <th
                       key={m.slug}
                       className="px-3 py-2 text-center text-[11px] font-medium text-text-tertiary"
@@ -401,7 +401,7 @@ export default function ScoresPage() {
                     <td className="px-3 py-2 font-medium text-text-primary">
                       {env.name}
                     </td>
-                    {ATHANOR_MODELS.map((m) => {
+                    {BASELINE_MODELS.map((m) => {
                       const score = meanScores[env.slug]?.[m.slug] ?? null;
                       return (
                         <td
@@ -424,7 +424,7 @@ export default function ScoresPage() {
       {ATHANOR_ENVIRONMENTS.map((env) => {
         const envData = calibratedData[env.slug];
         if (!envData) return null;
-        const firstModel = ATHANOR_MODELS[0];
+        const firstModel = BASELINE_MODELS[0];
         const taskList = envData[firstModel.slug] ?? [];
         return (
           <div key={env.id} className="mt-6">
@@ -439,7 +439,7 @@ export default function ScoresPage() {
                       <th className="px-2 py-1.5 text-left font-medium text-text-tertiary">
                         Task
                       </th>
-                      {ATHANOR_MODELS.map((m) => (
+                      {BASELINE_MODELS.map((m) => (
                         <th
                           key={m.slug}
                           className="px-2 py-1.5 text-center font-medium text-text-tertiary"
@@ -458,7 +458,7 @@ export default function ScoresPage() {
                         <td className="px-2 py-1 font-mono text-text-secondary">
                           {cell.task}
                         </td>
-                        {ATHANOR_MODELS.map((m) => {
+                        {BASELINE_MODELS.map((m) => {
                           const modelTasks = envData[m.slug] ?? [];
                           const entry = modelTasks.find(
                             (t) => t.task === cell.task,
