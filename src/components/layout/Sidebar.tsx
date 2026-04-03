@@ -22,6 +22,7 @@ const navItems = [
   { label: "Dashboard", href: "/overview", icon: PiHouseSimple },
   { label: "Quick Start", href: "/quickstart", icon: PiLightning },
   { label: "Environments", href: "/environments", icon: PiCube },
+  { label: "Download", href: "/download", icon: PiCube },
   { label: "Tasks", href: "/tasks", icon: PiListChecks },
   { label: "Runs", href: "/runs", icon: PiPlay },
   { label: "Launch Run", href: "/launch", icon: PiRocketLaunch },
