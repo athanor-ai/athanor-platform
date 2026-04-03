@@ -17,6 +17,7 @@ export async function POST(request: NextRequest) {
   }
 
   const profile = { organization_id: authUser.organizationId };
+  const supabase = await getSupabaseServerClient();
 
   const body = await request.json();
   const { provider, label, apiKey, baseUrl } = body;
