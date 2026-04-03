@@ -168,12 +168,46 @@ function scoreBg(s: number | null): string {
   return "bg-red-900/20";
 }
 
+/**
+ * Per-row relative coloring: green = best model in row, red = worst.
+ * All cells get a color (including 0.0).
+ *
+ * @param score - this cell's score
+ * @param rowScores - all model scores for this task
+ */
+function relativeTaskCellClass(score: number | null, rowScores: (number | null)[]): string {
+  if (score === null) return "text-text-tertiary";
+
+  const valid = rowScores.filter((s): s is number => s !== null);
+  if (valid.length === 0) return "text-text-tertiary";
+
+  const maxScore = Math.max(...valid);
+  const minScore = Math.min(...valid);
+  const range = maxScore - minScore;
+
+  // All same score (or only one model)
+  if (range < 0.001) {
+    if (score >= 0.5) return "bg-green-900/30 text-green-300";
+    if (score > 0) return "bg-yellow-900/25 text-yellow-300";
+    return "bg-red-900/30 text-red-400";
+  }
+
+  // Relative position: 0 = worst, 1 = best
+  const pos = (score - minScore) / range;
+
+  if (pos >= 0.8) return "bg-green-900/40 text-green-300";
+  if (pos >= 0.5) return "bg-green-900/20 text-green-400";
+  if (pos >= 0.2) return "bg-yellow-900/25 text-yellow-300";
+  return "bg-red-900/30 text-red-400";
+}
+
+// Legacy (for summary table)
 function taskCellClass(s: number | null): string {
   if (s === null) return "text-text-tertiary";
   if (s >= 0.9) return "bg-green-900/40 text-green-300";
   if (s >= 0.5) return "bg-yellow-900/30 text-yellow-300";
   if (s > 0) return "bg-red-900/20 text-red-300";
-  return "text-text-tertiary";
+  return "bg-red-900/30 text-red-400";
 }
 
 /* ------------------------------------------------------------------ */
@@ -425,18 +459,32 @@ export default function ScoresPage() {
         const envData = calibratedData[env.slug];
         if (!envData) return null;
         const firstModel = BASELINE_MODELS[0];
-        const taskList = envData[firstModel.slug] ?? [];
+        const rawTaskList = envData[firstModel.slug] ?? [];
+
+        // Build task list with mean scores for sorting
+        const taskList = rawTaskList.map((cell) => {
+          const scores = BASELINE_MODELS.map((m) => {
+            const entry = (envData[m.slug] ?? []).find((t) => t.task === cell.task);
+            return entry?.score ?? null;
+          });
+          const valid = scores.filter((s): s is number => s !== null);
+          const mean = valid.length > 0 ? valid.reduce((a, b) => a + b, 0) / valid.length : 0;
+          return { ...cell, allScores: scores, mean };
+        });
+        // Sort: easy (high score) on top, hard (low score) at bottom
+        taskList.sort((a, b) => b.mean - a.mean);
+
         return (
           <div key={env.id} className="mt-6">
             <div className="mb-2 text-[11px] font-medium uppercase tracking-wider text-text-tertiary">
-              {env.name} &mdash; {taskList.length} tasks (calibrated)
+              {env.name} — {taskList.length} tasks (calibrated)
             </div>
             <Card>
               <div className="overflow-x-auto">
-                <table className="w-full text-[11px]">
+                <table className="w-full text-[11px] table-fixed">
                   <thead>
                     <tr className="border-b border-border">
-                      <th className="px-2 py-1.5 text-left font-medium text-text-tertiary">
+                      <th className="w-[220px] px-2 py-1.5 text-left font-medium text-text-tertiary">
                         Task
                       </th>
                       {BASELINE_MODELS.map((m) => (
@@ -455,19 +503,15 @@ export default function ScoresPage() {
                         key={cell.task}
                         className="border-b border-border/30"
                       >
-                        <td className="px-2 py-1 font-mono text-text-secondary">
+                        <td className="w-[220px] px-2 py-1 font-mono text-text-secondary truncate">
                           {cell.task}
                         </td>
-                        {BASELINE_MODELS.map((m) => {
-                          const modelTasks = envData[m.slug] ?? [];
-                          const entry = modelTasks.find(
-                            (t) => t.task === cell.task,
-                          );
-                          const s = entry?.score ?? null;
+                        {BASELINE_MODELS.map((m, mi) => {
+                          const s = cell.allScores[mi];
                           return (
                             <td
                               key={m.slug}
-                              className={`px-2 py-1 text-center font-mono ${taskCellClass(s)}`}
+                              className={`px-2 py-1 text-center font-mono ${relativeTaskCellClass(s, cell.allScores)}`}
                             >
                               {s !== null ? s.toFixed(3) : "\u2014"}
                             </td>
