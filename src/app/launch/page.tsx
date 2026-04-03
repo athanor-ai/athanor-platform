@@ -2,9 +2,12 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useCredentials } from "@/hooks/useCredentials";
 import { useEnvironments } from "@/hooks/useEnvironments";
 import { useTasks } from "@/hooks/useTasks";
+import { useLaunchRun, useStopRun } from "@/hooks/useLaunchRun";
+import { useVMStatus } from "@/hooks/useVM";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Card, CardHeader, CardTitle } from "@/components/ui/Card";
 import { StatusBadge } from "@/components/ui/StatusBadge";
@@ -14,6 +17,74 @@ import { ATHANOR_MODELS, BASELINE_MODELS, isModelUsable } from "@/data/models";
 import { PROVIDER_BY_KEY } from "@/data/providers";
 import type { CredentialProvider } from "@/types/database";
 import type { AthanorModel } from "@/data/models";
+
+/* ------------------------------------------------------------------ */
+/*  Launch button with VM lifecycle                                    */
+/* ------------------------------------------------------------------ */
+
+function LaunchButton({
+  canLaunch,
+  selectedEnvironment,
+  selectedModels,
+}: {
+  canLaunch: boolean;
+  selectedEnvironment: string | null;
+  selectedModels: AthanorModel[];
+}) {
+  const router = useRouter();
+  const launch = useLaunchRun();
+  const vm = useVMStatus();
+  const [launching, setLaunching] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleLaunch = async () => {
+    if (!selectedEnvironment || selectedModels.length === 0) return;
+    setLaunching(true);
+    setError(null);
+
+    try {
+      // Launch one run per model
+      for (const model of selectedModels) {
+        const result = await launch.mutateAsync({
+          environment_id: selectedEnvironment,
+          model_name: model.slug,
+          autoShutdown: true,
+        });
+        // Navigate to runs page after first successful launch
+        if (result.run_id) {
+          router.push(`/runs/${result.run_id}`);
+          return;
+        }
+      }
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Launch failed");
+    } finally {
+      setLaunching(false);
+    }
+  };
+
+  return (
+    <div className="space-y-2">
+      <Button
+        variant="primary"
+        size="sm"
+        disabled={!canLaunch || launching}
+        onClick={handleLaunch}
+      >
+        {launching ? "Starting evaluation server..." : "Launch Evaluation"}
+      </Button>
+      {vm.data && (
+        <p className="text-[11px] text-text-tertiary">
+          Server: {vm.data.status === "running" ? "ready" : vm.data.status}
+          {vm.data.status === "deallocated" && " (will start automatically)"}
+        </p>
+      )}
+      {error && (
+        <p className="text-xs text-red-500">{error}</p>
+      )}
+    </div>
+  );
+}
 
 /* ------------------------------------------------------------------ */
 /*  Step indicator                                                     */
@@ -626,36 +697,11 @@ export default function LaunchPage() {
                 >
                   Back
                 </Button>
-                <Button
-                  variant="primary"
-                  size="sm"
-                  disabled={!canLaunch}
-                  title={
-                    canLaunch
-                      ? "Backend execution pipeline pending — run will be queued"
-                      : "Configure missing credentials first"
-                  }
-                >
-                  Queue Evaluation Run
-                </Button>
-              </div>
-            </div>
-
-            {/* Backend wiring notice */}
-            <div className="mt-4 rounded-md border border-warning/30 bg-warning/5 px-4 py-3">
-              <div className="flex items-start gap-2">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="mt-0.5 shrink-0 text-warning">
-                  <path d="M8 5v3M8 10.5h.01M14 8A6 6 0 1 1 2 8a6 6 0 0 1 12 0Z" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-                <div>
-                  <p className="text-xs font-medium text-warning">Backend Execution Pending</p>
-                  <p className="mt-0.5 text-[11px] text-text-secondary">
-                    The evaluation execution pipeline is not yet fully wired. Run configurations
-                    will be validated and queued. Actual execution against Athanor environments
-                    (starting with Gemini and Sonnet on easy tasks) will be enabled in the next
-                    integration pass.
-                  </p>
-                </div>
+                <LaunchButton
+                  canLaunch={canLaunch}
+                  selectedEnvironment={selectedEnvironment}
+                  selectedModels={selectedModels}
+                />
               </div>
             </div>
           </Card>
