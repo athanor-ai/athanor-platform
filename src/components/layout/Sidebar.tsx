@@ -32,8 +32,10 @@ const navItems = [
   { label: "Integration", href: "/training", icon: PiBrain },
   { label: "Credentials", href: "/credentials", icon: PiKey },
   { label: "Docs", href: "/docs", icon: PiBookOpen },
-  { label: "Admin", href: "/admin", icon: PiGear },
 ];
+
+// Admin link is NOT in the nav — admins access it directly via /admin URL.
+// This prevents customers from seeing an "Admin" link they can't use.
 
 export function Sidebar() {
   const pathname = usePathname();

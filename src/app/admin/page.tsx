@@ -58,48 +58,40 @@ export default function AdminPage() {
 
   // Invite customer
   const [showInvite, setShowInvite] = useState(false);
-  const [inviteEmail, setInviteEmail] = useState("");
+  const [inviteEmails, setInviteEmails] = useState("");
   const [inviteOrg, setInviteOrg] = useState("");
   const [inviteEnvs, setInviteEnvs] = useState<Set<string>>(new Set());
   const [inviting, setInviting] = useState(false);
   const [inviteResult, setInviteResult] = useState<string | null>(null);
 
   const handleInvite = async () => {
-    if (!inviteEmail || !inviteOrg) return;
+    const emails = inviteEmails.split(/[,\n]+/).map((e) => e.trim()).filter(Boolean);
+    if (!emails.length || !inviteOrg) return;
     setInviting(true);
     setInviteResult(null);
     try {
-      // 1. Create account + org
-      const res = await fetch("/api/auth/signup", {
+      const envIds = ATHANOR_ENVIRONMENTS
+        .filter((e) => inviteEnvs.has(e.slug))
+        .map((e) => e.id);
+
+      const res = await fetch("/api/admin/invite", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          email: inviteEmail,
-          password: crypto.randomUUID().slice(0, 16), // temp password, they'll reset
           orgName: inviteOrg,
+          emails,
+          environmentIds: envIds,
         }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
 
-      // 2. Grant env access for selected envs
-      for (const envSlug of inviteEnvs) {
-        const envDef = ATHANOR_ENVIRONMENTS.find((e) => e.slug === envSlug);
-        if (envDef) {
-          await fetch("/api/admin", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              action: "grant-access",
-              organization_id: data.organization_id,
-              environment_id: envDef.id,
-            }),
-          });
-        }
-      }
-
-      setInviteResult(`Customer created: ${inviteEmail} (${inviteOrg}) with ${inviteEnvs.size} env(s). They can now log in and reset their password.`);
-      setInviteEmail("");
+      const created = data.users.filter((u: { status: string }) => u.status === "created").length;
+      const cfAdded = data.cloudflare?.added?.length || 0;
+      setInviteResult(
+        `${inviteOrg} created: ${created}/${emails.length} users, ${data.environments.length} env(s), ${cfAdded} emails added to Cloudflare access.`
+      );
+      setInviteEmails("");
       setInviteOrg("");
       setInviteEnvs(new Set());
       fetchOrgs();
@@ -158,21 +150,24 @@ export default function AdminPage() {
           <Card>
             <div className="p-4 space-y-3">
               <p className="text-sm font-medium text-text-primary">New Customer</p>
-              <div className="flex gap-2">
-                <input
-                  type="email"
-                  placeholder="customer@company.com"
-                  value={inviteEmail}
-                  onChange={(e) => setInviteEmail(e.target.value)}
-                  className="flex-1 px-3 py-1.5 rounded-md border border-border-primary bg-surface-primary text-sm text-text-primary placeholder:text-text-tertiary"
-                />
+              <div className="space-y-2">
                 <input
                   type="text"
                   placeholder="Company Name"
                   value={inviteOrg}
                   onChange={(e) => setInviteOrg(e.target.value)}
-                  className="flex-1 px-3 py-1.5 rounded-md border border-border-primary bg-surface-primary text-sm text-text-primary placeholder:text-text-tertiary"
+                  className="w-full px-3 py-1.5 rounded-md border border-border-primary bg-surface-primary text-sm text-text-primary placeholder:text-text-tertiary"
                 />
+                <textarea
+                  placeholder={"Emails (one per line or comma-separated)\nalice@company.com\nbob@company.com"}
+                  value={inviteEmails}
+                  onChange={(e) => setInviteEmails(e.target.value)}
+                  rows={3}
+                  className="w-full px-3 py-1.5 rounded-md border border-border-primary bg-surface-primary text-sm text-text-primary placeholder:text-text-tertiary font-mono resize-none"
+                />
+                <p className="text-[10px] text-text-tertiary">
+                  First email becomes org owner. All emails get Cloudflare access automatically.
+                </p>
               </div>
               <div>
                 <p className="text-[11px] text-text-tertiary mb-1">Grant access to:</p>
@@ -197,7 +192,7 @@ export default function AdminPage() {
                 </div>
               </div>
               <div className="flex gap-2 items-center">
-                <Button variant="primary" size="sm" onClick={handleInvite} disabled={inviting || !inviteEmail || !inviteOrg}>
+                <Button variant="primary" size="sm" onClick={handleInvite} disabled={inviting || !inviteEmails.trim() || !inviteOrg}>
                   {inviting ? "Creating..." : "Create Account & Grant Access"}
                 </Button>
                 <Button variant="ghost" size="sm" onClick={() => setShowInvite(false)}>
