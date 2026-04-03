@@ -14,6 +14,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { addAccessEmails } from "@/lib/cloudflare-access";
+import nodeCrypto from "crypto";
+
+/** Same derivation as middleware -- keeps passwords in sync */
+function derivePassword(email: string): string {
+  const secret = process.env.CREDENTIAL_ENCRYPTION_KEY || "fallback-dev-key";
+  return nodeCrypto
+    .createHmac("sha256", secret)
+    .update(`athanor-bridge:${email.toLowerCase()}`)
+    .digest("hex")
+    .slice(0, 32);
+}
 
 const ADMIN_EMAILS = new Set(["aidan@athanorl.com", "hongsksam@gmail.com"]);
 
@@ -67,7 +78,7 @@ export async function POST(request: NextRequest) {
       // Create Supabase auth user
       const { data: authData, error: authError } = await supabase.auth.admin.createUser({
         email,
-        password: crypto.randomUUID().slice(0, 16),
+        password: derivePassword(email),
         email_confirm: true,
       });
 

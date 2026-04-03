@@ -1,17 +1,36 @@
 /**
  * Middleware: bridge Cloudflare Zero Trust identity to Supabase session.
  *
- * Flow:
- * 1. Cloudflare authenticates the user (OTP or GitHub org)
- * 2. Cloudflare passes verified email in cf-access-authenticated-user-email header
- * 3. This middleware reads the email, finds the Supabase user, signs them in
- * 4. Sets a Supabase session cookie so all API routes + RLS work
+ * When a user passes Cloudflare (via GitHub SSO or email OTP), Cloudflare
+ * sets the cf-access-authenticated-user-email header. This middleware:
  *
- * If no Cloudflare header (local dev), falls back to existing Supabase session.
+ * 1. Reads the verified email from the Cloudflare header
+ * 2. Signs the user into Supabase using their pre-created account
+ * 3. Sets Supabase session cookies so all API routes + RLS work
+ *
+ * The Supabase account is created during admin invite (POST /api/admin/invite).
+ * Each account has a deterministic password derived from email + a server secret,
+ * so the middleware can sign them in without user interaction.
  */
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { createServerClient } from "@supabase/ssr";
 import { createClient } from "@supabase/supabase-js";
+import crypto from "crypto";
+
+/**
+ * Derive a deterministic password for a user email.
+ * This is NOT user-facing -- it's an internal bridge between Cloudflare and Supabase.
+ * The password is never shown to the user; they authenticate via Cloudflare.
+ */
+function derivePassword(email: string): string {
+  const secret = process.env.CREDENTIAL_ENCRYPTION_KEY || "fallback-dev-key";
+  return crypto
+    .createHmac("sha256", secret)
+    .update(`athanor-bridge:${email.toLowerCase()}`)
+    .digest("hex")
+    .slice(0, 32);
+}
 
 export async function middleware(request: NextRequest) {
   const response = NextResponse.next();
@@ -19,66 +38,83 @@ export async function middleware(request: NextRequest) {
   const cfEmail = request.headers.get("cf-access-authenticated-user-email");
   if (!cfEmail) return response; // No Cloudflare header = local dev, skip
 
-  // Check if already has a valid Supabase session cookie
-  const existingSession = request.cookies.get("sb-session-email");
-  if (existingSession?.value === cfEmail.toLowerCase()) {
-    return response; // Already bridged this email
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!supabaseUrl || !supabaseAnonKey || !serviceKey) return response;
+
+  // Check if already bridged (cookie tracks this)
+  const bridgeCookie = request.cookies.get("sb-bridged-email");
+  if (bridgeCookie?.value === cfEmail.toLowerCase()) {
+    // Already bridged -- check if Supabase session is still valid
+    const hasSession = request.cookies.getAll().some(
+      (c) => c.name.startsWith("sb-") && c.name.includes("auth-token"),
+    );
+    if (hasSession) return response;
+    // Session expired, re-bridge below
   }
 
-  // Bridge: sign in the Supabase user matching this Cloudflare email
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!supabaseUrl || !serviceKey) return response;
-
   try {
-    const supabase = createClient(supabaseUrl, serviceKey);
+    const email = cfEmail.toLowerCase();
+    const password = derivePassword(email);
 
-    // Look up user by email
-    const { data: users } = await supabase.auth.admin.listUsers();
-    const user = users?.users?.find(
-      (u) => u.email?.toLowerCase() === cfEmail.toLowerCase(),
+    // Use service client to ensure the user exists and has the right password
+    const serviceClient = createClient(supabaseUrl, serviceKey);
+    const { data: users } = await serviceClient.auth.admin.listUsers();
+    const existingUser = users?.users?.find(
+      (u) => u.email?.toLowerCase() === email,
     );
 
-    if (!user) {
-      // User passed Cloudflare but doesn't have a Supabase account yet
-      // This happens if admin added their email to Cloudflare but hasn't invited them
-      // Let them through with no session -- they'll see mock/empty data
+    if (!existingUser) {
+      // User passed Cloudflare but no Supabase account -- let them through
+      // They'll see empty/mock data. Admin needs to invite them first.
       return response;
     }
 
-    // Generate a magic link token for this user (signs them in without password)
-    const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({
-      type: "magiclink",
-      email: user.email!,
+    // Update the user's password to our derived one (idempotent)
+    await serviceClient.auth.admin.updateUser(existingUser.id, {
+      password,
     });
 
-    if (linkError || !linkData) return response;
+    // Now sign in with the anon client to create a real session with cookies
+    const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
+      cookies: {
+        getAll() {
+          return request.cookies.getAll();
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value, options }) => {
+            response.cookies.set(name, value, options);
+          });
+        },
+      },
+    });
 
-    // Extract the access token from the generated link
-    // The link contains a token we can use to create a session
-    const token = linkData.properties?.hashed_token;
-    if (!token) return response;
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
 
-    // Set a tracking cookie so we don't re-bridge on every request
-    response.cookies.set("sb-session-email", cfEmail.toLowerCase(), {
+    if (signInError) {
+      console.error(`Auth bridge failed for ${email}:`, signInError.message);
+      return response;
+    }
+
+    // Set tracking cookie so we don't re-bridge on every request
+    response.cookies.set("sb-bridged-email", email, {
       httpOnly: true,
       secure: true,
       sameSite: "lax",
       maxAge: 60 * 60 * 8, // 8 hours
       path: "/",
     });
-
-    // Pass the user info as headers for API routes to pick up
-    response.headers.set("x-athanor-user-id", user.id);
-    response.headers.set("x-athanor-user-email", cfEmail.toLowerCase());
-  } catch {
-    // Don't block the request if bridging fails
+  } catch (e) {
+    console.error("Auth bridge error:", e);
   }
 
   return response;
 }
 
 export const config = {
-  // Run on all routes except static assets
-  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|api/cron).*)"],
 };
