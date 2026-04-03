@@ -37,7 +37,7 @@ export default function DownloadPage() {
     <>
       <PageHeader
         title="Download Environments"
-        subtitle="Each environment is a self-contained package. Download, build, evaluate. No platform dependency required."
+        description="Each environment is a self-contained package. Download, build, evaluate. No platform dependency required."
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

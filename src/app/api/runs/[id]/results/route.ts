@@ -47,16 +47,15 @@ export async function POST(
     error: r.error ?? null,
   }));
 
-  const { error, count } = await supabase
+  const { error } = await supabase
     .from("run_results")
-    .upsert(rows, { onConflict: "run_id,task_id" })
-    .select("*", { count: "exact", head: true });
+    .upsert(rows, { onConflict: "run_id,task_id" });
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  return NextResponse.json({ inserted: count ?? rows.length, run_id: runId });
+  return NextResponse.json({ inserted: rows.length, run_id: runId });
 }
 
 export async function GET(

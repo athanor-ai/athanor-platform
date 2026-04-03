@@ -13,9 +13,12 @@
 
 import { exec, spawn } from "child_process";
 import { promisify } from "util";
-import { createClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { prepareRunEnvironment, ENV_REPO_MAP } from "./executor";
 import { startVM, stopVM, cleanupVM } from "./vm-manager";
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnySupabaseClient = SupabaseClient<any, any, any>;
 
 const execAsync = promisify(exec);
 
@@ -181,7 +184,7 @@ async function waitForSSH(maxWaitMs = 120000): Promise<void> {
 }
 
 async function getEnvSlug(
-  supabase: ReturnType<typeof createClient>,
+  supabase: AnySupabaseClient,
   environmentId: string,
 ): Promise<string> {
   const { data } = await supabase
@@ -195,7 +198,7 @@ async function getEnvSlug(
 async function executeSSHWithProgress(
   command: string,
   runId: string,
-  supabase: ReturnType<typeof createClient>,
+  supabase: AnySupabaseClient,
   onProgress?: (update: ProgressUpdate) => void,
 ): Promise<number> {
   return new Promise((resolve, reject) => {

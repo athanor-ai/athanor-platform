@@ -74,7 +74,7 @@ export default function QuickstartPage() {
     <>
       <PageHeader
         title="Quick Start"
-        subtitle="From download to your first RL training signal in 10 minutes"
+        description="From download to your first RL training signal in 10 minutes"
       />
 
       {/* Environment selector */}
