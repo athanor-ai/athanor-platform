@@ -5,28 +5,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseServerClient } from "@/lib/supabase-server";
 import { encryptKey, getKeySuffix } from "@/lib/encryption";
+import { getAuthUser } from "@/lib/auth";
 
 export async function POST(request: NextRequest) {
-  const supabase = await getSupabaseServerClient();
-
-  // Verify auth
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) {
+  const authUser = await getAuthUser(request);
+  if (!authUser) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-
-  // Get user's org + verify admin role
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("organization_id, role")
-    .eq("id", user.id)
-    .single();
-
-  if (!profile || !["owner", "admin"].includes(profile.role)) {
+  if (!["owner", "admin"].includes(authUser.role) && !authUser.isAdmin) {
     return NextResponse.json({ error: "Forbidden: admin required" }, { status: 403 });
   }
+
+  const profile = { organization_id: authUser.organizationId };
 
   const body = await request.json();
   const { provider, label, apiKey, baseUrl } = body;
@@ -64,17 +54,15 @@ export async function POST(request: NextRequest) {
   return NextResponse.json(data, { status: 201 });
 }
 
-export async function GET() {
-  const supabase = await getSupabaseServerClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) {
+export async function GET(request: NextRequest) {
+  const authUser = await getAuthUser(request);
+  if (!authUser) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  // RLS enforces org scoping — select safe columns only (never encrypted_key)
+  const supabase = await getSupabaseServerClient();
+
+  // Select safe columns only (never encrypted_key), scoped to user's org
   const { data, error } = await supabase
     .from("credentials")
     .select("id, organization_id, provider, label, key_suffix, base_url, is_active, last_verified_at, created_at, updated_at")

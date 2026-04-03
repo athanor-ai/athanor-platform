@@ -4,38 +4,19 @@
  * Uses organization_environments join table for tenant filtering.
  * Admin orgs see all environments. Regular orgs see only purchased ones.
  */
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseServerClient } from "@/lib/supabase-server";
+import { getAuthUser } from "@/lib/auth";
 
-export async function GET() {
-  const supabase = await getSupabaseServerClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) {
+export async function GET(request: NextRequest) {
+  const authUser = await getAuthUser(request);
+  if (!authUser) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  // Get user's org
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("organization_id, role")
-    .eq("id", user.id)
-    .single();
+  const supabase = await getSupabaseServerClient();
 
-  if (!profile) {
-    return NextResponse.json({ error: "No organization" }, { status: 403 });
-  }
-
-  // Check if org is admin (sees all envs) or regular (sees purchased only)
-  const { data: org } = await supabase
-    .from("organizations")
-    .select("plan")
-    .eq("id", profile.organization_id)
-    .single();
-
-  if (org?.plan === "internal" || profile.role === "owner") {
+  if (authUser.isAdmin) {
     // Internal/admin: return all environments
     const { data: envs } = await supabase
       .from("environments")
@@ -50,7 +31,7 @@ export async function GET() {
   const { data: access } = await supabase
     .from("organization_environments")
     .select("environment_id, environments(id, name, slug, engine, status)")
-    .eq("organization_id", profile.organization_id);
+    .eq("organization_id", authUser.organizationId);
 
   const envs = (access || [])
     .map((a) => (a as Record<string, unknown>).environments)
