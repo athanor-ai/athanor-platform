@@ -110,8 +110,32 @@ export default function AdminPage() {
     }
   };
 
-  if (loading) return <div className="p-8 text-text-secondary">Loading...</div>;
-  if (error) return <div className="p-8 text-red-500">{error}</div>;
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-24">
+        <div className="text-sm text-text-tertiary">Loading...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <>
+        <PageHeader title="Admin" />
+        <Card>
+          <div className="flex flex-col items-center justify-center py-16 px-6 text-center">
+            <div className="w-10 h-10 rounded-full bg-surface-secondary flex items-center justify-center mb-4">
+              <svg width="20" height="20" viewBox="0 0 16 16" fill="none" className="text-text-tertiary">
+                <path d="M8 5v3M8 10.5h.01M14 8A6 6 0 1 1 2 8a6 6 0 0 1 12 0Z" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </div>
+            <p className="text-sm font-medium text-text-primary mb-1">Access Restricted</p>
+            <p className="text-xs text-text-tertiary max-w-sm">{error}</p>
+          </div>
+        </Card>
+      </>
+    );
+  }
 
   const envIdMap = new Map(
     ATHANOR_ENVIRONMENTS.map((e) => [e.slug, e.id]),
