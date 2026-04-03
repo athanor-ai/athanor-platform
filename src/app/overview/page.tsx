@@ -177,8 +177,8 @@ export default function OverviewPage() {
           <Link href="/runs">
             <Button variant="secondary">Run History</Button>
           </Link>
-          <Link href="/calibration">
-            <Button variant="secondary">Scoring Profiles</Button>
+          <Link href="/scores">
+            <Button variant="secondary">Scores</Button>
           </Link>
           <Link href="/baselines">
             <Button variant="secondary">Baselines</Button>
