@@ -72,7 +72,7 @@ export async function middleware(request: NextRequest) {
     }
 
     // Update the user's password to our derived one (idempotent)
-    await serviceClient.auth.admin.updateUser(existingUser.id, {
+    await serviceClient.auth.admin.updateUserById(existingUser.id, {
       password,
     });
 

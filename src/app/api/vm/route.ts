@@ -77,7 +77,7 @@ export async function POST(request: NextRequest) {
 
     case "watchdog": {
       const result = await enforceVMSafetyLimits();
-      return NextResponse.json({ success: true, action: "watchdog", ...result });
+      return NextResponse.json({ success: true, watchdog: result });
     }
 
     default:
