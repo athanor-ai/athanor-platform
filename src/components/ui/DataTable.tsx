@@ -4,6 +4,7 @@ export interface Column<T> {
   key: string;
   header: string;
   className?: string;
+  sortable?: boolean;
   render: (item: T) => React.ReactNode;
 }
 
@@ -17,6 +18,9 @@ export function DataTable<T extends { id: string }>({
   columns: Column<T>[];
   data: T[];
   onRowClick?: (item: T) => void;
+  onHeaderClick?: (key: string) => void;
+  sortKey?: string;
+  sortDir?: "asc" | "desc";
   emptyMessage?: string;
   className?: string;
 }) {
@@ -41,7 +45,16 @@ export function DataTable<T extends { id: string }>({
                   col.className,
                 )}
               >
-                {col.header}
+                {col.sortable && onHeaderClick ? (
+                  <button
+                    onClick={() => onHeaderClick(col.key)}
+                    className="hover:text-text-primary cursor-pointer"
+                  >
+                    {col.header} {sortKey === col.key ? (sortDir === "asc" ? "↑" : "↓") : ""}
+                  </button>
+                ) : (
+                  col.header
+                )}
               </th>
             ))}
           </tr>

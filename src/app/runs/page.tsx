@@ -81,7 +81,8 @@ export default function RunsPage() {
     },
     {
       key: "model",
-      header: (<button onClick={() => toggleSort("model")} className="hover:text-text-primary cursor-pointer">Agent / Model {sortKey === "model" ? (sortDir === "asc" ? "↑" : "↓") : ""}</button>),
+      header: "Agent / Model",
+      sortable: true,
       render: (run) => (
         <span className="text-xs font-medium text-accent">
           {run.model_name}
@@ -90,7 +91,8 @@ export default function RunsPage() {
     },
     {
       key: "environment",
-      header: (<button onClick={() => toggleSort("environment")} className="hover:text-text-primary cursor-pointer">Environment {sortKey === "environment" ? (sortDir === "asc" ? "↑" : "↓") : ""}</button>),
+      header: "Environment",
+      sortable: true,
       render: (run) => (
         <span className="text-xs text-text-secondary">
           {envMap.get(run.environment_id) ?? "Unknown"}
@@ -99,7 +101,8 @@ export default function RunsPage() {
     },
     {
       key: "status",
-      header: (<button onClick={() => toggleSort("status")} className="hover:text-text-primary cursor-pointer">Status {sortKey === "status" ? (sortDir === "asc" ? "↑" : "↓") : ""}</button>),
+      header: "Status",
+      sortable: true,
       render: (run) => <StatusBadge status={run.status} />,
     },
     {
@@ -198,6 +201,9 @@ export default function RunsPage() {
           columns={runColumns}
           data={sortedRuns}
           onRowClick={(run) => router.push(`/runs/${run.id}`)}
+          onHeaderClick={toggleSort}
+          sortKey={sortKey}
+          sortDir={sortDir}
         />
       </Card>
     </>
