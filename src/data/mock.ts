@@ -240,7 +240,7 @@ export const mockCredentials: Credential[] = [
   {
     id: "cred-002",
     organization_id: "org-athanor",
-    provider: "gemini",
+    provider: "google",
     label: "Google AI API Key",
     encrypted_key: "AIza...redacted",
     is_active: true,
