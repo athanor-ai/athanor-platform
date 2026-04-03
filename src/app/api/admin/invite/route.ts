@@ -105,7 +105,7 @@ export async function POST(request: NextRequest) {
   const envGranted: string[] = [];
 
   // Resolve slugs to IDs
-  let envIds = environmentIds || [];
+  const envIds = [...(environmentIds || [])];
   if (environmentSlugs?.length) {
     for (const slug of environmentSlugs) {
       const { data: env } = await supabase.from("environments").select("id").eq("slug", slug).single();
