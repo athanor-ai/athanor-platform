@@ -72,6 +72,31 @@ export async function GET(request: NextRequest) {
     .from("organization_environments")
     .select("organization_id, environment_id, access_level, environments(name, slug)");
 
+  // Get all profiles with last_sign_in from auth
+  const { data: authUsers } = await service.auth.admin.listUsers();
+  const lastSignInMap: Record<string, string | null> = {};
+  for (const u of authUsers?.users || []) {
+    if (u.email) lastSignInMap[u.email.toLowerCase()] = u.last_sign_in_at || null;
+  }
+
+  // Get all profiles grouped by org
+  const { data: profiles } = await service
+    .from("profiles")
+    .select("id, organization_id, email, role, created_at");
+
+  const profilesByOrg: Record<string, Array<{ email: string; role: string; status: string; created_at: string }>> = {};
+  for (const p of profiles || []) {
+    if (!profilesByOrg[p.organization_id]) profilesByOrg[p.organization_id] = [];
+    const lastSignIn = lastSignInMap[p.email?.toLowerCase()];
+    const status = lastSignIn ? "active" : "invited";
+    profilesByOrg[p.organization_id].push({
+      email: p.email,
+      role: p.role,
+      status,
+      created_at: p.created_at,
+    });
+  }
+
   // Group access by org
   const accessMap: Record<string, Array<{ env: string; slug: string; level: string }>> = {};
   for (const a of access || []) {
@@ -88,6 +113,7 @@ export async function GET(request: NextRequest) {
   const result = (orgs || []).map((o) => ({
     ...o,
     environments: accessMap[o.id] || [],
+    users: profilesByOrg[o.id] || [],
   }));
 
   return NextResponse.json(result);
@@ -135,6 +161,52 @@ export async function POST(request: NextRequest) {
         .eq("id", organization_id);
       if (error) return NextResponse.json({ error: error.message }, { status: 500 });
       return NextResponse.json({ success: true, action: "set-plan" });
+    }
+
+    case "delete-org": {
+      const { organization_id } = params;
+      if (!organization_id) {
+        return NextResponse.json({ error: "Missing organization_id" }, { status: 400 });
+      }
+
+      // Don't allow deleting internal org
+      const { data: org } = await service
+        .from("organizations")
+        .select("plan")
+        .eq("id", organization_id)
+        .single();
+      if (org?.plan === "internal") {
+        return NextResponse.json({ error: "Cannot delete internal org" }, { status: 403 });
+      }
+
+      // Get user emails to remove from Cloudflare
+      const { data: orgProfiles } = await service
+        .from("profiles")
+        .select("id, email")
+        .eq("organization_id", organization_id);
+
+      // Remove from Cloudflare Access
+      try {
+        const { removeAccessEmails } = await import("@/lib/cloudflare-access");
+        const emails = (orgProfiles || []).map((p) => p.email).filter(Boolean);
+        if (emails.length > 0) await removeAccessEmails(emails);
+      } catch {
+        // Don't fail if Cloudflare removal fails
+      }
+
+      // Delete auth users
+      for (const p of orgProfiles || []) {
+        await service.auth.admin.deleteUser(p.id);
+      }
+
+      // Delete org (cascades to profiles, org_environments, runs, credentials via FK)
+      const { error } = await service
+        .from("organizations")
+        .delete()
+        .eq("id", organization_id);
+
+      if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+      return NextResponse.json({ success: true, action: "delete-org" });
     }
 
     default:

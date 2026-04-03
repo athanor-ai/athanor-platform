@@ -6,6 +6,13 @@ import { Card, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { ATHANOR_ENVIRONMENTS } from "@/data/environments";
 
+interface OrgUser {
+  email: string;
+  role: string;
+  status: "invited" | "active";
+  created_at: string;
+}
+
 interface OrgData {
   id: string;
   name: string;
@@ -13,6 +20,7 @@ interface OrgData {
   plan: string;
   created_at: string;
   environments: Array<{ env: string; slug: string; level: string }>;
+  users: OrgUser[];
 }
 
 export default function AdminPage() {
@@ -199,13 +207,13 @@ export default function AdminPage() {
                   Cancel
                 </Button>
               </div>
-              {inviteResult && (
-                <p className={`text-xs ${inviteResult.startsWith("Error") ? "text-red-400" : "text-green-400"}`}>
-                  {inviteResult}
-                </p>
-              )}
             </div>
           </Card>
+        )}
+        {inviteResult && (
+          <div className={`mt-2 px-4 py-2 rounded-md text-xs ${inviteResult.startsWith("Error") ? "bg-red-900/20 text-red-400" : "bg-green-900/20 text-green-400"}`}>
+            {inviteResult}
+          </div>
         )}
       </div>
 
@@ -254,6 +262,51 @@ export default function AdminPage() {
                   );
                 })}
               </div>
+
+              {/* Users */}
+              {org.users.length > 0 && (
+                <div className="mt-3">
+                  <p className="text-[11px] font-medium text-text-tertiary mb-1.5">
+                    Users ({org.users.length})
+                  </p>
+                  <div className="space-y-1">
+                    {org.users.map((u) => (
+                      <div key={u.email} className="flex items-center gap-2 text-[11px]">
+                        <span className={`w-1.5 h-1.5 rounded-full ${u.status === "active" ? "bg-green-400" : "bg-yellow-400"}`} />
+                        <span className="font-mono text-text-secondary">{u.email}</span>
+                        <span className="text-text-tertiary">{u.role}</span>
+                        <span className={`px-1.5 py-0.5 rounded text-[9px] font-medium ${
+                          u.status === "active"
+                            ? "bg-green-900/20 text-green-400"
+                            : "bg-yellow-900/20 text-yellow-400"
+                        }`}>
+                          {u.status}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Delete org (only for non-internal orgs) */}
+              {org.plan !== "internal" && (
+                <div className="mt-3 pt-3 border-t border-border-primary/30">
+                  <button
+                    onClick={async () => {
+                      if (!confirm(`Delete ${org.name}? This removes the org, all users, and their access.`)) return;
+                      await fetch("/api/admin", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ action: "delete-org", organization_id: org.id }),
+                      });
+                      fetchOrgs();
+                    }}
+                    className="text-[10px] text-red-400/60 hover:text-red-400 transition-colors"
+                  >
+                    Delete organization
+                  </button>
+                </div>
+              )}
             </div>
           </Card>
         ))}
