@@ -5,15 +5,15 @@ import type { CredentialSummary } from "@/types/database";
 
 /**
  * Fetches credential metadata (safe summary only — no secret material).
- *
- * When backed by a real API, this must select only non-secret columns:
- *   id, organization_id, provider, label, key_suffix, is_active,
- *   last_verified_at, created_at, updated_at
- *
- * The encrypted_key column must NEVER be included in the client response.
+ * Uses real API when available, falls back to mock data.
  */
 async function fetchCredentials(): Promise<CredentialSummary[]> {
-  await new Promise((r) => setTimeout(r, 200));
+  try {
+    const res = await fetch("/api/credentials");
+    if (res.ok) return res.json();
+  } catch {
+    // API not available (dev without Supabase) — fall back to mock
+  }
   return mockCredentials;
 }
 

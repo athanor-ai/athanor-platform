@@ -4,17 +4,32 @@ import { mockRuns, mockRunResults } from "@/data/mock";
 import type { Run, RunResult } from "@/types/database";
 
 async function fetchRuns(): Promise<Run[]> {
-  await new Promise((r) => setTimeout(r, 300));
+  try {
+    const res = await fetch("/api/runs");
+    if (res.ok) return res.json();
+  } catch {
+    // Fall back to mock
+  }
   return mockRuns;
 }
 
 async function fetchRun(id: string): Promise<Run | undefined> {
-  await new Promise((r) => setTimeout(r, 200));
+  try {
+    const res = await fetch(`/api/runs/${id}`);
+    if (res.ok) return res.json();
+  } catch {
+    // Fall back to mock
+  }
   return mockRuns.find((r) => r.id === id);
 }
 
 async function fetchRunResults(runId: string): Promise<RunResult[]> {
-  await new Promise((r) => setTimeout(r, 200));
+  try {
+    const res = await fetch(`/api/runs/${runId}/results`);
+    if (res.ok) return res.json();
+  } catch {
+    // Fall back to mock
+  }
   return mockRunResults.filter((r) => r.run_id === runId);
 }
 

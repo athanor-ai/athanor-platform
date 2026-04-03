@@ -36,27 +36,16 @@ export function useCredentialMutations() {
 
   const addCredential = useMutation({
     mutationFn: async (input: AddCredentialInput): Promise<CredentialSummary> => {
-      // Simulate network latency
-      await new Promise((r) => setTimeout(r, 300));
-
-      const now = new Date().toISOString();
-      const suffix =
-        input.apiKey.length > 4
-          ? `...${input.apiKey.slice(-4)}`
-          : "...••••";
-
-      return {
-        id: generateId(),
-        organization_id: "org-athanor",
-        provider: input.provider,
-        label: input.label,
-        key_suffix: suffix,
-        base_url: input.baseUrl?.trim() || null,
-        is_active: true,
-        last_verified_at: now,
-        created_at: now,
-        updated_at: now,
-      };
+      const res = await fetch("/api/credentials", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(input),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ error: res.statusText }));
+        throw new Error(err.error || "Failed to add credential");
+      }
+      return res.json();
     },
     onSuccess: (newCredential) => {
       queryClient.setQueryData<CredentialSummary[]>(
@@ -67,43 +56,36 @@ export function useCredentialMutations() {
   });
 
   const updateCredential = useMutation({
-    mutationFn: async (
-      input: UpdateCredentialInput,
-    ): Promise<
-      UpdateCredentialInput & { masked: string; updatedAt: string }
-    > => {
-      await new Promise((r) => setTimeout(r, 300));
-
-      const masked =
-        input.apiKey.length > 8
-          ? `${input.apiKey.slice(0, 6)}...${input.apiKey.slice(-4)}`
-          : "••••••••";
-
-      return { ...input, masked, updatedAt: new Date().toISOString() };
+    mutationFn: async (input: UpdateCredentialInput): Promise<CredentialSummary> => {
+      const res = await fetch(`/api/credentials/${input.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(input),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ error: res.statusText }));
+        throw new Error(err.error || "Failed to update credential");
+      }
+      return res.json();
     },
-    onSuccess: (result) => {
+    onSuccess: (updated) => {
       queryClient.setQueryData<CredentialSummary[]>(
         queryKeys.credentials.all,
         (prev) =>
-          (prev ?? []).map((c) =>
-            c.id === result.id
-              ? {
-                  ...c,
-                  label: result.label,
-                  key_suffix: result.masked,
-                  base_url: result.baseUrl?.trim() || null,
-                  last_verified_at: result.updatedAt,
-                  updated_at: result.updatedAt,
-                }
-              : c,
-          ),
+          (prev ?? []).map((c) => (c.id === updated.id ? updated : c)),
       );
     },
   });
 
   const revokeCredential = useMutation({
     mutationFn: async (input: RevokeCredentialInput): Promise<string> => {
-      await new Promise((r) => setTimeout(r, 300));
+      const res = await fetch(`/api/credentials/${input.id}`, {
+        method: "DELETE",
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ error: res.statusText }));
+        throw new Error(err.error || "Failed to revoke credential");
+      }
       return input.id;
     },
     onSuccess: (removedId) => {

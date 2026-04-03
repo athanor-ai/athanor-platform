@@ -48,4 +48,5 @@ export const queryKeys = {
     all: ["docs"] as const,
     page: (slug: string) => ["docs", slug] as const,
   },
+  vm: ["vm", "status"] as const,
 } as const;
