@@ -14,6 +14,7 @@ import {
   stopVM,
   cleanupVM,
   checkVMHealth,
+  enforceVMSafetyLimits,
 } from "@/lib/vm-manager";
 
 async function verifyAdmin() {
@@ -74,9 +75,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: true, action: "health", ...health });
     }
 
+    case "watchdog": {
+      const result = await enforceVMSafetyLimits();
+      return NextResponse.json({ success: true, action: "watchdog", ...result });
+    }
+
     default:
       return NextResponse.json(
-        { error: "Unknown action. Use: start, stop, cleanup, health" },
+        { error: "Unknown action. Use: start, stop, cleanup, health, watchdog" },
         { status: 400 },
       );
   }

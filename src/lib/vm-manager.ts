@@ -22,13 +22,12 @@ const VM_RESOURCE_GROUP = process.env.AZURE_VM_RESOURCE_GROUP || "env-runner";
 const VM_NAME = process.env.AZURE_VM_NAME || "standard-env-runner";
 
 // Safety limits
-/* eslint-disable @typescript-eslint/no-unused-vars */
-const _MAX_VM_UPTIME_MS = 6 * 60 * 60 * 1000; // 6 hours max before forced shutdown
-const _MAX_DISK_USAGE_GB = 50; // Alert if disk usage exceeds this
-const _MAX_WORKDIR_SIZE_GB = 10; // Clean workdirs if they exceed this
-/* eslint-enable @typescript-eslint/no-unused-vars */
+const MAX_VM_UPTIME_MS = 6 * 60 * 60 * 1000; // 6 hours max before forced shutdown
 
 export type VMStatus = "running" | "deallocated" | "starting" | "stopping" | "unknown";
+
+// Track when the VM was started by this process
+let vmStartedAt: number | null = null;
 
 /**
  * Get current VM status.
@@ -56,7 +55,16 @@ export async function getVMStatus(): Promise<VMStatus> {
  */
 export async function startVM(): Promise<boolean> {
   const status = await getVMStatus();
-  if (status === "running") return true;
+  if (status === "running") {
+    // VM already running — check if it's been up too long
+    if (vmStartedAt && Date.now() - vmStartedAt > MAX_VM_UPTIME_MS) {
+      console.warn(`VM has been running for ${Math.round((Date.now() - vmStartedAt) / 3600000)}h, forcing shutdown`);
+      await stopVM();
+      vmStartedAt = null;
+      return false;
+    }
+    return true;
+  }
 
   try {
     console.log(`Starting VM ${VM_NAME}...`);
@@ -64,6 +72,7 @@ export async function startVM(): Promise<boolean> {
       `az vm start -g ${VM_RESOURCE_GROUP} -n ${VM_NAME}`,
       { timeout: 300000 }, // 5 min timeout for start
     );
+    vmStartedAt = Date.now();
     console.log(`VM ${VM_NAME} started`);
     return true;
   } catch (e) {
@@ -77,7 +86,10 @@ export async function startVM(): Promise<boolean> {
  */
 export async function stopVM(): Promise<boolean> {
   const status = await getVMStatus();
-  if (status === "deallocated") return true;
+  if (status === "deallocated") {
+    vmStartedAt = null;
+    return true;
+  }
 
   try {
     console.log(`Deallocating VM ${VM_NAME}...`);
@@ -85,6 +97,7 @@ export async function stopVM(): Promise<boolean> {
       `az vm deallocate -g ${VM_RESOURCE_GROUP} -n ${VM_NAME}`,
       { timeout: 300000 },
     );
+    vmStartedAt = null;
     console.log(`VM ${VM_NAME} deallocated`);
     return true;
   } catch (e) {
@@ -189,5 +202,69 @@ export async function checkVMHealth(sshTarget?: string): Promise<{
   } catch {
     return { diskUsagePercent: 0, memoryUsedMB: 0, activeProcesses: 0, warnings: ["Health check failed"] };
   }
+}
+
+/**
+ * Safety watchdog: check if VM has been running too long and force-deallocate.
+ *
+ * Call this from a cron endpoint (e.g. Vercel cron or external ping).
+ * If the VM is running but no runs are active in Supabase, it shuts down.
+ * If the VM has exceeded MAX_VM_UPTIME_MS, it shuts down regardless.
+ *
+ * Returns what action was taken.
+ */
+export async function enforceVMSafetyLimits(): Promise<{
+  action: "none" | "shutdown_idle" | "shutdown_timeout";
+  reason: string;
+}> {
+  const status = await getVMStatus();
+  if (status !== "running") {
+    vmStartedAt = null;
+    return { action: "none", reason: `VM is ${status}` };
+  }
+
+  // Check uptime via Azure (more reliable than in-memory timer)
+  try {
+    const { stdout } = await execAsync(
+      `az vm get-instance-view -g ${VM_RESOURCE_GROUP} -n ${VM_NAME} --query "instanceView.statuses[1].time" -o tsv`,
+      { timeout: 15000 },
+    );
+    const startTime = new Date(stdout.trim()).getTime();
+    const uptimeMs = Date.now() - startTime;
+    const uptimeHours = (uptimeMs / 3600000).toFixed(1);
+
+    if (uptimeMs > MAX_VM_UPTIME_MS) {
+      console.warn(`VM uptime ${uptimeHours}h exceeds limit, forcing deallocate`);
+      await cleanupVM();
+      await stopVM();
+      return { action: "shutdown_timeout", reason: `Uptime ${uptimeHours}h exceeded ${MAX_VM_UPTIME_MS / 3600000}h limit` };
+    }
+  } catch {
+    // Can't determine uptime — fall through to idle check
+  }
+
+  // Check if any runs are actually active
+  // This requires Supabase, so we use a simple SSH check instead:
+  // if no evaluate.py or dryrun processes are running, the VM is idle
+  const sshTarget = process.env.AZURE_VM_SSH_TARGET;
+  if (sshTarget) {
+    try {
+      const { stdout } = await execAsync(
+        `ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 ${sshTarget} "pgrep -f 'evaluate.py|dryrun' | wc -l"`,
+        { timeout: 15000 },
+      );
+      const procs = parseInt(stdout.trim()) || 0;
+      if (procs === 0) {
+        console.log("VM is idle (no evaluation processes), deallocating");
+        await cleanupVM(sshTarget);
+        await stopVM();
+        return { action: "shutdown_idle", reason: "No active evaluation processes" };
+      }
+    } catch {
+      // SSH failed — VM might be starting up, don't kill it
+    }
+  }
+
+  return { action: "none", reason: "VM is running with active processes" };
 }
 
