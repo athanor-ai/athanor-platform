@@ -16,31 +16,47 @@ function getServiceClient() {
   );
 }
 
-async function verifyInternalAdmin() {
-  const supabase = await getSupabaseServerClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return false;
+const ADMIN_EMAILS = new Set([
+  "aidan@athanorl.com",
+  "hongsksam@gmail.com",
+]);
 
-  const service = getServiceClient();
-  const { data: profile } = await service
-    .from("profiles")
-    .select("organization_id, role")
-    .eq("id", user.id)
-    .single();
+async function verifyInternalAdmin(request?: Request) {
+  // Method 1: Cloudflare Access header (when behind Zero Trust)
+  if (request) {
+    const cfEmail = request.headers.get("cf-access-authenticated-user-email");
+    if (cfEmail && ADMIN_EMAILS.has(cfEmail.toLowerCase())) return true;
+  }
 
-  if (!profile) return false;
+  // Method 2: Supabase auth session (when using platform login)
+  try {
+    const supabase = await getSupabaseServerClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return false;
 
-  const { data: org } = await service
-    .from("organizations")
-    .select("plan")
-    .eq("id", profile.organization_id)
-    .single();
+    const service = getServiceClient();
+    const { data: profile } = await service
+      .from("profiles")
+      .select("organization_id, role")
+      .eq("id", user.id)
+      .single();
 
-  return org?.plan === "internal";
+    if (!profile) return false;
+
+    const { data: org } = await service
+      .from("organizations")
+      .select("plan")
+      .eq("id", profile.organization_id)
+      .single();
+
+    return org?.plan === "internal";
+  } catch {
+    return false;
+  }
 }
 
-export async function GET() {
-  if (!(await verifyInternalAdmin())) {
+export async function GET(request: NextRequest) {
+  if (!(await verifyInternalAdmin(request))) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
@@ -78,7 +94,7 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  if (!(await verifyInternalAdmin())) {
+  if (!(await verifyInternalAdmin(request))) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
