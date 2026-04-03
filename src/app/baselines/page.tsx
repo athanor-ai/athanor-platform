@@ -75,11 +75,6 @@ export default function BaselinesPage() {
       ),
     },
     {
-      key: "status",
-      header: "Status",
-      render: (b) => <StatusBadge status={b.status} />,
-    },
-    {
       key: "mean_score",
       header: "Mean Score",
       render: (b) => (

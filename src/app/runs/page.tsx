@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useRuns } from "@/hooks/useRuns";
@@ -14,6 +14,17 @@ import { LoadingState } from "@/components/ui/LoadingState";
 import { EmptyState } from "@/components/ui/EmptyState";
 import type { Run } from "@/types/database";
 
+type SortKey = "model" | "environment" | "status" | "score" | "created";
+type SortDir = "asc" | "desc";
+
+const STATUS_ORDER: Record<string, number> = {
+  running: 0,
+  pending: 1,
+  completed: 2,
+  failed: 3,
+  cancelled: 4,
+};
+
 export default function RunsPage() {
   const router = useRouter();
   const runs = useRuns();
@@ -26,14 +37,37 @@ export default function RunsPage() {
     [environments.data],
   );
 
-  const sortedRuns = useMemo(
-    () =>
-      [...(runs.data ?? [])].sort(
-        (a, b) =>
-          new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
-      ),
-    [runs.data],
-  );
+  const [sortKey, setSortKey] = useState<SortKey>("created");
+  const [sortDir, setSortDir] = useState<SortDir>("desc");
+
+  const toggleSort = useCallback((key: SortKey) => {
+    if (sortKey === key) {
+      setSortDir((d) => (d === "asc" ? "desc" : "asc"));
+    } else {
+      setSortKey(key);
+      setSortDir(key === "status" ? "asc" : "desc");
+    }
+  }, [sortKey]);
+
+  const sortedRuns = useMemo(() => {
+    const data = [...(runs.data ?? [])];
+    const dir = sortDir === "asc" ? 1 : -1;
+    return data.sort((a, b) => {
+      switch (sortKey) {
+        case "model":
+          return dir * a.model_name.localeCompare(b.model_name);
+        case "environment":
+          return dir * (envMap.get(a.environment_id) ?? "").localeCompare(envMap.get(b.environment_id) ?? "");
+        case "status":
+          return dir * ((STATUS_ORDER[a.status] ?? 9) - (STATUS_ORDER[b.status] ?? 9));
+        case "score":
+          return dir * ((a.mean_score ?? 0) - (b.mean_score ?? 0));
+        case "created":
+        default:
+          return dir * (new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+      }
+    });
+  }, [runs.data, sortKey, sortDir, envMap]);
 
   const runColumns: Column<Run>[] = [
     {
@@ -47,7 +81,7 @@ export default function RunsPage() {
     },
     {
       key: "model",
-      header: "Agent / Model",
+      header: (<button onClick={() => toggleSort("model")} className="hover:text-text-primary cursor-pointer">Agent / Model {sortKey === "model" ? (sortDir === "asc" ? "↑" : "↓") : ""}</button>),
       render: (run) => (
         <span className="text-xs font-medium text-accent">
           {run.model_name}
@@ -56,7 +90,7 @@ export default function RunsPage() {
     },
     {
       key: "environment",
-      header: "Environment",
+      header: (<button onClick={() => toggleSort("environment")} className="hover:text-text-primary cursor-pointer">Environment {sortKey === "environment" ? (sortDir === "asc" ? "↑" : "↓") : ""}</button>),
       render: (run) => (
         <span className="text-xs text-text-secondary">
           {envMap.get(run.environment_id) ?? "Unknown"}
@@ -65,7 +99,7 @@ export default function RunsPage() {
     },
     {
       key: "status",
-      header: "Status",
+      header: (<button onClick={() => toggleSort("status")} className="hover:text-text-primary cursor-pointer">Status {sortKey === "status" ? (sortDir === "asc" ? "↑" : "↓") : ""}</button>),
       render: (run) => <StatusBadge status={run.status} />,
     },
     {

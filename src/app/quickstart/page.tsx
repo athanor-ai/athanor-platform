@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Card, CardHeader, CardTitle } from "@/components/ui/Card";
+import { CopyBlock } from "@/components/ui/CopyBlock";
 import { ATHANOR_ENVIRONMENTS } from "@/data/environments";
 
 const STEPS = [
@@ -108,9 +109,7 @@ export default function QuickstartPage() {
               <p className="text-sm text-text-secondary mt-1">{step.description}</p>
             </CardHeader>
             <div className="px-6 pb-6">
-              <pre className="bg-surface-primary border border-border-primary rounded-lg p-4 text-sm font-mono overflow-x-auto whitespace-pre">
-                {step.code(selectedEnv)}
-              </pre>
+              <CopyBlock code={step.code(selectedEnv)} language="bash" />
             </div>
           </Card>
         ))}
@@ -126,8 +125,7 @@ export default function QuickstartPage() {
             <p className="text-sm text-text-secondary mb-4">
               The environment acts as a reward function. Your training loop:
             </p>
-            <pre className="bg-surface-primary border border-border-primary rounded-lg p-4 text-sm font-mono overflow-x-auto whitespace-pre">
-{`# Python pseudocode for RL training integration
+            <CopyBlock language="python" code={`# Python pseudocode for RL training integration
 import json, subprocess
 
 def get_reward(task_id: str, agent_workspace: str) -> float:
@@ -144,8 +142,7 @@ for episode in range(num_episodes):
     workspace = agent.attempt(task)          # agent writes code
     reward = get_reward(task.id, workspace)  # deterministic reward
     agent.update(reward)                     # RL update step
-    reset_workspace(workspace)               # clean for next episode`}
-            </pre>
+    reset_workspace(workspace)               # clean for next episode`} />
             <p className="text-sm text-text-tertiary mt-4">
               Scores are deterministic (same code = same score) and continuous
               (partial solutions get partial credit). No LLM judges, no variance.
