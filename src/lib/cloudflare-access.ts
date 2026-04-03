@@ -28,8 +28,9 @@ interface AccessPolicy {
  * Get the current email allowlist from the Cloudflare Access policy.
  */
 export async function getAccessEmails(): Promise<string[]> {
+  // Use account-level reusable policy endpoint (not app-level)
   const res = await fetch(
-    `https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/access/apps/${CF_APP_ID}/policies/${CF_POLICY_ID}`,
+    `https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/access/policies/${CF_POLICY_ID}`,
     { headers: { Authorization: `Bearer ${getToken()}` } },
   );
   const data = await res.json() as { result: AccessPolicy };
@@ -57,17 +58,17 @@ export async function addAccessEmails(emails: string[]): Promise<{ added: string
     ...toAdd.map((email) => ({ email: { email: email.toLowerCase() } })),
   ];
 
-  // Get full policy to preserve other fields
+  // Get full policy to preserve other fields (account-level endpoint)
   const getRes = await fetch(
-    `https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/access/apps/${CF_APP_ID}/policies/${CF_POLICY_ID}`,
+    `https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/access/policies/${CF_POLICY_ID}`,
     { headers: { Authorization: `Bearer ${getToken()}` } },
   );
   const policyData = await getRes.json() as { result: Record<string, unknown> };
   const policy = policyData.result;
 
-  // Update policy with new include list
+  // Update policy with new include list (account-level endpoint)
   const updateRes = await fetch(
-    `https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/access/apps/${CF_APP_ID}/policies/${CF_POLICY_ID}`,
+    `https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/access/policies/${CF_POLICY_ID}`,
     {
       method: "PUT",
       headers: {
@@ -107,14 +108,14 @@ export async function removeAccessEmails(emails: string[]): Promise<{ removed: s
   const include = remaining.map((email) => ({ email: { email } }));
 
   const getRes = await fetch(
-    `https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/access/apps/${CF_APP_ID}/policies/${CF_POLICY_ID}`,
+    `https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/access/policies/${CF_POLICY_ID}`,
     { headers: { Authorization: `Bearer ${getToken()}` } },
   );
   const policyData = await getRes.json() as { result: Record<string, unknown> };
   const policy = policyData.result;
 
   await fetch(
-    `https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/access/apps/${CF_APP_ID}/policies/${CF_POLICY_ID}`,
+    `https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/access/policies/${CF_POLICY_ID}`,
     {
       method: "PUT",
       headers: {
