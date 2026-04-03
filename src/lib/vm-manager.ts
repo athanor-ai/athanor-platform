@@ -22,7 +22,6 @@ const VM_RESOURCE_GROUP = process.env.AZURE_VM_RESOURCE_GROUP || "env-runner";
 const VM_NAME = process.env.AZURE_VM_NAME || "standard-env-runner";
 
 // Safety limits
-const MAX_RUN_DURATION_MS = 4 * 60 * 60 * 1000; // 4 hours max per run
 /* eslint-disable @typescript-eslint/no-unused-vars */
 const _MAX_VM_UPTIME_MS = 6 * 60 * 60 * 1000; // 6 hours max before forced shutdown
 const _MAX_DISK_USAGE_GB = 50; // Alert if disk usage exceeds this
@@ -192,59 +191,3 @@ export async function checkVMHealth(sshTarget?: string): Promise<{
   }
 }
 
-/**
- * Full run lifecycle: start VM -> execute -> cleanup -> stop VM.
- *
- * Called by the API when a run is queued. Handles the entire lifecycle
- * including error recovery and guaranteed VM shutdown.
- */
-export async function executeRunLifecycle(
-  runId: string,
-  options: {
-    autoShutdown?: boolean; // default true -- deallocate after run
-    maxDurationMs?: number; // default MAX_RUN_DURATION_MS
-    onProgress?: (msg: string) => void;
-  } = {},
-): Promise<{ success: boolean; error?: string }> {
-  const autoShutdown = options.autoShutdown ?? true;
-  const maxDuration = options.maxDurationMs ?? MAX_RUN_DURATION_MS;
-  const log = options.onProgress ?? console.log;
-
-  const startTime = Date.now();
-
-  try {
-    // 1. Start VM
-    log("Starting evaluation server...");
-    const started = await startVM();
-    if (!started) {
-      return { success: false, error: "Failed to start VM" };
-    }
-
-    // 2. Wait for VM to be SSH-accessible (up to 2 min)
-    log("Waiting for server to be ready...");
-    // TODO: implement SSH readiness check
-
-    // 3. Execute the run (via SSH to the VM)
-    log(`Executing run ${runId}...`);
-    // TODO: SSH to VM, run evaluate.py with credentials
-
-    // 4. Check timeout
-    if (Date.now() - startTime > maxDuration) {
-      log("Run exceeded maximum duration, stopping...");
-      return { success: false, error: "Timeout exceeded" };
-    }
-
-    return { success: true };
-  } catch (e) {
-    return { success: false, error: String(e) };
-  } finally {
-    // ALWAYS cleanup and optionally stop
-    log("Cleaning up...");
-    await cleanupVM();
-
-    if (autoShutdown) {
-      log("Shutting down evaluation server...");
-      await stopVM();
-    }
-  }
-}
