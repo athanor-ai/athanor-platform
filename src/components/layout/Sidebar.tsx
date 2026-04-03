@@ -15,6 +15,7 @@ import {
   PiBookOpen,
   PiRocketLaunch,
   PiLightning,
+  PiGear,
 } from "react-icons/pi";
 import { ATHANOR_ENVIRONMENTS } from "@/data/environments";
 
@@ -31,6 +32,7 @@ const navItems = [
   { label: "Integration", href: "/training", icon: PiBrain },
   { label: "Credentials", href: "/credentials", icon: PiKey },
   { label: "Docs", href: "/docs", icon: PiBookOpen },
+  { label: "Admin", href: "/admin", icon: PiGear },
 ];
 
 export function Sidebar() {
