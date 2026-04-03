@@ -40,12 +40,13 @@ export default function RunsPage() {
   const [sortKey, setSortKey] = useState<SortKey>("created");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
 
-  const toggleSort = useCallback((key: SortKey) => {
-    if (sortKey === key) {
+  const toggleSort = useCallback((key: string) => {
+    const k = key as SortKey;
+    if (sortKey === k) {
       setSortDir((d) => (d === "asc" ? "desc" : "asc"));
     } else {
-      setSortKey(key);
-      setSortDir(key === "status" ? "asc" : "desc");
+      setSortKey(k);
+      setSortDir(k === "status" ? "asc" : "desc");
     }
   }, [sortKey]);
 

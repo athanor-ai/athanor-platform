@@ -12,6 +12,9 @@ export function DataTable<T extends { id: string }>({
   columns,
   data,
   onRowClick,
+  onHeaderClick,
+  sortKey,
+  sortDir,
   emptyMessage = "No data available",
   className,
 }: {
