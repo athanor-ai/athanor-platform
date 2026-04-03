@@ -1,0 +1,3154 @@
+{
+  "lean-theorem-proving": {
+    "claude-sonnet-4-6": [
+      {
+        "task": "ackermann-level3",
+        "score": 0.018316
+      },
+      {
+        "task": "compiler-correctness",
+        "score": 0
+      },
+      {
+        "task": "first-duplicate",
+        "score": 1
+      },
+      {
+        "task": "fix-wrong-lemma",
+        "score": 1
+      },
+      {
+        "task": "fix-proof-errors",
+        "score": 1
+      },
+      {
+        "task": "binary-search",
+        "score": 0.737363
+      },
+      {
+        "task": "church-rosser",
+        "score": 0
+      },
+      {
+        "task": "list-advanced",
+        "score": 1
+      },
+      {
+        "task": "list-filter",
+        "score": 1
+      },
+      {
+        "task": "last-digit-squares",
+        "score": 1
+      },
+      {
+        "task": "increasing-triplet",
+        "score": 1
+      },
+      {
+        "task": "fib-add-formula",
+        "score": 0.049787
+      },
+      {
+        "task": "max-subarray",
+        "score": 1
+      },
+      {
+        "task": "longest-streak",
+        "score": 1
+      },
+      {
+        "task": "majority-element",
+        "score": 0.07244
+      },
+      {
+        "task": "partition-evens-odds",
+        "score": 1
+      },
+      {
+        "task": "merge-sorted",
+        "score": 0.854752
+      },
+      {
+        "task": "nat-arith-combined",
+        "score": 0.203221
+      },
+      {
+        "task": "pythagorean-div3",
+        "score": 1
+      },
+      {
+        "task": "nat-induction-hard",
+        "score": 1.3e-05
+      },
+      {
+        "task": "sqrt2-irrational",
+        "score": 0.049787
+      },
+      {
+        "task": "sqrt3-irrational",
+        "score": 0.049787
+      },
+      {
+        "task": "squares-mod-arith",
+        "score": 1e-06
+      },
+      {
+        "task": "stock-profit",
+        "score": 1
+      },
+      {
+        "task": "two-sum",
+        "score": 1
+      },
+      {
+        "task": "well-founded-order",
+        "score": 0
+      },
+      {
+        "task": "nat-divisibility",
+        "score": 1e-06
+      },
+      {
+        "task": "prime-factor-exists",
+        "score": 1
+      },
+      {
+        "task": "red-black-invariant",
+        "score": 0
+      },
+      {
+        "task": "regex-derivative",
+        "score": 0
+      }
+    ],
+    "gemini-2.5-flash": [
+      {
+        "task": "church-rosser",
+        "score": 0
+      },
+      {
+        "task": "first-duplicate",
+        "score": 1
+      },
+      {
+        "task": "ackermann-level3",
+        "score": 0.018316
+      },
+      {
+        "task": "fib-add-formula",
+        "score": 0.176167
+      },
+      {
+        "task": "compiler-correctness",
+        "score": 0
+      },
+      {
+        "task": "fix-proof-errors",
+        "score": 1
+      },
+      {
+        "task": "binary-search",
+        "score": 0.261009
+      },
+      {
+        "task": "fix-wrong-lemma",
+        "score": 0.684371
+      },
+      {
+        "task": "increasing-triplet",
+        "score": 0.737363
+      },
+      {
+        "task": "last-digit-squares",
+        "score": 1.2e-05
+      },
+      {
+        "task": "list-filter",
+        "score": 0.05889
+      },
+      {
+        "task": "longest-streak",
+        "score": 0.049787
+      },
+      {
+        "task": "list-advanced",
+        "score": 0.085445
+      },
+      {
+        "task": "majority-element",
+        "score": 0.348305
+      },
+      {
+        "task": "max-subarray",
+        "score": 0.472367
+      },
+      {
+        "task": "nat-divisibility",
+        "score": 0.014959
+      },
+      {
+        "task": "nat-arith-combined",
+        "score": 0.00258
+      },
+      {
+        "task": "prime-factor-exists",
+        "score": 1e-06
+      },
+      {
+        "task": "nat-induction-hard",
+        "score": 1.3e-05
+      },
+      {
+        "task": "partition-evens-odds",
+        "score": 0.005196
+      },
+      {
+        "task": "merge-sorted",
+        "score": 0.412278
+      },
+      {
+        "task": "red-black-invariant",
+        "score": 0
+      },
+      {
+        "task": "sqrt2-irrational",
+        "score": 0
+      },
+      {
+        "task": "regex-derivative",
+        "score": 0
+      },
+      {
+        "task": "stock-profit",
+        "score": 0.904864
+      },
+      {
+        "task": "pythagorean-div3",
+        "score": 0
+      },
+      {
+        "task": "sqrt3-irrational",
+        "score": 0.006791
+      },
+      {
+        "task": "two-sum",
+        "score": 0
+      },
+      {
+        "task": "squares-mod-arith",
+        "score": 0.000114
+      },
+      {
+        "task": "well-founded-order",
+        "score": 0
+      }
+    ],
+    "gemini-3.1-pro-preview": [
+      {
+        "task": "ackermann-level3",
+        "score": 1e-06
+      },
+      {
+        "task": "binary-search",
+        "score": 0.049787
+      },
+      {
+        "task": "church-rosser",
+        "score": 0
+      },
+      {
+        "task": "fib-add-formula",
+        "score": 0.049787
+      },
+      {
+        "task": "compiler-correctness",
+        "score": 0
+      },
+      {
+        "task": "first-duplicate",
+        "score": 0.002479
+      },
+      {
+        "task": "fix-proof-errors",
+        "score": 0.041442
+      },
+      {
+        "task": "list-advanced",
+        "score": 1e-06
+      },
+      {
+        "task": "last-digit-squares",
+        "score": 1e-06
+      },
+      {
+        "task": "list-filter",
+        "score": 1
+      },
+      {
+        "task": "fix-wrong-lemma",
+        "score": 0.025455
+      },
+      {
+        "task": "longest-streak",
+        "score": 1
+      },
+      {
+        "task": "increasing-triplet",
+        "score": 0.153355
+      },
+      {
+        "task": "majority-element",
+        "score": 0.472367
+      },
+      {
+        "task": "max-subarray",
+        "score": 0.07244
+      },
+      {
+        "task": "nat-divisibility",
+        "score": 1e-06
+      },
+      {
+        "task": "merge-sorted",
+        "score": 1e-06
+      },
+      {
+        "task": "nat-arith-combined",
+        "score": 1e-06
+      },
+      {
+        "task": "partition-evens-odds",
+        "score": 2.8e-05
+      },
+      {
+        "task": "nat-induction-hard",
+        "score": 1e-06
+      },
+      {
+        "task": "prime-factor-exists",
+        "score": 1e-06
+      },
+      {
+        "task": "pythagorean-div3",
+        "score": 1e-06
+      },
+      {
+        "task": "sqrt2-irrational",
+        "score": 0.076426
+      },
+      {
+        "task": "red-black-invariant",
+        "score": 0
+      },
+      {
+        "task": "stock-profit",
+        "score": 0.002479
+      },
+      {
+        "task": "squares-mod-arith",
+        "score": 1e-06
+      },
+      {
+        "task": "sqrt3-irrational",
+        "score": 0.049787
+      },
+      {
+        "task": "regex-derivative",
+        "score": 0
+      },
+      {
+        "task": "two-sum",
+        "score": 1e-06
+      },
+      {
+        "task": "well-founded-order",
+        "score": 0
+      }
+    ],
+    "kimi-k2.5": [
+      {
+        "task": "binary-search",
+        "score": 0.180092
+      },
+      {
+        "task": "fib-add-formula",
+        "score": 0.122456
+      },
+      {
+        "task": "first-duplicate",
+        "score": 0.023355
+      },
+      {
+        "task": "fix-proof-errors",
+        "score": 0.041442
+      },
+      {
+        "task": "compiler-correctness",
+        "score": 0
+      },
+      {
+        "task": "church-rosser",
+        "score": 0
+      },
+      {
+        "task": "fix-wrong-lemma",
+        "score": 0
+      },
+      {
+        "task": "last-digit-squares",
+        "score": 1e-06
+      },
+      {
+        "task": "ackermann-level3",
+        "score": 0.018316
+      },
+      {
+        "task": "majority-element",
+        "score": 0.07244
+      },
+      {
+        "task": "list-advanced",
+        "score": 0.000779
+      },
+      {
+        "task": "increasing-triplet",
+        "score": 0.930836
+      },
+      {
+        "task": "list-filter",
+        "score": 1
+      },
+      {
+        "task": "nat-arith-combined",
+        "score": 1e-06
+      },
+      {
+        "task": "max-subarray",
+        "score": 0.07244
+      },
+      {
+        "task": "longest-streak",
+        "score": 0.809767
+      },
+      {
+        "task": "nat-induction-hard",
+        "score": 1e-06
+      },
+      {
+        "task": "merge-sorted",
+        "score": 0
+      },
+      {
+        "task": "nat-divisibility",
+        "score": 1e-06
+      },
+      {
+        "task": "partition-evens-odds",
+        "score": 0
+      },
+      {
+        "task": "red-black-invariant",
+        "score": 0
+      },
+      {
+        "task": "regex-derivative",
+        "score": 0
+      },
+      {
+        "task": "pythagorean-div3",
+        "score": 0.737363
+      },
+      {
+        "task": "squares-mod-arith",
+        "score": 1e-06
+      },
+      {
+        "task": "stock-profit",
+        "score": 0.002479
+      },
+      {
+        "task": "prime-factor-exists",
+        "score": 0
+      },
+      {
+        "task": "well-founded-order",
+        "score": 0
+      },
+      {
+        "task": "sqrt3-irrational",
+        "score": 0.120786
+      },
+      {
+        "task": "two-sum",
+        "score": 0.004658
+      },
+      {
+        "task": "sqrt2-irrational",
+        "score": 0.067162
+      }
+    ],
+    "mistral-large-3": [
+      {
+        "task": "binary-search",
+        "score": 0.05889
+      },
+      {
+        "task": "ackermann-level3",
+        "score": 0
+      },
+      {
+        "task": "church-rosser",
+        "score": 0
+      },
+      {
+        "task": "fib-add-formula",
+        "score": 0.176167
+      },
+      {
+        "task": "increasing-triplet",
+        "score": 0.154265
+      },
+      {
+        "task": "first-duplicate",
+        "score": 0.085445
+      },
+      {
+        "task": "fix-wrong-lemma",
+        "score": 0.919705
+      },
+      {
+        "task": "fix-proof-errors",
+        "score": 0.645023
+      },
+      {
+        "task": "list-filter",
+        "score": 0.904864
+      },
+      {
+        "task": "list-advanced",
+        "score": 0.412278
+      },
+      {
+        "task": "last-digit-squares",
+        "score": 1e-06
+      },
+      {
+        "task": "majority-element",
+        "score": 0.154265
+      },
+      {
+        "task": "max-subarray",
+        "score": 0.154265
+      },
+      {
+        "task": "nat-arith-combined",
+        "score": 1e-06
+      },
+      {
+        "task": "merge-sorted",
+        "score": 0
+      },
+      {
+        "task": "partition-evens-odds",
+        "score": 0
+      },
+      {
+        "task": "nat-divisibility",
+        "score": 1e-06
+      },
+      {
+        "task": "prime-factor-exists",
+        "score": 0
+      },
+      {
+        "task": "compiler-correctness",
+        "score": 0
+      },
+      {
+        "task": "pythagorean-div3",
+        "score": 0
+      },
+      {
+        "task": "longest-streak",
+        "score": 0.049787
+      },
+      {
+        "task": "nat-induction-hard",
+        "score": 0
+      },
+      {
+        "task": "red-black-invariant",
+        "score": 0
+      },
+      {
+        "task": "sqrt3-irrational",
+        "score": 0
+      },
+      {
+        "task": "squares-mod-arith",
+        "score": 1e-06
+      },
+      {
+        "task": "stock-profit",
+        "score": 0
+      },
+      {
+        "task": "two-sum",
+        "score": 0
+      },
+      {
+        "task": "regex-derivative",
+        "score": 0
+      },
+      {
+        "task": "sqrt2-irrational",
+        "score": 0
+      },
+      {
+        "task": "well-founded-order",
+        "score": 0
+      }
+    ]
+  },
+  "cedar-policy-verification": {
+    "claude-sonnet-4-6": [
+      {
+        "task": "debug_multi_tenant_authorization",
+        "score": 1
+      },
+      {
+        "task": "debug_healthcare_records",
+        "score": 0.666454
+      },
+      {
+        "task": "adversarial_policy_audit",
+        "score": 0.05
+      },
+      {
+        "task": "fix_action_group_conflicts",
+        "score": 1
+      },
+      {
+        "task": "find_authorization_bypass",
+        "score": 0.05
+      },
+      {
+        "task": "fix_photo_sharing_bugs",
+        "score": 0.279232
+      },
+      {
+        "task": "fix_ip_time_geo_policies",
+        "score": 0.577638
+      },
+      {
+        "task": "fix_schema_type_errors",
+        "score": 0.908641
+      },
+      {
+        "task": "fix_scope_and_condition_bugs",
+        "score": 1
+      },
+      {
+        "task": "fix_unsafe_attribute_access",
+        "score": 0.820524
+      },
+      {
+        "task": "fix_template_instantiation_bugs",
+        "score": 1
+      },
+      {
+        "task": "debug_recursive_hierarchy_access",
+        "score": 0.581181
+      },
+      {
+        "task": "full_hospital_authorization_system",
+        "score": 0.986243
+      },
+      {
+        "task": "policy_equivalence_analysis",
+        "score": 0.972419
+      },
+      {
+        "task": "implement_and_verify_refactoring",
+        "score": 0.336129
+      },
+      {
+        "task": "prove_emergency_override_safety",
+        "score": 0
+      },
+      {
+        "task": "prove_forbid_overrides_permit",
+        "score": 0
+      },
+      {
+        "task": "prove_policy_slicing_soundness",
+        "score": 0.05
+      },
+      {
+        "task": "schema_evolution_migration",
+        "score": 0.943368
+      },
+      {
+        "task": "prove_schema_validation_soundness",
+        "score": 0
+      }
+    ],
+    "gemini-2.5-flash": [
+      {
+        "task": "debug_healthcare_records",
+        "score": 0.782279
+      },
+      {
+        "task": "adversarial_policy_audit",
+        "score": 0
+      },
+      {
+        "task": "debug_recursive_hierarchy_access",
+        "score": 0
+      },
+      {
+        "task": "find_authorization_bypass",
+        "score": 0
+      },
+      {
+        "task": "debug_multi_tenant_authorization",
+        "score": 1
+      },
+      {
+        "task": "fix_ip_time_geo_policies",
+        "score": 0
+      },
+      {
+        "task": "fix_photo_sharing_bugs",
+        "score": 0.279232
+      },
+      {
+        "task": "fix_action_group_conflicts",
+        "score": 0.968607
+      },
+      {
+        "task": "fix_schema_type_errors",
+        "score": 0.908641
+      },
+      {
+        "task": "fix_template_instantiation_bugs",
+        "score": 1
+      },
+      {
+        "task": "fix_unsafe_attribute_access",
+        "score": 0.448733
+      },
+      {
+        "task": "fix_scope_and_condition_bugs",
+        "score": 1
+      },
+      {
+        "task": "full_hospital_authorization_system",
+        "score": 0.19463
+      },
+      {
+        "task": "implement_and_verify_refactoring",
+        "score": 0
+      },
+      {
+        "task": "policy_equivalence_analysis",
+        "score": 0
+      },
+      {
+        "task": "prove_forbid_overrides_permit",
+        "score": 1
+      },
+      {
+        "task": "prove_emergency_override_safety",
+        "score": 0
+      },
+      {
+        "task": "prove_schema_validation_soundness",
+        "score": 0
+      },
+      {
+        "task": "schema_evolution_migration",
+        "score": 0.943368
+      },
+      {
+        "task": "prove_policy_slicing_soundness",
+        "score": 0.926752
+      }
+    ],
+    "gemini-3.1-pro-preview": [
+      {
+        "task": "adversarial_policy_audit",
+        "score": 0
+      },
+      {
+        "task": "debug_multi_tenant_authorization",
+        "score": 1
+      },
+      {
+        "task": "debug_recursive_hierarchy_access",
+        "score": 0.724366
+      },
+      {
+        "task": "find_authorization_bypass",
+        "score": 0
+      },
+      {
+        "task": "debug_healthcare_records",
+        "score": 0
+      },
+      {
+        "task": "fix_action_group_conflicts",
+        "score": 0
+      },
+      {
+        "task": "fix_photo_sharing_bugs",
+        "score": 0.279232
+      },
+      {
+        "task": "fix_schema_type_errors",
+        "score": 1
+      },
+      {
+        "task": "fix_ip_time_geo_policies",
+        "score": 0.577638
+      },
+      {
+        "task": "fix_template_instantiation_bugs",
+        "score": 1
+      },
+      {
+        "task": "fix_scope_and_condition_bugs",
+        "score": 1
+      },
+      {
+        "task": "fix_unsafe_attribute_access",
+        "score": 0
+      },
+      {
+        "task": "implement_and_verify_refactoring",
+        "score": 0
+      },
+      {
+        "task": "prove_emergency_override_safety",
+        "score": 0
+      },
+      {
+        "task": "full_hospital_authorization_system",
+        "score": 0
+      },
+      {
+        "task": "policy_equivalence_analysis",
+        "score": 0
+      },
+      {
+        "task": "prove_forbid_overrides_permit",
+        "score": 0
+      },
+      {
+        "task": "prove_schema_validation_soundness",
+        "score": 0
+      },
+      {
+        "task": "prove_policy_slicing_soundness",
+        "score": 0.05
+      },
+      {
+        "task": "schema_evolution_migration",
+        "score": 0.943368
+      }
+    ],
+    "kimi-k2.5": [
+      {
+        "task": "debug_multi_tenant_authorization",
+        "score": 0
+      },
+      {
+        "task": "debug_recursive_hierarchy_access",
+        "score": 0
+      },
+      {
+        "task": "adversarial_policy_audit",
+        "score": 0
+      },
+      {
+        "task": "fix_action_group_conflicts",
+        "score": 0
+      },
+      {
+        "task": "debug_healthcare_records",
+        "score": 0.666454
+      },
+      {
+        "task": "find_authorization_bypass",
+        "score": 0.05
+      },
+      {
+        "task": "fix_ip_time_geo_policies",
+        "score": 0
+      },
+      {
+        "task": "fix_photo_sharing_bugs",
+        "score": 0
+      },
+      {
+        "task": "fix_schema_type_errors",
+        "score": 0
+      },
+      {
+        "task": "fix_scope_and_condition_bugs",
+        "score": 1
+      },
+      {
+        "task": "fix_template_instantiation_bugs",
+        "score": 0.402539
+      },
+      {
+        "task": "fix_unsafe_attribute_access",
+        "score": 0
+      },
+      {
+        "task": "implement_and_verify_refactoring",
+        "score": 0
+      },
+      {
+        "task": "policy_equivalence_analysis",
+        "score": 0
+      },
+      {
+        "task": "prove_forbid_overrides_permit",
+        "score": 0.980892
+      },
+      {
+        "task": "prove_emergency_override_safety",
+        "score": 0
+      },
+      {
+        "task": "full_hospital_authorization_system",
+        "score": 0.93188
+      },
+      {
+        "task": "prove_policy_slicing_soundness",
+        "score": 0.926752
+      },
+      {
+        "task": "schema_evolution_migration",
+        "score": 0
+      },
+      {
+        "task": "prove_schema_validation_soundness",
+        "score": 0.958187
+      }
+    ],
+    "mistral-large-3": [
+      {
+        "task": "debug_healthcare_records",
+        "score": 0.553526
+      },
+      {
+        "task": "adversarial_policy_audit",
+        "score": 0.02
+      },
+      {
+        "task": "debug_recursive_hierarchy_access",
+        "score": 0
+      },
+      {
+        "task": "fix_action_group_conflicts",
+        "score": 1
+      },
+      {
+        "task": "debug_multi_tenant_authorization",
+        "score": 0.820524
+      },
+      {
+        "task": "find_authorization_bypass",
+        "score": 0
+      },
+      {
+        "task": "fix_schema_type_errors",
+        "score": 0.908641
+      },
+      {
+        "task": "fix_photo_sharing_bugs",
+        "score": 0.279232
+      },
+      {
+        "task": "fix_template_instantiation_bugs",
+        "score": 1
+      },
+      {
+        "task": "fix_ip_time_geo_policies",
+        "score": 0.437107
+      },
+      {
+        "task": "fix_unsafe_attribute_access",
+        "score": 0.301587
+      },
+      {
+        "task": "fix_scope_and_condition_bugs",
+        "score": 1
+      },
+      {
+        "task": "policy_equivalence_analysis",
+        "score": 0
+      },
+      {
+        "task": "implement_and_verify_refactoring",
+        "score": 0.356129
+      },
+      {
+        "task": "full_hospital_authorization_system",
+        "score": 0.05
+      },
+      {
+        "task": "prove_emergency_override_safety",
+        "score": 0
+      },
+      {
+        "task": "prove_forbid_overrides_permit",
+        "score": 1
+      },
+      {
+        "task": "schema_evolution_migration",
+        "score": 0.05
+      },
+      {
+        "task": "prove_schema_validation_soundness",
+        "score": 1
+      },
+      {
+        "task": "prove_policy_slicing_soundness",
+        "score": 1
+      }
+    ]
+  },
+  "distributed-consensus": {
+    "claude-sonnet-4-6": [
+      {
+        "task": "fix_raft_safety",
+        "score": 0.81983
+      },
+      {
+        "task": "implement_chain_replication",
+        "score": 0.470946
+      },
+      {
+        "task": "implement_pbft",
+        "score": 0.179925
+      },
+      {
+        "task": "fix_distributed_snapshot",
+        "score": 1
+      },
+      {
+        "task": "implement_epidemic_broadcast",
+        "score": 0.003796
+      },
+      {
+        "task": "implement_shard_migration",
+        "score": 1
+      },
+      {
+        "task": "implement_bft_kv_store",
+        "score": 0.40708
+      },
+      {
+        "task": "implement_crdt_raft",
+        "score": 0.751569
+      },
+      {
+        "task": "fix_distributed_lock",
+        "score": 0.679965
+      },
+      {
+        "task": "implement_consistent_broadcast",
+        "score": 1
+      },
+      {
+        "task": "hybrid_clock",
+        "score": 0.9172364032547359
+      },
+      {
+        "task": "implement_lsm_compaction",
+        "score": 1
+      },
+      {
+        "task": "implement_read_repair",
+        "score": 0
+      },
+      {
+        "task": "implement_raft_log",
+        "score": 1
+      },
+      {
+        "task": "swim_protocol",
+        "score": 0.9744145886708848
+      },
+      {
+        "task": "paxos_prepare",
+        "score": 1
+      },
+      {
+        "task": "fix_snapshot_replication",
+        "score": 0.306348
+      },
+      {
+        "task": "twopc_crash",
+        "score": 1
+      },
+      {
+        "task": "virtual_nodes",
+        "score": 0.8950064145964933
+      },
+      {
+        "task": "fix_raft_snapshot_crdt",
+        "score": 0.466935
+      },
+      {
+        "task": "fix_txn_coordinator",
+        "score": 1
+      },
+      {
+        "task": "fix_consistent_hash_replication",
+        "score": 1
+      },
+      {
+        "task": "verify_two_phase_commit",
+        "score": 1
+      },
+      {
+        "task": "verify_replicated_kv",
+        "score": 1
+      },
+      {
+        "task": "verify_distributed_lock",
+        "score": 1
+      },
+      {
+        "task": "verify_log_compaction",
+        "score": 0.6819547009985492
+      }
+    ],
+    "gemini-2.5-flash": [
+      {
+        "task": "fix_distributed_lock",
+        "score": 0.862388
+      },
+      {
+        "task": "implement_consistent_broadcast",
+        "score": 0.025092
+      },
+      {
+        "task": "hybrid_clock",
+        "score": 0.9172364032547359
+      },
+      {
+        "task": "fix_snapshot_replication",
+        "score": 0
+      },
+      {
+        "task": "implement_lsm_compaction",
+        "score": 0.774539
+      },
+      {
+        "task": "implement_raft_log",
+        "score": 0.224416
+      },
+      {
+        "task": "implement_read_repair",
+        "score": 1
+      },
+      {
+        "task": "swim_protocol",
+        "score": 0
+      },
+      {
+        "task": "paxos_prepare",
+        "score": 0.167759
+      },
+      {
+        "task": "twopc_crash",
+        "score": 1
+      },
+      {
+        "task": "virtual_nodes",
+        "score": 0.8950064145964933
+      },
+      {
+        "task": "fix_raft_safety",
+        "score": 0.136545
+      },
+      {
+        "task": "implement_chain_replication",
+        "score": 0.751569
+      },
+      {
+        "task": "implement_pbft",
+        "score": 0
+      },
+      {
+        "task": "fix_distributed_snapshot",
+        "score": 0.402539
+      },
+      {
+        "task": "implement_epidemic_broadcast",
+        "score": 0.003796
+      },
+      {
+        "task": "implement_shard_migration",
+        "score": 1
+      },
+      {
+        "task": "implement_bft_kv_store",
+        "score": 0.030716
+      },
+      {
+        "task": "implement_crdt_raft",
+        "score": 0
+      },
+      {
+        "task": "fix_consistent_hash_replication",
+        "score": 0
+      },
+      {
+        "task": "fix_raft_snapshot_crdt",
+        "score": 0
+      },
+      {
+        "task": "fix_txn_coordinator",
+        "score": 0.402539
+      },
+      {
+        "task": "verify_two_phase_commit",
+        "score": 0
+      },
+      {
+        "task": "verify_replicated_kv",
+        "score": 0
+      },
+      {
+        "task": "verify_log_compaction",
+        "score": 0
+      },
+      {
+        "task": "verify_distributed_lock",
+        "score": 0
+      }
+    ],
+    "gemini-3.1-pro-preview": [
+      {
+        "task": "fix_distributed_lock",
+        "score": 0
+      },
+      {
+        "task": "fix_snapshot_replication",
+        "score": 0
+      },
+      {
+        "task": "hybrid_clock",
+        "score": 0.9744145886708848
+      },
+      {
+        "task": "implement_consistent_broadcast",
+        "score": 0.025092
+      },
+      {
+        "task": "implement_raft_log",
+        "score": 1
+      },
+      {
+        "task": "implement_read_repair",
+        "score": 1
+      },
+      {
+        "task": "implement_lsm_compaction",
+        "score": 1
+      },
+      {
+        "task": "swim_protocol",
+        "score": 0.9744145886708848
+      },
+      {
+        "task": "paxos_prepare",
+        "score": 1
+      },
+      {
+        "task": "virtual_nodes",
+        "score": 0.8950064145964933
+      },
+      {
+        "task": "twopc_crash",
+        "score": 1
+      },
+      {
+        "task": "fix_distributed_snapshot",
+        "score": 1
+      },
+      {
+        "task": "fix_raft_safety",
+        "score": 0.81983
+      },
+      {
+        "task": "implement_chain_replication",
+        "score": 1
+      },
+      {
+        "task": "implement_epidemic_broadcast",
+        "score": 1
+      },
+      {
+        "task": "implement_pbft",
+        "score": 0.098821
+      },
+      {
+        "task": "implement_shard_migration",
+        "score": 1
+      },
+      {
+        "task": "implement_bft_kv_store",
+        "score": 0.130746
+      },
+      {
+        "task": "implement_crdt_raft",
+        "score": 0.907124
+      },
+      {
+        "task": "fix_consistent_hash_replication",
+        "score": 0
+      },
+      {
+        "task": "fix_raft_snapshot_crdt",
+        "score": 0
+      },
+      {
+        "task": "fix_txn_coordinator",
+        "score": 1
+      },
+      {
+        "task": "verify_two_phase_commit",
+        "score": 0
+      },
+      {
+        "task": "verify_replicated_kv",
+        "score": 0
+      },
+      {
+        "task": "verify_distributed_lock",
+        "score": 0.5951376261615519
+      },
+      {
+        "task": "verify_log_compaction",
+        "score": 0.6819547009985492
+      }
+    ],
+    "kimi-k2.5": [
+      {
+        "task": "fix_distributed_lock",
+        "score": 0.679965
+      },
+      {
+        "task": "fix_snapshot_replication",
+        "score": 0
+      },
+      {
+        "task": "hybrid_clock",
+        "score": 0.6133966953880752
+      },
+      {
+        "task": "implement_consistent_broadcast",
+        "score": 1
+      },
+      {
+        "task": "implement_lsm_compaction",
+        "score": 0
+      },
+      {
+        "task": "implement_raft_log",
+        "score": 0.224416
+      },
+      {
+        "task": "implement_read_repair",
+        "score": 0
+      },
+      {
+        "task": "paxos_prepare",
+        "score": 1
+      },
+      {
+        "task": "swim_protocol",
+        "score": 0.9744145886708848
+      },
+      {
+        "task": "twopc_crash",
+        "score": 0
+      },
+      {
+        "task": "virtual_nodes",
+        "score": 0.8950064145964933
+      },
+      {
+        "task": "fix_raft_safety",
+        "score": 0
+      },
+      {
+        "task": "implement_chain_replication",
+        "score": 0.33548
+      },
+      {
+        "task": "implement_pbft",
+        "score": 0
+      },
+      {
+        "task": "fix_distributed_snapshot",
+        "score": 0
+      },
+      {
+        "task": "implement_epidemic_broadcast",
+        "score": 0.003796
+      },
+      {
+        "task": "implement_shard_migration",
+        "score": 0.137499
+      },
+      {
+        "task": "implement_bft_kv_store",
+        "score": 0.013038
+      },
+      {
+        "task": "implement_crdt_raft",
+        "score": 0.038856
+      },
+      {
+        "task": "fix_consistent_hash_replication",
+        "score": 0
+      },
+      {
+        "task": "fix_raft_snapshot_crdt",
+        "score": 0
+      },
+      {
+        "task": "fix_txn_coordinator",
+        "score": 0
+      },
+      {
+        "task": "verify_two_phase_commit",
+        "score": 0
+      },
+      {
+        "task": "verify_replicated_kv",
+        "score": 0
+      },
+      {
+        "task": "verify_log_compaction",
+        "score": 0.6819547009985492
+      },
+      {
+        "task": "verify_distributed_lock",
+        "score": 0.5951376261615519
+      }
+    ],
+    "mistral-large-3": [
+      {
+        "task": "fix_distributed_lock",
+        "score": 0.481302
+      },
+      {
+        "task": "fix_snapshot_replication",
+        "score": 0
+      },
+      {
+        "task": "hybrid_clock",
+        "score": 0.9172364032547359
+      },
+      {
+        "task": "implement_consistent_broadcast",
+        "score": 1
+      },
+      {
+        "task": "implement_lsm_compaction",
+        "score": 0.774539
+      },
+      {
+        "task": "implement_raft_log",
+        "score": 0
+      },
+      {
+        "task": "implement_read_repair",
+        "score": 0.907124
+      },
+      {
+        "task": "paxos_prepare",
+        "score": 0.167759
+      },
+      {
+        "task": "swim_protocol",
+        "score": 0.9744145886708848
+      },
+      {
+        "task": "twopc_crash",
+        "score": 1
+      },
+      {
+        "task": "virtual_nodes",
+        "score": 0
+      },
+      {
+        "task": "fix_raft_safety",
+        "score": 0
+      },
+      {
+        "task": "implement_chain_replication",
+        "score": 0.616103
+      },
+      {
+        "task": "implement_pbft",
+        "score": 0.098821
+      },
+      {
+        "task": "fix_distributed_snapshot",
+        "score": 1
+      },
+      {
+        "task": "implement_epidemic_broadcast",
+        "score": 0
+      },
+      {
+        "task": "implement_shard_migration",
+        "score": 0
+      },
+      {
+        "task": "implement_bft_kv_store",
+        "score": 0.130746
+      },
+      {
+        "task": "implement_crdt_raft",
+        "score": 0
+      },
+      {
+        "task": "fix_consistent_hash_replication",
+        "score": 0.521493
+      },
+      {
+        "task": "fix_raft_snapshot_crdt",
+        "score": 0.242812
+      },
+      {
+        "task": "fix_txn_coordinator",
+        "score": 1
+      },
+      {
+        "task": "verify_two_phase_commit",
+        "score": 0.9260936847592803
+      },
+      {
+        "task": "verify_replicated_kv",
+        "score": 0
+      },
+      {
+        "task": "verify_distributed_lock",
+        "score": 0
+      },
+      {
+        "task": "verify_log_compaction",
+        "score": 0
+      }
+    ]
+  },
+  "congestion-control": {
+    "claude-sonnet-4-6": [
+      {
+        "task": "fix-cubic-slow-start",
+        "score": 0.758267
+      },
+      {
+        "task": "fix-fairness-under-competition",
+        "score": 0.409423
+      },
+      {
+        "task": "fix-cubic-units",
+        "score": 0.493585
+      },
+      {
+        "task": "fix-slow-convergence",
+        "score": 0.210974
+      },
+      {
+        "task": "fix-stale-ssthresh",
+        "score": 0.393633
+      },
+      {
+        "task": "fix-three-bugs",
+        "score": 0.641496
+      },
+      {
+        "task": "implement-bbr",
+        "score": 0
+      },
+      {
+        "task": "fix-timeout-handling",
+        "score": 0.493755
+      },
+      {
+        "task": "implement-compound",
+        "score": 0.410599
+      },
+      {
+        "task": "implement-cubic",
+        "score": 0.459475
+      },
+      {
+        "task": "implement-fast-recovery",
+        "score": 0.501097
+      },
+      {
+        "task": "implement-ledbat",
+        "score": 0.449224
+      },
+      {
+        "task": "implement-mult-decrease",
+        "score": 0.571482
+      },
+      {
+        "task": "implement-loss-differentiated",
+        "score": 0.500192
+      },
+      {
+        "task": "implement-vegas",
+        "score": 0.09575
+      },
+      {
+        "task": "tune-high-bdp",
+        "score": 0.75698
+      },
+      {
+        "task": "fix-aimd",
+        "score": 0.281522
+      },
+      {
+        "task": "implement-westwood",
+        "score": 0.46481
+      },
+      {
+        "task": "fix-recovery-deadlock",
+        "score": 0.492693
+      },
+      {
+        "task": "fix-competing-flows",
+        "score": 0.467163
+      },
+      {
+        "task": "implement-pcc",
+        "score": 0
+      },
+      {
+        "task": "verify-aimd-safety",
+        "score": 0
+      },
+      {
+        "task": "verify-flow-fairness",
+        "score": 0
+      },
+      {
+        "task": "verify-sliding-window",
+        "score": 0
+      }
+    ],
+    "gemini-2.5-flash": [
+      {
+        "task": "fix-cubic-slow-start",
+        "score": 0.758267
+      },
+      {
+        "task": "fix-competing-flows",
+        "score": 0.467163
+      },
+      {
+        "task": "fix-cubic-units",
+        "score": 0
+      },
+      {
+        "task": "fix-recovery-deadlock",
+        "score": 0.492693
+      },
+      {
+        "task": "fix-fairness-under-competition",
+        "score": 0.409423
+      },
+      {
+        "task": "fix-slow-convergence",
+        "score": 0.186039
+      },
+      {
+        "task": "fix-stale-ssthresh",
+        "score": 0.393633
+      },
+      {
+        "task": "fix-three-bugs",
+        "score": 0
+      },
+      {
+        "task": "implement-bbr",
+        "score": 0.011016
+      },
+      {
+        "task": "fix-timeout-handling",
+        "score": 0.493755
+      },
+      {
+        "task": "implement-cubic",
+        "score": 0.940679
+      },
+      {
+        "task": "fix-aimd",
+        "score": 0
+      },
+      {
+        "task": "implement-compound",
+        "score": 0.333055
+      },
+      {
+        "task": "implement-fast-recovery",
+        "score": 0
+      },
+      {
+        "task": "implement-ledbat",
+        "score": 0.505733
+      },
+      {
+        "task": "implement-mult-decrease",
+        "score": 0.432452
+      },
+      {
+        "task": "implement-pcc",
+        "score": 0.048984
+      },
+      {
+        "task": "implement-loss-differentiated",
+        "score": 0.500192
+      },
+      {
+        "task": "implement-westwood",
+        "score": 0
+      },
+      {
+        "task": "implement-vegas",
+        "score": 0
+      },
+      {
+        "task": "tune-high-bdp",
+        "score": 0.740493
+      },
+      {
+        "task": "verify-aimd-safety",
+        "score": 0
+      },
+      {
+        "task": "verify-flow-fairness",
+        "score": 0
+      },
+      {
+        "task": "verify-sliding-window",
+        "score": 0
+      }
+    ],
+    "gemini-3.1-pro-preview": [
+      {
+        "task": "fix-competing-flows",
+        "score": 1e-06
+      },
+      {
+        "task": "fix-aimd",
+        "score": 0
+      },
+      {
+        "task": "fix-cubic-slow-start",
+        "score": 0.758267
+      },
+      {
+        "task": "fix-cubic-units",
+        "score": 0.493585
+      },
+      {
+        "task": "fix-recovery-deadlock",
+        "score": 0
+      },
+      {
+        "task": "fix-fairness-under-competition",
+        "score": 0.409423
+      },
+      {
+        "task": "fix-slow-convergence",
+        "score": 0.263416
+      },
+      {
+        "task": "fix-stale-ssthresh",
+        "score": 0.277416
+      },
+      {
+        "task": "implement-bbr",
+        "score": 0.011016
+      },
+      {
+        "task": "fix-three-bugs",
+        "score": 0.363578
+      },
+      {
+        "task": "fix-timeout-handling",
+        "score": 0.493755
+      },
+      {
+        "task": "implement-fast-recovery",
+        "score": 0.002006
+      },
+      {
+        "task": "implement-cubic",
+        "score": 0.004995
+      },
+      {
+        "task": "implement-compound",
+        "score": 0.399914
+      },
+      {
+        "task": "implement-mult-decrease",
+        "score": 0.017517
+      },
+      {
+        "task": "implement-ledbat",
+        "score": 0.002154
+      },
+      {
+        "task": "implement-vegas",
+        "score": 0.001456
+      },
+      {
+        "task": "implement-loss-differentiated",
+        "score": 0.500192
+      },
+      {
+        "task": "implement-pcc",
+        "score": 0.048984
+      },
+      {
+        "task": "verify-aimd-safety",
+        "score": 0
+      },
+      {
+        "task": "tune-high-bdp",
+        "score": 0.070917
+      },
+      {
+        "task": "verify-sliding-window",
+        "score": 0
+      },
+      {
+        "task": "verify-flow-fairness",
+        "score": 0
+      },
+      {
+        "task": "implement-westwood",
+        "score": 0.002221
+      }
+    ],
+    "kimi-k2.5": [
+      {
+        "task": "fix-cubic-slow-start",
+        "score": 0.00143
+      },
+      {
+        "task": "fix-aimd",
+        "score": 0.194792
+      },
+      {
+        "task": "fix-cubic-units",
+        "score": 0.493585
+      },
+      {
+        "task": "fix-recovery-deadlock",
+        "score": 0.492693
+      },
+      {
+        "task": "fix-competing-flows",
+        "score": 0.467163
+      },
+      {
+        "task": "fix-stale-ssthresh",
+        "score": 0.393633
+      },
+      {
+        "task": "fix-fairness-under-competition",
+        "score": 0.409423
+      },
+      {
+        "task": "fix-timeout-handling",
+        "score": 0.493755
+      },
+      {
+        "task": "fix-slow-convergence",
+        "score": 0.155803
+      },
+      {
+        "task": "implement-bbr",
+        "score": 0.011014
+      },
+      {
+        "task": "fix-three-bugs",
+        "score": 0.346387
+      },
+      {
+        "task": "implement-compound",
+        "score": 0.009154
+      },
+      {
+        "task": "implement-cubic",
+        "score": 0.004995
+      },
+      {
+        "task": "implement-fast-recovery",
+        "score": 0.002006
+      },
+      {
+        "task": "implement-mult-decrease",
+        "score": 0.504642
+      },
+      {
+        "task": "implement-ledbat",
+        "score": 0.449224
+      },
+      {
+        "task": "implement-loss-differentiated",
+        "score": 0.500192
+      },
+      {
+        "task": "implement-vegas",
+        "score": 0.09575
+      },
+      {
+        "task": "implement-pcc",
+        "score": 0.243483
+      },
+      {
+        "task": "tune-high-bdp",
+        "score": 0.000534
+      },
+      {
+        "task": "verify-flow-fairness",
+        "score": 0
+      },
+      {
+        "task": "implement-westwood",
+        "score": 0.002221
+      },
+      {
+        "task": "verify-sliding-window",
+        "score": 0
+      },
+      {
+        "task": "verify-aimd-safety",
+        "score": 0
+      }
+    ],
+    "mistral-large-3": [
+      {
+        "task": "fix-slow-convergence",
+        "score": 0.184468
+      },
+      {
+        "task": "fix-cubic-units",
+        "score": 0.493585
+      },
+      {
+        "task": "fix-stale-ssthresh",
+        "score": 0.393633
+      },
+      {
+        "task": "fix-aimd",
+        "score": 0
+      },
+      {
+        "task": "fix-timeout-handling",
+        "score": 0.493755
+      },
+      {
+        "task": "fix-three-bugs",
+        "score": 0.489578
+      },
+      {
+        "task": "fix-cubic-slow-start",
+        "score": 0.758267
+      },
+      {
+        "task": "fix-fairness-under-competition",
+        "score": 0.409423
+      },
+      {
+        "task": "implement-compound",
+        "score": 0.009154
+      },
+      {
+        "task": "implement-fast-recovery",
+        "score": 0.002006
+      },
+      {
+        "task": "implement-cubic",
+        "score": 0.484964
+      },
+      {
+        "task": "implement-bbr",
+        "score": 0.011016
+      },
+      {
+        "task": "implement-mult-decrease",
+        "score": 0.571482
+      },
+      {
+        "task": "implement-ledbat",
+        "score": 0.395365
+      },
+      {
+        "task": "implement-loss-differentiated",
+        "score": 0.602781
+      },
+      {
+        "task": "implement-vegas",
+        "score": 0.09575
+      },
+      {
+        "task": "tune-high-bdp",
+        "score": 0.75698
+      },
+      {
+        "task": "implement-westwood",
+        "score": 0.490716
+      },
+      {
+        "task": "fix-recovery-deadlock",
+        "score": 0.492693
+      },
+      {
+        "task": "fix-competing-flows",
+        "score": 0.467163
+      },
+      {
+        "task": "implement-pcc",
+        "score": 0.049092
+      },
+      {
+        "task": "verify-aimd-safety",
+        "score": 0
+      },
+      {
+        "task": "verify-flow-fairness",
+        "score": 0
+      },
+      {
+        "task": "verify-sliding-window",
+        "score": 0
+      }
+    ]
+  },
+  "c-to-rust": {
+    "claude-sonnet-4-6": [
+      {
+        "task": "csparse_ipvec",
+        "score": 0.262288
+      },
+      {
+        "task": "csparse_gaxpy",
+        "score": 0.302021
+      },
+      {
+        "task": "csparse_lsolve",
+        "score": 0.419064
+      },
+      {
+        "task": "csparse_cumsum",
+        "score": 0.260128
+      },
+      {
+        "task": "csparse_dfs",
+        "score": 0
+      },
+      {
+        "task": "csparse_norm",
+        "score": 0.486115
+      },
+      {
+        "task": "csparse_lu",
+        "score": 0
+      },
+      {
+        "task": "csparse_pvec",
+        "score": 0.302708
+      },
+      {
+        "task": "csparse_reach",
+        "score": 0.173403
+      },
+      {
+        "task": "csparse_scatter",
+        "score": 0.177688
+      },
+      {
+        "task": "csparse_multiply",
+        "score": 0.1
+      },
+      {
+        "task": "csparse_symperm",
+        "score": 0.106348
+      },
+      {
+        "task": "csparse_spsolve",
+        "score": 0.148545
+      },
+      {
+        "task": "csparse_usolve",
+        "score": 0.373205
+      },
+      {
+        "task": "csparse_transpose",
+        "score": 0.287496
+      },
+      {
+        "task": "csc_col_norm",
+        "score": 0.430117
+      },
+      {
+        "task": "csc_matvec",
+        "score": 0.33642
+      },
+      {
+        "task": "csc_nnz",
+        "score": 0.206124
+      },
+      {
+        "task": "dense_to_csc",
+        "score": 0.299325
+      },
+      {
+        "task": "vec_add",
+        "score": 0.300346
+      },
+      {
+        "task": "csc_filter",
+        "score": 0.181719
+      },
+      {
+        "task": "vec_dot",
+        "score": 0.289521
+      },
+      {
+        "task": "vec_max",
+        "score": 0.425243
+      },
+      {
+        "task": "vec_scale",
+        "score": 0.738475
+      },
+      {
+        "task": "mat_diag",
+        "score": 0.253851
+      },
+      {
+        "task": "verus_vec_add_proof",
+        "score": 0
+      },
+      {
+        "task": "verus_perm_proof",
+        "score": 0
+      },
+      {
+        "task": "verus_cumsum_proof",
+        "score": 0
+      }
+    ],
+    "gemini-2.5-flash": [
+      {
+        "task": "csparse_lsolve",
+        "score": 0
+      },
+      {
+        "task": "csparse_gaxpy",
+        "score": 0.317138
+      },
+      {
+        "task": "csparse_ipvec",
+        "score": 0.261581
+      },
+      {
+        "task": "csparse_dfs",
+        "score": 0
+      },
+      {
+        "task": "csparse_lu",
+        "score": 0
+      },
+      {
+        "task": "csparse_cumsum",
+        "score": 0.269312
+      },
+      {
+        "task": "csparse_reach",
+        "score": 0
+      },
+      {
+        "task": "csparse_multiply",
+        "score": 0
+      },
+      {
+        "task": "csparse_pvec",
+        "score": 0.313862
+      },
+      {
+        "task": "csparse_spsolve",
+        "score": 0
+      },
+      {
+        "task": "csparse_scatter",
+        "score": 0
+      },
+      {
+        "task": "csparse_norm",
+        "score": 0
+      },
+      {
+        "task": "csparse_symperm",
+        "score": 0
+      },
+      {
+        "task": "csparse_usolve",
+        "score": 0
+      },
+      {
+        "task": "csparse_transpose",
+        "score": 0
+      },
+      {
+        "task": "csc_nnz",
+        "score": 0.271576
+      },
+      {
+        "task": "dense_to_csc",
+        "score": 0.378837
+      },
+      {
+        "task": "csc_matvec",
+        "score": 0
+      },
+      {
+        "task": "csc_col_norm",
+        "score": 0.181724
+      },
+      {
+        "task": "csc_filter",
+        "score": 0.1679
+      },
+      {
+        "task": "vec_max",
+        "score": 0
+      },
+      {
+        "task": "vec_dot",
+        "score": 0.278847
+      },
+      {
+        "task": "vec_add",
+        "score": 0.194299
+      },
+      {
+        "task": "vec_scale",
+        "score": 0.533838
+      },
+      {
+        "task": "mat_diag",
+        "score": 0.178761
+      },
+      {
+        "task": "verus_vec_add_proof",
+        "score": 0
+      },
+      {
+        "task": "verus_cumsum_proof",
+        "score": 0
+      },
+      {
+        "task": "verus_perm_proof",
+        "score": 0
+      }
+    ],
+    "gemini-3.1-pro-preview": [
+      {
+        "task": "csc_nnz",
+        "score": 0
+      },
+      {
+        "task": "csc_matvec",
+        "score": 0.344263
+      },
+      {
+        "task": "csc_col_norm",
+        "score": 0.295989
+      },
+      {
+        "task": "csparse_dfs",
+        "score": 0
+      },
+      {
+        "task": "csparse_gaxpy",
+        "score": 0.304914
+      },
+      {
+        "task": "csparse_lu",
+        "score": 0
+      },
+      {
+        "task": "csparse_ipvec",
+        "score": 0.248637
+      },
+      {
+        "task": "csparse_lsolve",
+        "score": 0.328525
+      },
+      {
+        "task": "csparse_cumsum",
+        "score": 0.304597
+      },
+      {
+        "task": "csparse_norm",
+        "score": 0.457625
+      },
+      {
+        "task": "csc_filter",
+        "score": 0.163091
+      },
+      {
+        "task": "csparse_reach",
+        "score": 0.215654
+      },
+      {
+        "task": "csparse_pvec",
+        "score": 0.18722
+      },
+      {
+        "task": "csparse_multiply",
+        "score": 0
+      },
+      {
+        "task": "csparse_transpose",
+        "score": 0
+      },
+      {
+        "task": "csparse_symperm",
+        "score": 0.115785
+      },
+      {
+        "task": "csparse_spsolve",
+        "score": 0.10206
+      },
+      {
+        "task": "csparse_scatter",
+        "score": 0.203029
+      },
+      {
+        "task": "csparse_usolve",
+        "score": 0.312536
+      },
+      {
+        "task": "dense_to_csc",
+        "score": 0.424115
+      },
+      {
+        "task": "vec_max",
+        "score": 0.416606
+      },
+      {
+        "task": "vec_dot",
+        "score": 0.207968
+      },
+      {
+        "task": "vec_add",
+        "score": 0.341857
+      },
+      {
+        "task": "vec_scale",
+        "score": 0.686401
+      },
+      {
+        "task": "mat_diag",
+        "score": 0.350565
+      },
+      {
+        "task": "verus_vec_add_proof",
+        "score": 0
+      },
+      {
+        "task": "verus_cumsum_proof",
+        "score": 0
+      },
+      {
+        "task": "verus_perm_proof",
+        "score": 0
+      }
+    ],
+    "kimi-k2.5": [
+      {
+        "task": "csparse_gaxpy",
+        "score": 0
+      },
+      {
+        "task": "csparse_lsolve",
+        "score": 0
+      },
+      {
+        "task": "csparse_cumsum",
+        "score": 0
+      },
+      {
+        "task": "csparse_norm",
+        "score": 0
+      },
+      {
+        "task": "csparse_ipvec",
+        "score": 0.26737
+      },
+      {
+        "task": "csparse_lu",
+        "score": 0
+      },
+      {
+        "task": "csparse_dfs",
+        "score": 0.171642
+      },
+      {
+        "task": "csparse_reach",
+        "score": 0.18599
+      },
+      {
+        "task": "csparse_scatter",
+        "score": 0
+      },
+      {
+        "task": "csparse_pvec",
+        "score": 0.255416
+      },
+      {
+        "task": "csparse_transpose",
+        "score": 0
+      },
+      {
+        "task": "csparse_multiply",
+        "score": 0.105111
+      },
+      {
+        "task": "csparse_spsolve",
+        "score": 0.129979
+      },
+      {
+        "task": "csparse_usolve",
+        "score": 0.373558
+      },
+      {
+        "task": "csparse_symperm",
+        "score": 0
+      },
+      {
+        "task": "csc_col_norm",
+        "score": 0
+      },
+      {
+        "task": "mat_diag",
+        "score": 0
+      },
+      {
+        "task": "dense_to_csc",
+        "score": 0.385134
+      },
+      {
+        "task": "csc_matvec",
+        "score": 0
+      },
+      {
+        "task": "vec_add",
+        "score": 0.290832
+      },
+      {
+        "task": "csc_nnz",
+        "score": 0.273112
+      },
+      {
+        "task": "vec_dot",
+        "score": 0.187387
+      },
+      {
+        "task": "csc_filter",
+        "score": 0.147692
+      },
+      {
+        "task": "vec_max",
+        "score": 0.453371
+      },
+      {
+        "task": "vec_scale",
+        "score": 0.774564
+      },
+      {
+        "task": "verus_vec_add_proof",
+        "score": 0
+      },
+      {
+        "task": "verus_perm_proof",
+        "score": 0
+      },
+      {
+        "task": "verus_cumsum_proof",
+        "score": 0
+      }
+    ],
+    "mistral-large-3": [
+      {
+        "task": "csparse_lsolve",
+        "score": 0.363814
+      },
+      {
+        "task": "csparse_cumsum",
+        "score": 0.247351
+      },
+      {
+        "task": "csparse_ipvec",
+        "score": 0.260192
+      },
+      {
+        "task": "csparse_dfs",
+        "score": 0
+      },
+      {
+        "task": "csparse_norm",
+        "score": 0
+      },
+      {
+        "task": "csparse_multiply",
+        "score": 0
+      },
+      {
+        "task": "csparse_pvec",
+        "score": 0.262702
+      },
+      {
+        "task": "csparse_lu",
+        "score": 0
+      },
+      {
+        "task": "csparse_gaxpy",
+        "score": 0.217549
+      },
+      {
+        "task": "csparse_reach",
+        "score": 0.182066
+      },
+      {
+        "task": "csparse_scatter",
+        "score": 0.192547
+      },
+      {
+        "task": "csparse_symperm",
+        "score": 0
+      },
+      {
+        "task": "csparse_spsolve",
+        "score": 0
+      },
+      {
+        "task": "csparse_transpose",
+        "score": 0.27273
+      },
+      {
+        "task": "csparse_usolve",
+        "score": 0.260753
+      },
+      {
+        "task": "csc_matvec",
+        "score": 0
+      },
+      {
+        "task": "csc_nnz",
+        "score": 0.269391
+      },
+      {
+        "task": "vec_add",
+        "score": 0
+      },
+      {
+        "task": "dense_to_csc",
+        "score": 0.419307
+      },
+      {
+        "task": "vec_dot",
+        "score": 0
+      },
+      {
+        "task": "vec_scale",
+        "score": 0
+      },
+      {
+        "task": "csc_filter",
+        "score": 0.161636
+      },
+      {
+        "task": "csc_col_norm",
+        "score": 0.244571
+      },
+      {
+        "task": "vec_max",
+        "score": 0.496675
+      },
+      {
+        "task": "mat_diag",
+        "score": 0.459364
+      },
+      {
+        "task": "verus_cumsum_proof",
+        "score": 0
+      },
+      {
+        "task": "verus_perm_proof",
+        "score": 0
+      },
+      {
+        "task": "verus_vec_add_proof",
+        "score": 0
+      }
+    ]
+  },
+  "hw-cbmc": {
+    "claude-sonnet-4-6": [
+      {
+        "task": "fix-booth-mul",
+        "score": 1
+      },
+      {
+        "task": "fix-fifo-async",
+        "score": 0.078021
+      },
+      {
+        "task": "fix-fifo-ptrs",
+        "score": 1
+      },
+      {
+        "task": "fix-fifo-credit",
+        "score": 1
+      },
+      {
+        "task": "fix-lfsr",
+        "score": 1
+      },
+      {
+        "task": "fix-i2c-ctrl",
+        "score": 1
+      },
+      {
+        "task": "fix-restoring-div",
+        "score": 1
+      },
+      {
+        "task": "fix-regfile-fwd",
+        "score": 0.217287
+      },
+      {
+        "task": "fix-smv-ring3",
+        "score": 1
+      },
+      {
+        "task": "fix-mem-ctrl",
+        "score": 0.078021
+      },
+      {
+        "task": "fix-timer-irq",
+        "score": 1
+      },
+      {
+        "task": "fix-uart-rx",
+        "score": 1
+      },
+      {
+        "task": "fix-spi-slave",
+        "score": 0.073906
+      },
+      {
+        "task": "implement-arb3",
+        "score": 0.962837
+      },
+      {
+        "task": "fix-tlb-ctrl",
+        "score": 1
+      },
+      {
+        "task": "write-assertions-tasksched",
+        "score": 1
+      },
+      {
+        "task": "write-assertions-wdogtimer",
+        "score": 0.968035
+      },
+      {
+        "task": "write-assertions-txnmon",
+        "score": 1
+      },
+      {
+        "task": "write-assertions-irqctrl",
+        "score": 1
+      },
+      {
+        "task": "write-assertions-liveness-dma",
+        "score": 1
+      },
+      {
+        "task": "write-assertions-liveness-fifo",
+        "score": 1
+      },
+      {
+        "task": "fix-arb-lock",
+        "score": 1
+      },
+      {
+        "task": "fix-dma-engine",
+        "score": 0.078021
+      },
+      {
+        "task": "fix-cache-ctrl",
+        "score": 0.485676
+      },
+      {
+        "task": "fix-branch-pred",
+        "score": 0.217287
+      },
+      {
+        "task": "write-assertions-liveness-arbiter",
+        "score": 0.903663
+      }
+    ],
+    "gemini-2.5-flash": [
+      {
+        "task": "fix-booth-mul",
+        "score": 0.143594
+      },
+      {
+        "task": "fix-cache-ctrl",
+        "score": 0.485676
+      },
+      {
+        "task": "fix-fifo-credit",
+        "score": 0.796506
+      },
+      {
+        "task": "fix-fifo-async",
+        "score": 0.078021
+      },
+      {
+        "task": "fix-branch-pred",
+        "score": 0.217287
+      },
+      {
+        "task": "fix-fifo-ptrs",
+        "score": 0.485676
+      },
+      {
+        "task": "fix-lfsr",
+        "score": 0.734049
+      },
+      {
+        "task": "fix-arb-lock",
+        "score": 0.149253
+      },
+      {
+        "task": "fix-i2c-ctrl",
+        "score": 0.404862
+      },
+      {
+        "task": "fix-dma-engine",
+        "score": 0.078021
+      },
+      {
+        "task": "fix-regfile-fwd",
+        "score": 0.217287
+      },
+      {
+        "task": "fix-smv-ring3",
+        "score": 1
+      },
+      {
+        "task": "fix-restoring-div",
+        "score": 0.047016
+      },
+      {
+        "task": "fix-timer-irq",
+        "score": 1
+      },
+      {
+        "task": "fix-mem-ctrl",
+        "score": 0.078021
+      },
+      {
+        "task": "fix-uart-rx",
+        "score": 0
+      },
+      {
+        "task": "fix-spi-slave",
+        "score": 0.073906
+      },
+      {
+        "task": "implement-arb3",
+        "score": 0.057833
+      },
+      {
+        "task": "write-assertions-irqctrl",
+        "score": 0
+      },
+      {
+        "task": "write-assertions-txnmon",
+        "score": 0
+      },
+      {
+        "task": "fix-tlb-ctrl",
+        "score": 1
+      },
+      {
+        "task": "write-assertions-wdogtimer",
+        "score": 0
+      },
+      {
+        "task": "write-assertions-liveness-dma",
+        "score": 0.968035
+      },
+      {
+        "task": "write-assertions-liveness-fifo",
+        "score": 0
+      },
+      {
+        "task": "write-assertions-liveness-arbiter",
+        "score": 0.015051
+      },
+      {
+        "task": "write-assertions-tasksched",
+        "score": 0
+      }
+    ],
+    "gemini-3.1-pro-preview": [
+      {
+        "task": "fix-booth-mul",
+        "score": 1
+      },
+      {
+        "task": "fix-arb-lock",
+        "score": 1
+      },
+      {
+        "task": "fix-cache-ctrl",
+        "score": 0.485676
+      },
+      {
+        "task": "fix-dma-engine",
+        "score": 0.078021
+      },
+      {
+        "task": "fix-fifo-credit",
+        "score": 1
+      },
+      {
+        "task": "fix-branch-pred",
+        "score": 0.217287
+      },
+      {
+        "task": "fix-fifo-ptrs",
+        "score": 1
+      },
+      {
+        "task": "fix-fifo-async",
+        "score": 0
+      },
+      {
+        "task": "fix-lfsr",
+        "score": 1
+      },
+      {
+        "task": "fix-i2c-ctrl",
+        "score": 0.404862
+      },
+      {
+        "task": "fix-mem-ctrl",
+        "score": 0.078021
+      },
+      {
+        "task": "fix-regfile-fwd",
+        "score": 0.217287
+      },
+      {
+        "task": "fix-restoring-div",
+        "score": 0
+      },
+      {
+        "task": "fix-smv-ring3",
+        "score": 1
+      },
+      {
+        "task": "fix-timer-irq",
+        "score": 1
+      },
+      {
+        "task": "fix-uart-rx",
+        "score": 1
+      },
+      {
+        "task": "implement-arb3",
+        "score": 0.519083
+      },
+      {
+        "task": "fix-spi-slave",
+        "score": 0
+      },
+      {
+        "task": "write-assertions-txnmon",
+        "score": 1
+      },
+      {
+        "task": "write-assertions-wdogtimer",
+        "score": 1
+      },
+      {
+        "task": "fix-tlb-ctrl",
+        "score": 1
+      },
+      {
+        "task": "write-assertions-liveness-dma",
+        "score": 0.111388
+      },
+      {
+        "task": "write-assertions-tasksched",
+        "score": 0
+      },
+      {
+        "task": "write-assertions-liveness-fifo",
+        "score": 1
+      },
+      {
+        "task": "write-assertions-liveness-arbiter",
+        "score": 0
+      },
+      {
+        "task": "write-assertions-irqctrl",
+        "score": 1
+      }
+    ],
+    "kimi-k2.5": [
+      {
+        "task": "fix-booth-mul",
+        "score": 0.143559
+      },
+      {
+        "task": "fix-branch-pred",
+        "score": 0.217247
+      },
+      {
+        "task": "fix-cache-ctrl",
+        "score": 0.485708
+      },
+      {
+        "task": "fix-arb-lock",
+        "score": 0.149283
+      },
+      {
+        "task": "fix-dma-engine",
+        "score": 0.078038
+      },
+      {
+        "task": "fix-fifo-async",
+        "score": 0.078038
+      },
+      {
+        "task": "fix-fifo-credit",
+        "score": 0.078038
+      },
+      {
+        "task": "fix-fifo-ptrs",
+        "score": 1
+      },
+      {
+        "task": "fix-i2c-ctrl",
+        "score": 0.404862
+      },
+      {
+        "task": "fix-mem-ctrl",
+        "score": 0.078038
+      },
+      {
+        "task": "fix-restoring-div",
+        "score": 0.047016
+      },
+      {
+        "task": "fix-lfsr",
+        "score": 1
+      },
+      {
+        "task": "fix-regfile-fwd",
+        "score": 0.217247
+      },
+      {
+        "task": "fix-smv-ring3",
+        "score": 0.073906
+      },
+      {
+        "task": "fix-spi-slave",
+        "score": 0.073906
+      },
+      {
+        "task": "fix-uart-rx",
+        "score": 0.86111
+      },
+      {
+        "task": "fix-timer-irq",
+        "score": 0.365237
+      },
+      {
+        "task": "implement-arb3",
+        "score": 0.057821
+      },
+      {
+        "task": "write-assertions-irqctrl",
+        "score": 0
+      },
+      {
+        "task": "write-assertions-wdogtimer",
+        "score": 0
+      },
+      {
+        "task": "fix-tlb-ctrl",
+        "score": 1
+      },
+      {
+        "task": "write-assertions-txnmon",
+        "score": 0
+      },
+      {
+        "task": "write-assertions-liveness-dma",
+        "score": 0.01246
+      },
+      {
+        "task": "write-assertions-liveness-fifo",
+        "score": 0.01246
+      },
+      {
+        "task": "write-assertions-liveness-arbiter",
+        "score": 0.01246
+      },
+      {
+        "task": "write-assertions-tasksched",
+        "score": 0.903663
+      }
+    ],
+    "mistral-large-3": [
+      {
+        "task": "fix-booth-mul",
+        "score": 0.404862
+      },
+      {
+        "task": "fix-cache-ctrl",
+        "score": 0.485708
+      },
+      {
+        "task": "fix-arb-lock",
+        "score": 0.149283
+      },
+      {
+        "task": "fix-branch-pred",
+        "score": 0.217247
+      },
+      {
+        "task": "fix-fifo-ptrs",
+        "score": 0.485708
+      },
+      {
+        "task": "fix-i2c-ctrl",
+        "score": 0.404862
+      },
+      {
+        "task": "fix-fifo-credit",
+        "score": 0.796424
+      },
+      {
+        "task": "fix-fifo-async",
+        "score": 0.078038
+      },
+      {
+        "task": "fix-lfsr",
+        "score": 0.734105
+      },
+      {
+        "task": "fix-dma-engine",
+        "score": 0.078038
+      },
+      {
+        "task": "fix-restoring-div",
+        "score": 0.228183
+      },
+      {
+        "task": "fix-smv-ring3",
+        "score": 1
+      },
+      {
+        "task": "fix-timer-irq",
+        "score": 1
+      },
+      {
+        "task": "fix-mem-ctrl",
+        "score": 0.078038
+      },
+      {
+        "task": "fix-spi-slave",
+        "score": 0.073906
+      },
+      {
+        "task": "implement-arb3",
+        "score": 0.057821
+      },
+      {
+        "task": "fix-regfile-fwd",
+        "score": 0.217247
+      },
+      {
+        "task": "fix-uart-rx",
+        "score": 0
+      },
+      {
+        "task": "fix-tlb-ctrl",
+        "score": 0
+      },
+      {
+        "task": "write-assertions-irqctrl",
+        "score": 0
+      },
+      {
+        "task": "write-assertions-txnmon",
+        "score": 0
+      },
+      {
+        "task": "write-assertions-wdogtimer",
+        "score": 0
+      },
+      {
+        "task": "write-assertions-liveness-arbiter",
+        "score": 0.903663
+      },
+      {
+        "task": "write-assertions-tasksched",
+        "score": 0
+      },
+      {
+        "task": "write-assertions-liveness-dma",
+        "score": 0.903663
+      },
+      {
+        "task": "write-assertions-liveness-fifo",
+        "score": 0
+      }
+    ]
+  }
+}

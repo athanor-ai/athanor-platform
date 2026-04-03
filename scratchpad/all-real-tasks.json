@@ -1,0 +1,1234 @@
+[
+  {
+    "slug": "ackermann-level3",
+    "env_id": "env-lean",
+    "name": "Ackermann Level3",
+    "category": "recursion",
+    "difficulty": "expert",
+    "score": 0.018316
+  },
+  {
+    "slug": "binary-search",
+    "env_id": "env-lean",
+    "name": "Binary Search",
+    "category": "algorithms",
+    "difficulty": "medium",
+    "score": 0.737363
+  },
+  {
+    "slug": "church-rosser",
+    "env_id": "env-lean",
+    "name": "Church Rosser",
+    "category": "lambda-calculus",
+    "difficulty": "expert",
+    "score": 0
+  },
+  {
+    "slug": "compiler-correctness",
+    "env_id": "env-lean",
+    "name": "Compiler Correctness",
+    "category": "compiler-verification",
+    "difficulty": "expert",
+    "score": 0
+  },
+  {
+    "slug": "fib-add-formula",
+    "env_id": "env-lean",
+    "name": "Fib Add Formula",
+    "category": "arithmetic",
+    "difficulty": "expert",
+    "score": 0.049787
+  },
+  {
+    "slug": "first-duplicate",
+    "env_id": "env-lean",
+    "name": "First Duplicate",
+    "category": "algorithms",
+    "difficulty": "easy",
+    "score": 1
+  },
+  {
+    "slug": "fix-proof-errors",
+    "env_id": "env-lean",
+    "name": "Fix Proof Errors",
+    "category": "proof-repair",
+    "difficulty": "easy",
+    "score": 1
+  },
+  {
+    "slug": "fix-wrong-lemma",
+    "env_id": "env-lean",
+    "name": "Fix Wrong Lemma",
+    "category": "proof-repair",
+    "difficulty": "easy",
+    "score": 1
+  },
+  {
+    "slug": "increasing-triplet",
+    "env_id": "env-lean",
+    "name": "Increasing Triplet",
+    "category": "algorithms",
+    "difficulty": "easy",
+    "score": 1
+  },
+  {
+    "slug": "last-digit-squares",
+    "env_id": "env-lean",
+    "name": "Last Digit Squares",
+    "category": "number-theory",
+    "difficulty": "easy",
+    "score": 1
+  },
+  {
+    "slug": "list-advanced",
+    "env_id": "env-lean",
+    "name": "List Advanced",
+    "category": "data-structures",
+    "difficulty": "easy",
+    "score": 1
+  },
+  {
+    "slug": "list-filter",
+    "env_id": "env-lean",
+    "name": "List Filter",
+    "category": "data-structures",
+    "difficulty": "easy",
+    "score": 1
+  },
+  {
+    "slug": "longest-streak",
+    "env_id": "env-lean",
+    "name": "Longest Streak",
+    "category": "algorithms",
+    "difficulty": "easy",
+    "score": 1
+  },
+  {
+    "slug": "majority-element",
+    "env_id": "env-lean",
+    "name": "Majority Element",
+    "category": "algorithms",
+    "difficulty": "expert",
+    "score": 0.07244
+  },
+  {
+    "slug": "max-subarray",
+    "env_id": "env-lean",
+    "name": "Max Subarray",
+    "category": "algorithms",
+    "difficulty": "easy",
+    "score": 1
+  },
+  {
+    "slug": "merge-sorted",
+    "env_id": "env-lean",
+    "name": "Merge Sorted",
+    "category": "algorithms",
+    "difficulty": "medium",
+    "score": 0.854752
+  },
+  {
+    "slug": "nat-arith-combined",
+    "env_id": "env-lean",
+    "name": "Nat Arith Combined",
+    "category": "arithmetic",
+    "difficulty": "expert",
+    "score": 0.203221
+  },
+  {
+    "slug": "nat-divisibility",
+    "env_id": "env-lean",
+    "name": "Nat Divisibility",
+    "category": "arithmetic",
+    "difficulty": "expert",
+    "score": 1e-06
+  },
+  {
+    "slug": "nat-induction-hard",
+    "env_id": "env-lean",
+    "name": "Nat Induction Hard",
+    "category": "arithmetic",
+    "difficulty": "expert",
+    "score": 1.3e-05
+  },
+  {
+    "slug": "partition-evens-odds",
+    "env_id": "env-lean",
+    "name": "Partition Evens Odds",
+    "category": "algorithms",
+    "difficulty": "easy",
+    "score": 1
+  },
+  {
+    "slug": "prime-factor-exists",
+    "env_id": "env-lean",
+    "name": "Prime Factor Exists",
+    "category": "number-theory",
+    "difficulty": "easy",
+    "score": 1
+  },
+  {
+    "slug": "pythagorean-div3",
+    "env_id": "env-lean",
+    "name": "Pythagorean Div3",
+    "category": "number-theory",
+    "difficulty": "easy",
+    "score": 1
+  },
+  {
+    "slug": "red-black-invariant",
+    "env_id": "env-lean",
+    "name": "Red Black Invariant",
+    "category": "data-structures",
+    "difficulty": "expert",
+    "score": 0
+  },
+  {
+    "slug": "regex-derivative",
+    "env_id": "env-lean",
+    "name": "Regex Derivative",
+    "category": "automata",
+    "difficulty": "expert",
+    "score": 0
+  },
+  {
+    "slug": "sqrt2-irrational",
+    "env_id": "env-lean",
+    "name": "Sqrt2 Irrational",
+    "category": "number-theory",
+    "difficulty": "expert",
+    "score": 0.049787
+  },
+  {
+    "slug": "sqrt3-irrational",
+    "env_id": "env-lean",
+    "name": "Sqrt3 Irrational",
+    "category": "number-theory",
+    "difficulty": "expert",
+    "score": 0.049787
+  },
+  {
+    "slug": "squares-mod-arith",
+    "env_id": "env-lean",
+    "name": "Squares Mod Arith",
+    "category": "number-theory",
+    "difficulty": "expert",
+    "score": 1e-06
+  },
+  {
+    "slug": "stock-profit",
+    "env_id": "env-lean",
+    "name": "Stock Profit",
+    "category": "algorithms",
+    "difficulty": "easy",
+    "score": 1
+  },
+  {
+    "slug": "two-sum",
+    "env_id": "env-lean",
+    "name": "Two Sum",
+    "category": "algorithms",
+    "difficulty": "easy",
+    "score": 1
+  },
+  {
+    "slug": "well-founded-order",
+    "env_id": "env-lean",
+    "name": "Well Founded Order",
+    "category": "order-theory",
+    "difficulty": "expert",
+    "score": 0
+  },
+  {
+    "slug": "adversarial_policy_audit",
+    "env_id": "env-cedar",
+    "name": "Adversarial Policy Audit",
+    "category": "security-audit",
+    "difficulty": "expert",
+    "score": 0.05
+  },
+  {
+    "slug": "debug_healthcare_records",
+    "env_id": "env-cedar",
+    "name": "Debug Healthcare Records",
+    "category": "policy-debugging",
+    "difficulty": "medium",
+    "score": 0.666454
+  },
+  {
+    "slug": "debug_multi_tenant_authorization",
+    "env_id": "env-cedar",
+    "name": "Debug Multi Tenant Authorization",
+    "category": "policy-debugging",
+    "difficulty": "easy",
+    "score": 1
+  },
+  {
+    "slug": "debug_recursive_hierarchy_access",
+    "env_id": "env-cedar",
+    "name": "Debug Recursive Hierarchy Access",
+    "category": "policy-debugging",
+    "difficulty": "hard",
+    "score": 0.581181
+  },
+  {
+    "slug": "find_authorization_bypass",
+    "env_id": "env-cedar",
+    "name": "Find Authorization Bypass",
+    "category": "security-audit",
+    "difficulty": "expert",
+    "score": 0.05
+  },
+  {
+    "slug": "fix_action_group_conflicts",
+    "env_id": "env-cedar",
+    "name": "Fix Action Group Conflicts",
+    "category": "policy-repair",
+    "difficulty": "easy",
+    "score": 1
+  },
+  {
+    "slug": "fix_ip_time_geo_policies",
+    "env_id": "env-cedar",
+    "name": "Fix Ip Time Geo Policies",
+    "category": "policy-repair",
+    "difficulty": "hard",
+    "score": 0.577638
+  },
+  {
+    "slug": "fix_photo_sharing_bugs",
+    "env_id": "env-cedar",
+    "name": "Fix Photo Sharing Bugs",
+    "category": "policy-repair",
+    "difficulty": "expert",
+    "score": 0.279232
+  },
+  {
+    "slug": "fix_schema_type_errors",
+    "env_id": "env-cedar",
+    "name": "Fix Schema Type Errors",
+    "category": "policy-repair",
+    "difficulty": "easy",
+    "score": 0.908641
+  },
+  {
+    "slug": "fix_scope_and_condition_bugs",
+    "env_id": "env-cedar",
+    "name": "Fix Scope And Condition Bugs",
+    "category": "policy-repair",
+    "difficulty": "easy",
+    "score": 1
+  },
+  {
+    "slug": "fix_template_instantiation_bugs",
+    "env_id": "env-cedar",
+    "name": "Fix Template Instantiation Bugs",
+    "category": "policy-repair",
+    "difficulty": "easy",
+    "score": 1
+  },
+  {
+    "slug": "fix_unsafe_attribute_access",
+    "env_id": "env-cedar",
+    "name": "Fix Unsafe Attribute Access",
+    "category": "policy-repair",
+    "difficulty": "medium",
+    "score": 0.820524
+  },
+  {
+    "slug": "full_hospital_authorization_system",
+    "env_id": "env-cedar",
+    "name": "Full Hospital Authorization System",
+    "category": "system-design",
+    "difficulty": "easy",
+    "score": 0.986243
+  },
+  {
+    "slug": "implement_and_verify_refactoring",
+    "env_id": "env-cedar",
+    "name": "Implement And Verify Refactoring",
+    "category": "policy-authoring",
+    "difficulty": "hard",
+    "score": 0.336129
+  },
+  {
+    "slug": "policy_equivalence_analysis",
+    "env_id": "env-cedar",
+    "name": "Policy Equivalence Analysis",
+    "category": "policy-analysis",
+    "difficulty": "easy",
+    "score": 0.972419
+  },
+  {
+    "slug": "prove_emergency_override_safety",
+    "env_id": "env-cedar",
+    "name": "Prove Emergency Override Safety",
+    "category": "policy-verification",
+    "difficulty": "expert",
+    "score": 0
+  },
+  {
+    "slug": "prove_forbid_overrides_permit",
+    "env_id": "env-cedar",
+    "name": "Prove Forbid Overrides Permit",
+    "category": "policy-verification",
+    "difficulty": "expert",
+    "score": 0
+  },
+  {
+    "slug": "prove_policy_slicing_soundness",
+    "env_id": "env-cedar",
+    "name": "Prove Policy Slicing Soundness",
+    "category": "policy-verification",
+    "difficulty": "expert",
+    "score": 0.05
+  },
+  {
+    "slug": "prove_schema_validation_soundness",
+    "env_id": "env-cedar",
+    "name": "Prove Schema Validation Soundness",
+    "category": "policy-verification",
+    "difficulty": "expert",
+    "score": 0
+  },
+  {
+    "slug": "schema_evolution_migration",
+    "env_id": "env-cedar",
+    "name": "Schema Evolution Migration",
+    "category": "schema-management",
+    "difficulty": "easy",
+    "score": 0.943368
+  },
+  {
+    "slug": "fix_consistent_hash_replication",
+    "env_id": "env-consensus",
+    "name": "Fix Consistent Hash Replication",
+    "category": "bug-fixing",
+    "difficulty": "easy",
+    "score": 1
+  },
+  {
+    "slug": "fix_distributed_lock",
+    "env_id": "env-consensus",
+    "name": "Fix Distributed Lock",
+    "category": "bug-fixing",
+    "difficulty": "medium",
+    "score": 0.679965
+  },
+  {
+    "slug": "fix_distributed_snapshot",
+    "env_id": "env-consensus",
+    "name": "Fix Distributed Snapshot",
+    "category": "bug-fixing",
+    "difficulty": "easy",
+    "score": 1
+  },
+  {
+    "slug": "fix_raft_safety",
+    "env_id": "env-consensus",
+    "name": "Fix Raft Safety",
+    "category": "bug-fixing",
+    "difficulty": "medium",
+    "score": 0.81983
+  },
+  {
+    "slug": "fix_raft_snapshot_crdt",
+    "env_id": "env-consensus",
+    "name": "Fix Raft Snapshot Crdt",
+    "category": "bug-fixing",
+    "difficulty": "hard",
+    "score": 0.466935
+  },
+  {
+    "slug": "fix_snapshot_replication",
+    "env_id": "env-consensus",
+    "name": "Fix Snapshot Replication",
+    "category": "bug-fixing",
+    "difficulty": "hard",
+    "score": 0.306348
+  },
+  {
+    "slug": "fix_txn_coordinator",
+    "env_id": "env-consensus",
+    "name": "Fix Txn Coordinator",
+    "category": "bug-fixing",
+    "difficulty": "easy",
+    "score": 1
+  },
+  {
+    "slug": "hybrid_clock",
+    "env_id": "env-consensus",
+    "name": "Hybrid Clock",
+    "category": "clocks",
+    "difficulty": "easy",
+    "score": 0.9172364032547359
+  },
+  {
+    "slug": "implement_bft_kv_store",
+    "env_id": "env-consensus",
+    "name": "Implement Bft Kv Store",
+    "category": "implementation",
+    "difficulty": "hard",
+    "score": 0.40708
+  },
+  {
+    "slug": "implement_chain_replication",
+    "env_id": "env-consensus",
+    "name": "Implement Chain Replication",
+    "category": "implementation",
+    "difficulty": "hard",
+    "score": 0.470946
+  },
+  {
+    "slug": "implement_consistent_broadcast",
+    "env_id": "env-consensus",
+    "name": "Implement Consistent Broadcast",
+    "category": "implementation",
+    "difficulty": "easy",
+    "score": 1
+  },
+  {
+    "slug": "implement_crdt_raft",
+    "env_id": "env-consensus",
+    "name": "Implement Crdt Raft",
+    "category": "implementation",
+    "difficulty": "medium",
+    "score": 0.751569
+  },
+  {
+    "slug": "implement_epidemic_broadcast",
+    "env_id": "env-consensus",
+    "name": "Implement Epidemic Broadcast",
+    "category": "implementation",
+    "difficulty": "expert",
+    "score": 0.003796
+  },
+  {
+    "slug": "implement_lsm_compaction",
+    "env_id": "env-consensus",
+    "name": "Implement Lsm Compaction",
+    "category": "implementation",
+    "difficulty": "easy",
+    "score": 1
+  },
+  {
+    "slug": "implement_pbft",
+    "env_id": "env-consensus",
+    "name": "Implement Pbft",
+    "category": "implementation",
+    "difficulty": "expert",
+    "score": 0.179925
+  },
+  {
+    "slug": "implement_raft_log",
+    "env_id": "env-consensus",
+    "name": "Implement Raft Log",
+    "category": "implementation",
+    "difficulty": "easy",
+    "score": 1
+  },
+  {
+    "slug": "implement_read_repair",
+    "env_id": "env-consensus",
+    "name": "Implement Read Repair",
+    "category": "implementation",
+    "difficulty": "expert",
+    "score": 0
+  },
+  {
+    "slug": "implement_shard_migration",
+    "env_id": "env-consensus",
+    "name": "Implement Shard Migration",
+    "category": "implementation",
+    "difficulty": "easy",
+    "score": 1
+  },
+  {
+    "slug": "paxos_prepare",
+    "env_id": "env-consensus",
+    "name": "Paxos Prepare",
+    "category": "paxos",
+    "difficulty": "easy",
+    "score": 1
+  },
+  {
+    "slug": "swim_protocol",
+    "env_id": "env-consensus",
+    "name": "Swim Protocol",
+    "category": "membership",
+    "difficulty": "easy",
+    "score": 0.9744145886708848
+  },
+  {
+    "slug": "twopc_crash",
+    "env_id": "env-consensus",
+    "name": "Twopc Crash",
+    "category": "transactions",
+    "difficulty": "easy",
+    "score": 1
+  },
+  {
+    "slug": "verify_distributed_lock",
+    "env_id": "env-consensus",
+    "name": "Verify Distributed Lock",
+    "category": "formal-verification",
+    "difficulty": "easy",
+    "score": 1
+  },
+  {
+    "slug": "verify_log_compaction",
+    "env_id": "env-consensus",
+    "name": "Verify Log Compaction",
+    "category": "formal-verification",
+    "difficulty": "medium",
+    "score": 0.6819547009985492
+  },
+  {
+    "slug": "verify_replicated_kv",
+    "env_id": "env-consensus",
+    "name": "Verify Replicated Kv",
+    "category": "formal-verification",
+    "difficulty": "easy",
+    "score": 1
+  },
+  {
+    "slug": "verify_two_phase_commit",
+    "env_id": "env-consensus",
+    "name": "Verify Two Phase Commit",
+    "category": "formal-verification",
+    "difficulty": "easy",
+    "score": 1
+  },
+  {
+    "slug": "virtual_nodes",
+    "env_id": "env-consensus",
+    "name": "Virtual Nodes",
+    "category": "partitioning",
+    "difficulty": "medium",
+    "score": 0.8950064145964933
+  },
+  {
+    "slug": "fix_aimd",
+    "env_id": "env-congestion",
+    "name": "Fix Aimd",
+    "category": "bug-fixing",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "fix_competing_flows",
+    "env_id": "env-congestion",
+    "name": "Fix Competing Flows",
+    "category": "bug-fixing",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "fix_cubic_slow_start",
+    "env_id": "env-congestion",
+    "name": "Fix Cubic Slow Start",
+    "category": "bug-fixing",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "fix_cubic_units",
+    "env_id": "env-congestion",
+    "name": "Fix Cubic Units",
+    "category": "bug-fixing",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "fix_fairness_under_competition",
+    "env_id": "env-congestion",
+    "name": "Fix Fairness Under Competition",
+    "category": "bug-fixing",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "fix_recovery_deadlock",
+    "env_id": "env-congestion",
+    "name": "Fix Recovery Deadlock",
+    "category": "bug-fixing",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "fix_slow_convergence",
+    "env_id": "env-congestion",
+    "name": "Fix Slow Convergence",
+    "category": "bug-fixing",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "fix_stale_ssthresh",
+    "env_id": "env-congestion",
+    "name": "Fix Stale Ssthresh",
+    "category": "bug-fixing",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "fix_three_bugs",
+    "env_id": "env-congestion",
+    "name": "Fix Three Bugs",
+    "category": "bug-fixing",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "fix_timeout_handling",
+    "env_id": "env-congestion",
+    "name": "Fix Timeout Handling",
+    "category": "bug-fixing",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "implement_bbr",
+    "env_id": "env-congestion",
+    "name": "Implement Bbr",
+    "category": "implementation",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "implement_compound",
+    "env_id": "env-congestion",
+    "name": "Implement Compound",
+    "category": "implementation",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "implement_cubic",
+    "env_id": "env-congestion",
+    "name": "Implement Cubic",
+    "category": "implementation",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "implement_fast_recovery",
+    "env_id": "env-congestion",
+    "name": "Implement Fast Recovery",
+    "category": "implementation",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "implement_ledbat",
+    "env_id": "env-congestion",
+    "name": "Implement Ledbat",
+    "category": "implementation",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "implement_loss_differentiated",
+    "env_id": "env-congestion",
+    "name": "Implement Loss Differentiated",
+    "category": "implementation",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "implement_mult_decrease",
+    "env_id": "env-congestion",
+    "name": "Implement Mult Decrease",
+    "category": "implementation",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "implement_pcc",
+    "env_id": "env-congestion",
+    "name": "Implement Pcc",
+    "category": "implementation",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "implement_vegas",
+    "env_id": "env-congestion",
+    "name": "Implement Vegas",
+    "category": "implementation",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "implement_westwood",
+    "env_id": "env-congestion",
+    "name": "Implement Westwood",
+    "category": "implementation",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "tune_high_bdp",
+    "env_id": "env-congestion",
+    "name": "Tune High Bdp",
+    "category": "parameter-tuning",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "verify_aimd_safety",
+    "env_id": "env-congestion",
+    "name": "Verify Aimd Safety",
+    "category": "formal-verification",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "verify_flow_fairness",
+    "env_id": "env-congestion",
+    "name": "Verify Flow Fairness",
+    "category": "formal-verification",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "verify_sliding_window",
+    "env_id": "env-congestion",
+    "name": "Verify Sliding Window",
+    "category": "formal-verification",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "csc-col-norm",
+    "env_id": "env-c2rust",
+    "name": "Csc Col Norm",
+    "category": "sparse-matrix",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "csc-filter",
+    "env_id": "env-c2rust",
+    "name": "Csc Filter",
+    "category": "sparse-matrix",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "csc-matvec",
+    "env_id": "env-c2rust",
+    "name": "Csc Matvec",
+    "category": "sparse-matrix",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "csc-nnz",
+    "env_id": "env-c2rust",
+    "name": "Csc Nnz",
+    "category": "sparse-matrix",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "csparse-cumsum",
+    "env_id": "env-c2rust",
+    "name": "Csparse Cumsum",
+    "category": "sparse-matrix",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "csparse-dfs",
+    "env_id": "env-c2rust",
+    "name": "Csparse Dfs",
+    "category": "sparse-matrix",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "csparse-gaxpy",
+    "env_id": "env-c2rust",
+    "name": "Csparse Gaxpy",
+    "category": "sparse-matrix",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "csparse-ipvec",
+    "env_id": "env-c2rust",
+    "name": "Csparse Ipvec",
+    "category": "sparse-matrix",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "csparse-lsolve",
+    "env_id": "env-c2rust",
+    "name": "Csparse Lsolve",
+    "category": "sparse-matrix",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "csparse-lu",
+    "env_id": "env-c2rust",
+    "name": "Csparse Lu",
+    "category": "sparse-matrix",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "csparse-multiply",
+    "env_id": "env-c2rust",
+    "name": "Csparse Multiply",
+    "category": "sparse-matrix",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "csparse-norm",
+    "env_id": "env-c2rust",
+    "name": "Csparse Norm",
+    "category": "sparse-matrix",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "csparse-pvec",
+    "env_id": "env-c2rust",
+    "name": "Csparse Pvec",
+    "category": "sparse-matrix",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "csparse-reach",
+    "env_id": "env-c2rust",
+    "name": "Csparse Reach",
+    "category": "sparse-matrix",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "csparse-scatter",
+    "env_id": "env-c2rust",
+    "name": "Csparse Scatter",
+    "category": "sparse-matrix",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "csparse-spsolve",
+    "env_id": "env-c2rust",
+    "name": "Csparse Spsolve",
+    "category": "sparse-matrix",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "csparse-symperm",
+    "env_id": "env-c2rust",
+    "name": "Csparse Symperm",
+    "category": "sparse-matrix",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "csparse-transpose",
+    "env_id": "env-c2rust",
+    "name": "Csparse Transpose",
+    "category": "sparse-matrix",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "csparse-usolve",
+    "env_id": "env-c2rust",
+    "name": "Csparse Usolve",
+    "category": "sparse-matrix",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "dense-to-csc",
+    "env_id": "env-c2rust",
+    "name": "Dense To Csc",
+    "category": "matrix-ops",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "mat-diag",
+    "env_id": "env-c2rust",
+    "name": "Mat Diag",
+    "category": "matrix-ops",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "vec-add",
+    "env_id": "env-c2rust",
+    "name": "Vec Add",
+    "category": "vector-ops",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "vec-dot",
+    "env_id": "env-c2rust",
+    "name": "Vec Dot",
+    "category": "vector-ops",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "vec-max",
+    "env_id": "env-c2rust",
+    "name": "Vec Max",
+    "category": "vector-ops",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "vec-scale",
+    "env_id": "env-c2rust",
+    "name": "Vec Scale",
+    "category": "vector-ops",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "verus-cumsum-proof",
+    "env_id": "env-c2rust",
+    "name": "Verus Cumsum Proof",
+    "category": "formal-verification",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "verus-perm-proof",
+    "env_id": "env-c2rust",
+    "name": "Verus Perm Proof",
+    "category": "formal-verification",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "verus-vec-add-proof",
+    "env_id": "env-c2rust",
+    "name": "Verus Vec Add Proof",
+    "category": "formal-verification",
+    "difficulty": "hard",
+    "score": 0.5
+  },
+  {
+    "slug": "fix-arb-lock",
+    "env_id": "env-hwcbmc",
+    "name": "Fix Arb Lock",
+    "category": "bug-fixing",
+    "difficulty": "easy",
+    "score": 1
+  },
+  {
+    "slug": "fix-booth-mul",
+    "env_id": "env-hwcbmc",
+    "name": "Fix Booth Mul",
+    "category": "bug-fixing",
+    "difficulty": "easy",
+    "score": 1
+  },
+  {
+    "slug": "fix-branch-pred",
+    "env_id": "env-hwcbmc",
+    "name": "Fix Branch Pred",
+    "category": "bug-fixing",
+    "difficulty": "expert",
+    "score": 0.217287
+  },
+  {
+    "slug": "fix-cache-ctrl",
+    "env_id": "env-hwcbmc",
+    "name": "Fix Cache Ctrl",
+    "category": "bug-fixing",
+    "difficulty": "hard",
+    "score": 0.485676
+  },
+  {
+    "slug": "fix-dma-engine",
+    "env_id": "env-hwcbmc",
+    "name": "Fix Dma Engine",
+    "category": "bug-fixing",
+    "difficulty": "expert",
+    "score": 0.078021
+  },
+  {
+    "slug": "fix-fifo-async",
+    "env_id": "env-hwcbmc",
+    "name": "Fix Fifo Async",
+    "category": "bug-fixing",
+    "difficulty": "expert",
+    "score": 0.078021
+  },
+  {
+    "slug": "fix-fifo-credit",
+    "env_id": "env-hwcbmc",
+    "name": "Fix Fifo Credit",
+    "category": "bug-fixing",
+    "difficulty": "easy",
+    "score": 1
+  },
+  {
+    "slug": "fix-fifo-ptrs",
+    "env_id": "env-hwcbmc",
+    "name": "Fix Fifo Ptrs",
+    "category": "bug-fixing",
+    "difficulty": "easy",
+    "score": 1
+  },
+  {
+    "slug": "fix-i2c-ctrl",
+    "env_id": "env-hwcbmc",
+    "name": "Fix I2C Ctrl",
+    "category": "bug-fixing",
+    "difficulty": "easy",
+    "score": 1
+  },
+  {
+    "slug": "fix-lfsr",
+    "env_id": "env-hwcbmc",
+    "name": "Fix Lfsr",
+    "category": "bug-fixing",
+    "difficulty": "easy",
+    "score": 1
+  },
+  {
+    "slug": "fix-mem-ctrl",
+    "env_id": "env-hwcbmc",
+    "name": "Fix Mem Ctrl",
+    "category": "bug-fixing",
+    "difficulty": "expert",
+    "score": 0.078021
+  },
+  {
+    "slug": "fix-regfile-fwd",
+    "env_id": "env-hwcbmc",
+    "name": "Fix Regfile Fwd",
+    "category": "bug-fixing",
+    "difficulty": "expert",
+    "score": 0.217287
+  },
+  {
+    "slug": "fix-restoring-div",
+    "env_id": "env-hwcbmc",
+    "name": "Fix Restoring Div",
+    "category": "bug-fixing",
+    "difficulty": "easy",
+    "score": 1
+  },
+  {
+    "slug": "fix-smv-ring3",
+    "env_id": "env-hwcbmc",
+    "name": "Fix Smv Ring3",
+    "category": "bug-fixing",
+    "difficulty": "easy",
+    "score": 1
+  },
+  {
+    "slug": "fix-spi-slave",
+    "env_id": "env-hwcbmc",
+    "name": "Fix Spi Slave",
+    "category": "bug-fixing",
+    "difficulty": "expert",
+    "score": 0.073906
+  },
+  {
+    "slug": "fix-timer-irq",
+    "env_id": "env-hwcbmc",
+    "name": "Fix Timer Irq",
+    "category": "bug-fixing",
+    "difficulty": "easy",
+    "score": 1
+  },
+  {
+    "slug": "fix-tlb-ctrl",
+    "env_id": "env-hwcbmc",
+    "name": "Fix Tlb Ctrl",
+    "category": "bug-fixing",
+    "difficulty": "easy",
+    "score": 1
+  },
+  {
+    "slug": "fix-uart-rx",
+    "env_id": "env-hwcbmc",
+    "name": "Fix Uart Rx",
+    "category": "bug-fixing",
+    "difficulty": "easy",
+    "score": 1
+  },
+  {
+    "slug": "implement-arb3",
+    "env_id": "env-hwcbmc",
+    "name": "Implement Arb3",
+    "category": "implementation",
+    "difficulty": "easy",
+    "score": 0.962837
+  },
+  {
+    "slug": "write-assertions-irqctrl",
+    "env_id": "env-hwcbmc",
+    "name": "Write Assertions Irqctrl",
+    "category": "assertion-synthesis",
+    "difficulty": "easy",
+    "score": 1
+  },
+  {
+    "slug": "write-assertions-liveness-arbiter",
+    "env_id": "env-hwcbmc",
+    "name": "Write Assertions Liveness Arbiter",
+    "category": "liveness-checking",
+    "difficulty": "easy",
+    "score": 0.903663
+  },
+  {
+    "slug": "write-assertions-liveness-dma",
+    "env_id": "env-hwcbmc",
+    "name": "Write Assertions Liveness Dma",
+    "category": "liveness-checking",
+    "difficulty": "easy",
+    "score": 1
+  },
+  {
+    "slug": "write-assertions-liveness-fifo",
+    "env_id": "env-hwcbmc",
+    "name": "Write Assertions Liveness Fifo",
+    "category": "liveness-checking",
+    "difficulty": "easy",
+    "score": 1
+  },
+  {
+    "slug": "write-assertions-tasksched",
+    "env_id": "env-hwcbmc",
+    "name": "Write Assertions Tasksched",
+    "category": "assertion-synthesis",
+    "difficulty": "easy",
+    "score": 1
+  },
+  {
+    "slug": "write-assertions-txnmon",
+    "env_id": "env-hwcbmc",
+    "name": "Write Assertions Txnmon",
+    "category": "assertion-synthesis",
+    "difficulty": "easy",
+    "score": 1
+  },
+  {
+    "slug": "write-assertions-wdogtimer",
+    "env_id": "env-hwcbmc",
+    "name": "Write Assertions Wdogtimer",
+    "category": "assertion-synthesis",
+    "difficulty": "easy",
+    "score": 0.968035
+  }
+]

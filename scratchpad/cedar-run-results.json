@@ -1,0 +1,102 @@
+[
+  {
+    "task": "debug_multi_tenant_authorization",
+    "score": 1,
+    "status": "PASS"
+  },
+  {
+    "task": "debug_healthcare_records",
+    "score": 0.666454,
+    "status": "PASS"
+  },
+  {
+    "task": "adversarial_policy_audit",
+    "score": 0.05,
+    "status": "PASS"
+  },
+  {
+    "task": "fix_action_group_conflicts",
+    "score": 1,
+    "status": "PASS"
+  },
+  {
+    "task": "find_authorization_bypass",
+    "score": 0.05,
+    "status": "PASS"
+  },
+  {
+    "task": "fix_photo_sharing_bugs",
+    "score": 0.279232,
+    "status": "PASS"
+  },
+  {
+    "task": "fix_ip_time_geo_policies",
+    "score": 0.577638,
+    "status": "PASS"
+  },
+  {
+    "task": "fix_schema_type_errors",
+    "score": 0.908641,
+    "status": "PASS"
+  },
+  {
+    "task": "fix_scope_and_condition_bugs",
+    "score": 1,
+    "status": "PASS"
+  },
+  {
+    "task": "fix_unsafe_attribute_access",
+    "score": 0.820524,
+    "status": "PASS"
+  },
+  {
+    "task": "fix_template_instantiation_bugs",
+    "score": 1,
+    "status": "PASS"
+  },
+  {
+    "task": "debug_recursive_hierarchy_access",
+    "score": 0.581181,
+    "status": "PASS"
+  },
+  {
+    "task": "full_hospital_authorization_system",
+    "score": 0.986243,
+    "status": "PASS"
+  },
+  {
+    "task": "policy_equivalence_analysis",
+    "score": 0.972419,
+    "status": "PASS"
+  },
+  {
+    "task": "implement_and_verify_refactoring",
+    "score": 0.336129,
+    "status": "PASS"
+  },
+  {
+    "task": "prove_emergency_override_safety",
+    "score": 0,
+    "status": "PASS"
+  },
+  {
+    "task": "prove_forbid_overrides_permit",
+    "score": 0,
+    "status": "PASS"
+  },
+  {
+    "task": "prove_policy_slicing_soundness",
+    "score": 0.05,
+    "status": "PASS"
+  },
+  {
+    "task": "schema_evolution_migration",
+    "score": 0.943368,
+    "status": "PASS"
+  },
+  {
+    "task": "prove_schema_validation_soundness",
+    "score": 0,
+    "status": "PASS"
+  }
+]

@@ -1,0 +1,152 @@
+[
+  {
+    "task": "ackermann-level3",
+    "score": 0.018316,
+    "status": "PASS"
+  },
+  {
+    "task": "compiler-correctness",
+    "score": 0,
+    "status": "PASS"
+  },
+  {
+    "task": "first-duplicate",
+    "score": 1,
+    "status": "PASS"
+  },
+  {
+    "task": "fix-wrong-lemma",
+    "score": 1,
+    "status": "PASS"
+  },
+  {
+    "task": "fix-proof-errors",
+    "score": 1,
+    "status": "PASS"
+  },
+  {
+    "task": "binary-search",
+    "score": 0.737363,
+    "status": "PASS"
+  },
+  {
+    "task": "church-rosser",
+    "score": 0,
+    "status": "PASS"
+  },
+  {
+    "task": "list-advanced",
+    "score": 1,
+    "status": "PASS"
+  },
+  {
+    "task": "list-filter",
+    "score": 1,
+    "status": "PASS"
+  },
+  {
+    "task": "last-digit-squares",
+    "score": 1,
+    "status": "PASS"
+  },
+  {
+    "task": "increasing-triplet",
+    "score": 1,
+    "status": "PASS"
+  },
+  {
+    "task": "fib-add-formula",
+    "score": 0.049787,
+    "status": "PASS"
+  },
+  {
+    "task": "max-subarray",
+    "score": 1,
+    "status": "PASS"
+  },
+  {
+    "task": "longest-streak",
+    "score": 1,
+    "status": "PASS"
+  },
+  {
+    "task": "majority-element",
+    "score": 0.07244,
+    "status": "PASS"
+  },
+  {
+    "task": "partition-evens-odds",
+    "score": 1,
+    "status": "PASS"
+  },
+  {
+    "task": "merge-sorted",
+    "score": 0.854752,
+    "status": "PASS"
+  },
+  {
+    "task": "nat-arith-combined",
+    "score": 0.203221,
+    "status": "PASS"
+  },
+  {
+    "task": "pythagorean-div3",
+    "score": 1,
+    "status": "PASS"
+  },
+  {
+    "task": "nat-induction-hard",
+    "score": 1.3e-05,
+    "status": "PASS"
+  },
+  {
+    "task": "sqrt2-irrational",
+    "score": 0.049787,
+    "status": "PASS"
+  },
+  {
+    "task": "sqrt3-irrational",
+    "score": 0.049787,
+    "status": "PASS"
+  },
+  {
+    "task": "squares-mod-arith",
+    "score": 1e-06,
+    "status": "PASS"
+  },
+  {
+    "task": "stock-profit",
+    "score": 1,
+    "status": "PASS"
+  },
+  {
+    "task": "two-sum",
+    "score": 1,
+    "status": "PASS"
+  },
+  {
+    "task": "well-founded-order",
+    "score": 0,
+    "status": "PASS"
+  },
+  {
+    "task": "nat-divisibility",
+    "score": 1e-06,
+    "status": "PASS"
+  },
+  {
+    "task": "prime-factor-exists",
+    "score": 1,
+    "status": "PASS"
+  },
+  {
+    "task": "red-black-invariant",
+    "score": 0,
+    "status": "PASS"
+  },
+  {
+    "task": "regex-derivative",
+    "score": 0,
+    "status": "PASS"
+  }
+]
