@@ -21,7 +21,7 @@ const navItems = [
   { label: "Environments", href: "/environments", icon: PiCube },
   { label: "Tasks", href: "/tasks", icon: PiListChecks },
   { label: "Runs", href: "/runs", icon: PiPlay },
-  { label: "Calibration", href: "/calibration", icon: PiWaveSine },
+  { label: "Scores", href: "/scores", icon: PiWaveSine },
   { label: "Baselines", href: "/baselines", icon: PiChartBar },
   { label: "Integration", href: "/training", icon: PiBrain },
   { label: "Credentials", href: "/credentials", icon: PiKey },
