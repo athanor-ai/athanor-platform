@@ -18,7 +18,7 @@ import type {
   Run,
   RunResult,
   BaselineRun,
-  Credential,
+  CredentialSummary,
   DocsPage,
 } from "@/types/database";
 import { ATHANOR_ENVIRONMENTS } from "./environments";
@@ -225,13 +225,18 @@ export const mockBaselineRuns: BaselineRun[] = realBaselineRuns;
 /*  Credentials  (provider-level, not benchmark-specific)              */
 /* ------------------------------------------------------------------ */
 
-export const mockCredentials: Credential[] = [
+/**
+ * Mock credentials — safe metadata only.
+ * SECURITY: Never include encrypted_key or raw key material in client data.
+ * Only a masked key_suffix is provided for user identification.
+ */
+export const mockCredentials: CredentialSummary[] = [
   {
     id: "cred-001",
     organization_id: "org-athanor",
     provider: "anthropic",
     label: "Anthropic API Key",
-    encrypted_key: "sk-ant-...redacted",
+    key_suffix: "...m3k7",
     base_url: null,
     is_active: true,
     last_verified_at: hourAgo,
@@ -243,7 +248,7 @@ export const mockCredentials: Credential[] = [
     organization_id: "org-athanor",
     provider: "google",
     label: "Google AI API Key",
-    encrypted_key: "AIza...redacted",
+    key_suffix: "...p8v2",
     base_url: null,
     is_active: true,
     last_verified_at: dayAgo,

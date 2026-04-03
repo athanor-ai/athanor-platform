@@ -148,6 +148,13 @@ export type CredentialProvider =
   | "azure"
   | "bedrock";
 
+/**
+ * Full credential row — server-only.
+ *
+ * SECURITY: This type includes `encrypted_key` and must NEVER be returned to
+ * the client or rendered in the UI. All client-facing code should use
+ * {@link CredentialSummary} instead.
+ */
 export interface Credential {
   id: string;
   organization_id: string;
@@ -155,6 +162,28 @@ export interface Credential {
   label: string;
   encrypted_key: string;
   /** Base URL for OpenAI-compatible, LiteLLM, Azure, or Bedrock endpoints. */
+  base_url: string | null;
+  is_active: boolean;
+  last_verified_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+/**
+ * Safe credential metadata for client/UI consumption.
+ *
+ * Contains only non-secret fields: provider, label, status, and a masked key
+ * suffix for user identification. The actual encrypted key material is never
+ * included in this type.
+ */
+export interface CredentialSummary {
+  id: string;
+  organization_id: string;
+  provider: CredentialProvider;
+  label: string;
+  /** Masked key suffix for display, e.g. "...a1b2" — never the full key */
+  key_suffix: string;
+  /** Base URL for proxy / OpenAI-compatible providers (non-secret). */
   base_url: string | null;
   is_active: boolean;
   last_verified_at: string | null;

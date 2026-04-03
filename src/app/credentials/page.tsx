@@ -12,7 +12,7 @@ import {
   PROVIDERS,
   type ProviderConfig,
 } from "@/data/providers";
-import type { Credential, CredentialProvider } from "@/types/database";
+import type { CredentialSummary, CredentialProvider } from "@/types/database";
 
 /* ------------------------------------------------------------------ */
 /*  Provider avatar                                                    */
@@ -61,7 +61,7 @@ function CredentialForm({
   onClose,
 }: {
   provider: ProviderConfig;
-  existingCredential?: Credential;
+  existingCredential?: CredentialSummary;
   onClose: () => void;
 }) {
   const { addCredential, updateCredential } = useCredentialMutations();
@@ -256,7 +256,7 @@ function ConnectedCard({
   credential,
 }: {
   provider: ProviderConfig;
-  credential: Credential;
+  credential: CredentialSummary;
 }) {
   const [mode, setMode] = useState<"view" | "edit" | "revoke">("view");
   const [copied, setCopied] = useState(false);
@@ -333,7 +333,7 @@ function ConnectedCard({
         <div className="flex items-center justify-between">
           <span className="text-[11px] text-text-tertiary">Key</span>
           <span className="font-mono text-xs text-text-tertiary">
-            {credential.encrypted_key}
+            {credential.key_suffix}
           </span>
         </div>
         {credential.base_url && (
@@ -476,7 +476,7 @@ export default function CredentialsPage() {
 
   const credentialList = credentials.data ?? [];
 
-  const credentialMap = new Map<string, Credential>(
+  const credentialMap = new Map<string, CredentialSummary>(
     credentialList.map((c) => [c.provider, c]),
   );
 
