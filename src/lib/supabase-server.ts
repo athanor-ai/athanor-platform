@@ -1,3 +1,11 @@
+/**
+ * Server-side Supabase client — runs with the user's auth session (anon key).
+ *
+ * SECURITY: This client uses the ANON key and respects RLS policies.
+ * For admin operations that need to bypass RLS, create a separate service-role
+ * client using SUPABASE_SERVICE_ROLE_KEY — but NEVER import or use the
+ * service-role key in client components or code that ships to the browser.
+ */
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 

@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "@/lib/query-keys";
-import type { Credential, CredentialProvider } from "@/types/database";
+import type { CredentialSummary, CredentialProvider } from "@/types/database";
 
 interface AddCredentialInput {
   provider: CredentialProvider;
@@ -35,22 +35,22 @@ export function useCredentialMutations() {
   const queryClient = useQueryClient();
 
   const addCredential = useMutation({
-    mutationFn: async (input: AddCredentialInput): Promise<Credential> => {
+    mutationFn: async (input: AddCredentialInput): Promise<CredentialSummary> => {
       // Simulate network latency
       await new Promise((r) => setTimeout(r, 300));
 
       const now = new Date().toISOString();
-      const masked =
-        input.apiKey.length > 8
-          ? `${input.apiKey.slice(0, 6)}...${input.apiKey.slice(-4)}`
-          : "••••••••";
+      const suffix =
+        input.apiKey.length > 4
+          ? `...${input.apiKey.slice(-4)}`
+          : "...••••";
 
       return {
         id: generateId(),
         organization_id: "org-athanor",
         provider: input.provider,
         label: input.label,
-        encrypted_key: masked,
+        key_suffix: suffix,
         base_url: input.baseUrl?.trim() || null,
         is_active: true,
         last_verified_at: now,
@@ -59,7 +59,7 @@ export function useCredentialMutations() {
       };
     },
     onSuccess: (newCredential) => {
-      queryClient.setQueryData<Credential[]>(
+      queryClient.setQueryData<CredentialSummary[]>(
         queryKeys.credentials.all,
         (prev) => [...(prev ?? []), newCredential],
       );
@@ -82,7 +82,7 @@ export function useCredentialMutations() {
       return { ...input, masked, updatedAt: new Date().toISOString() };
     },
     onSuccess: (result) => {
-      queryClient.setQueryData<Credential[]>(
+      queryClient.setQueryData<CredentialSummary[]>(
         queryKeys.credentials.all,
         (prev) =>
           (prev ?? []).map((c) =>
@@ -90,7 +90,7 @@ export function useCredentialMutations() {
               ? {
                   ...c,
                   label: result.label,
-                  encrypted_key: result.masked,
+                  key_suffix: result.masked,
                   base_url: result.baseUrl?.trim() || null,
                   last_verified_at: result.updatedAt,
                   updated_at: result.updatedAt,
@@ -107,7 +107,7 @@ export function useCredentialMutations() {
       return input.id;
     },
     onSuccess: (removedId) => {
-      queryClient.setQueryData<Credential[]>(
+      queryClient.setQueryData<CredentialSummary[]>(
         queryKeys.credentials.all,
         (prev) => (prev ?? []).filter((c) => c.id !== removedId),
       );
