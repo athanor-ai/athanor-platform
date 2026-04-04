@@ -16,7 +16,6 @@ import {
   PiBookOpen,
   PiRocketLaunch,
   PiLightning,
-  PiDownloadSimple,
 } from "react-icons/pi";
 import { useUser } from "@/hooks/useUser";
 
@@ -40,7 +39,6 @@ const coreNavItems: NavItem[] = [
 /** Setup & admin tabs — used occasionally for onboarding and configuration. */
 const setupNavItems: NavItem[] = [
   { label: "Quick Start", href: "/quickstart", icon: PiLightning },
-  { label: "Download", href: "/download", icon: PiDownloadSimple },
   { label: "Integration", href: "/training", icon: PiBrain },
   { label: "Credentials", href: "/credentials", icon: PiKey },
   { label: "Docs", href: "/docs", icon: PiBookOpen },

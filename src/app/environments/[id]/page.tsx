@@ -1,7 +1,8 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import { PiDownloadSimple, PiGithubLogo } from "react-icons/pi";
 import {
   useEnvironment,
   useEnvironmentVersions,
@@ -17,8 +18,14 @@ import { LoadingState } from "@/components/ui/LoadingState";
 import { EmptyState } from "@/components/ui/EmptyState";
 import type { EnvironmentVersion, Task } from "@/types/database";
 
+/** Build the GitHub download link for a task file. */
+function taskGithubUrl(task: Task): string {
+  return `https://github.com/athanor-ai/congestion-control/blob/master/student_data/${task.slug}`;
+}
+
 export default function EnvironmentDetailPage() {
   const params = useParams();
+  const router = useRouter();
   const id = params.id as string;
 
   const environment = useEnvironment(id);
@@ -127,12 +134,19 @@ export default function EnvironmentDetailPage() {
       render: (t) => <StatusBadge status={t.difficulty} />,
     },
     {
-      key: "max_steps",
-      header: "Max Steps",
+      key: "download",
+      header: "Download",
       render: (t) => (
-        <span className="font-mono text-xs text-text-secondary">
-          {t.max_steps}
-        </span>
+        <a
+          href={taskGithubUrl(t)}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={(e) => e.stopPropagation()}
+          className="inline-flex items-center gap-1 rounded-sm border border-border bg-background px-1.5 py-0.5 text-[10px] font-medium text-text-secondary transition-colors hover:border-accent/30 hover:text-accent"
+        >
+          <PiGithubLogo className="h-3 w-3" />
+          Source
+        </a>
       ),
     },
   ];
@@ -159,6 +173,52 @@ export default function EnvironmentDetailPage() {
         <MetricCard label="Latest Version" value={latestVersion} />
       </div>
 
+      {/* Download section */}
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle>Download</CardTitle>
+        </CardHeader>
+        <div className="space-y-3 px-6 pb-6">
+          <p className="text-sm text-text-secondary">
+            Download task files for this environment. Each task is available as a
+            source file on GitHub.
+          </p>
+          <div className="flex gap-2">
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={() =>
+                window.open(
+                  "https://github.com/athanor-ai/congestion-control/tree/master/student_data",
+                  "_blank",
+                )
+              }
+            >
+              <PiDownloadSimple className="mr-1.5 h-4 w-4" />
+              Browse All Files
+            </Button>
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() =>
+                window.open(
+                  "https://github.com/athanor-ai/congestion-control",
+                  "_blank",
+                )
+              }
+            >
+              <PiGithubLogo className="mr-1.5 h-4 w-4" />
+              GitHub Repo
+            </Button>
+          </div>
+          <p className="text-xs text-text-tertiary">
+            Includes: Containerfile, scoring harness, {taskList.length} task
+            configs, baselines, calibration toolkit, and production Docker
+            Compose.
+          </p>
+        </div>
+      </Card>
+
       {/* Versions table */}
       <Card className="mb-6">
         <CardHeader>
@@ -179,6 +239,7 @@ export default function EnvironmentDetailPage() {
         <DataTable
           columns={taskColumns}
           data={taskList}
+          onRowClick={(task) => router.push(`/tasks?task=${task.id}`)}
           emptyMessage="No tasks defined for this environment"
         />
       </Card>

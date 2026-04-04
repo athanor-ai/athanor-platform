@@ -1,7 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { Suspense, useMemo, useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import clsx from "clsx";
 import { PiCaretDown, PiCaretRight, PiGithubLogo } from "react-icons/pi";
 import { useTasks } from "@/hooks/useTasks";
@@ -21,28 +22,9 @@ import {
   useColumnFilters,
   matchesTextFilter,
   matchesSelectFilter,
-  matchesBucketFilter,
   uniqueOptions,
 } from "@/hooks/useColumnFilters";
 import type { Task } from "@/types/database";
-
-/* ------------------------------------------------------------------ */
-/*  Max-steps bucket helpers                                           */
-/* ------------------------------------------------------------------ */
-
-const STEPS_BUCKETS = [
-  { label: "< 50", value: "lt50" },
-  { label: "50 – 100", value: "50-100" },
-  { label: "100 – 200", value: "100-200" },
-  { label: "> 200", value: "gt200" },
-];
-
-function stepsBucketKey(steps: number): string {
-  if (steps < 50) return "lt50";
-  if (steps <= 100) return "50-100";
-  if (steps <= 200) return "100-200";
-  return "gt200";
-}
 
 /* ------------------------------------------------------------------ */
 /*  Difficulty options (static)                                        */
@@ -61,13 +43,36 @@ const DIFFICULTY_OPTIONS = [
 /* ------------------------------------------------------------------ */
 
 export default function TasksPage() {
+  return (
+    <Suspense
+      fallback={
+        <>
+          <PageHeader
+            title="Tasks"
+            description="Browse and filter registered tasks across your shipped environments"
+          />
+          <LoadingState message="Loading tasks..." />
+        </>
+      }
+    >
+      <TasksPageContent />
+    </Suspense>
+  );
+}
+
+function TasksPageContent() {
   const tasks = useTasks();
   const runs = useRuns();
   const environments = useEnvironments();
+  const searchParams = useSearchParams();
+
+  const taskParam = searchParams.get("task");
 
   const { filters, setColumnFilter, activeCount, clearAll } =
     useColumnFilters();
-  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [expandedId, setExpandedId] = useState<string | null>(
+    taskParam ?? null,
+  );
 
   const isPending = tasks.isPending || environments.isPending || runs.isPending;
 
@@ -126,8 +131,7 @@ export default function TasksPage() {
         matchesTextFilter(filters.name, t.name) &&
         matchesSelectFilter(filters.environment, envName) &&
         matchesSelectFilter(filters.category, t.category) &&
-        matchesSelectFilter(filters.difficulty, t.difficulty) &&
-        matchesBucketFilter(filters.maxSteps, stepsBucketKey(t.max_steps))
+        matchesSelectFilter(filters.difficulty, t.difficulty)
       );
     });
 
@@ -154,10 +158,6 @@ export default function TasksPage() {
   const difficultyFilterConfig: ColumnFilterConfig = {
     type: "select",
     options: DIFFICULTY_OPTIONS,
-  };
-  const stepsFilterConfig: ColumnFilterConfig = {
-    type: "range",
-    options: STEPS_BUCKETS,
   };
 
   if (isPending) {
@@ -267,16 +267,6 @@ export default function TasksPage() {
                       />
                     </span>
                   </th>
-                  <th className="pb-2 pr-4 pt-4 text-[11px] font-medium uppercase tracking-wider text-text-tertiary">
-                    <span className="inline-flex items-center gap-0.5">
-                      Max Steps
-                      <ColumnFilter
-                        config={stepsFilterConfig}
-                        value={filters.maxSteps ?? {}}
-                        onChange={(next) => setColumnFilter("maxSteps", next)}
-                      />
-                    </span>
-                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -292,6 +282,7 @@ export default function TasksPage() {
                       envName={envMap.get(task.environment_id) ?? "Unknown"}
                       linkedRuns={linkedRuns}
                       onToggle={() => toggleRow(task.id)}
+                      autoScroll={taskParam === task.id}
                     />
                   );
                 })}
@@ -314,16 +305,31 @@ function TaskRow({
   envName,
   linkedRuns,
   onToggle,
+  autoScroll,
 }: {
   task: Task;
   isExpanded: boolean;
   envName: string;
   linkedRuns: { runId: string; shortId: string; modelName: string }[];
   onToggle: () => void;
+  autoScroll?: boolean;
 }) {
+  const rowRef = useRef<HTMLTableRowElement>(null);
+
+  const scrollIntoView = useCallback(() => {
+    if (autoScroll && isExpanded && rowRef.current) {
+      rowRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [autoScroll, isExpanded]);
+
+  useEffect(() => {
+    scrollIntoView();
+  }, [scrollIntoView]);
+
   return (
     <>
       <tr
+        ref={rowRef}
         className={clsx(
           "cursor-pointer border-b transition-colors",
           isExpanded
@@ -364,19 +370,12 @@ function TaskRow({
         <td className="py-2.5 pr-4">
           <StatusBadge status={task.difficulty} />
         </td>
-
-        {/* Max Steps */}
-        <td className="py-2.5 pr-4">
-          <span className="font-mono text-xs text-text-secondary">
-            {task.max_steps}
-          </span>
-        </td>
       </tr>
 
       {/* Expanded detail row */}
       {isExpanded && (
         <tr className="border-b border-border bg-surface-overlay">
-          <td colSpan={6} className="px-4 py-3">
+          <td colSpan={5} className="px-4 py-3">
             <div className="space-y-3">
               {/* Description + GitHub link */}
               <div>
