@@ -16,12 +16,8 @@ import { StatusBadge } from "@/components/ui/StatusBadge";
 import { Button } from "@/components/ui/Button";
 import { LoadingState } from "@/components/ui/LoadingState";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { ENVIRONMENT_REGISTRY } from "@/data/environment-registry";
 import type { EnvironmentVersion, Task } from "@/types/database";
-
-/** Build the GitHub download link for a task file. */
-function taskGithubUrl(task: Task): string {
-  return `https://github.com/athanor-ai/congestion-control/blob/master/student_data/${task.slug}`;
-}
 
 export default function EnvironmentDetailPage() {
   const params = useParams();
@@ -54,6 +50,11 @@ export default function EnvironmentDetailPage() {
       />
     );
   }
+
+  const envConfig = ENVIRONMENT_REGISTRY.find((e) => e.id === id);
+  const repoUrl = envConfig
+    ? `https://github.com/${envConfig.repo}`
+    : undefined;
 
   const versionList = versions.data ?? [];
   const taskList = tasks.data ?? [];
@@ -138,7 +139,7 @@ export default function EnvironmentDetailPage() {
       header: "Download",
       render: (t) => (
         <a
-          href={taskGithubUrl(t)}
+          href={t.github_url}
           target="_blank"
           rel="noopener noreferrer"
           onClick={(e) => e.stopPropagation()}
@@ -184,32 +185,26 @@ export default function EnvironmentDetailPage() {
             source file on GitHub.
           </p>
           <div className="flex gap-2">
-            <Button
-              variant="primary"
-              size="sm"
-              onClick={() =>
-                window.open(
-                  "https://github.com/athanor-ai/congestion-control/tree/master/student_data",
-                  "_blank",
-                )
-              }
-            >
-              <PiDownloadSimple className="mr-1.5 h-4 w-4" />
-              Browse All Files
-            </Button>
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={() =>
-                window.open(
-                  "https://github.com/athanor-ai/congestion-control",
-                  "_blank",
-                )
-              }
-            >
-              <PiGithubLogo className="mr-1.5 h-4 w-4" />
-              GitHub Repo
-            </Button>
+            {repoUrl && (
+              <>
+                <Button
+                  variant="primary"
+                  size="sm"
+                  onClick={() => window.open(repoUrl, "_blank")}
+                >
+                  <PiDownloadSimple className="mr-1.5 h-4 w-4" />
+                  Browse All Files
+                </Button>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => window.open(repoUrl, "_blank")}
+                >
+                  <PiGithubLogo className="mr-1.5 h-4 w-4" />
+                  GitHub Repo
+                </Button>
+              </>
+            )}
           </div>
           <p className="text-xs text-text-tertiary">
             Includes: Containerfile, scoring harness, {taskList.length} task
