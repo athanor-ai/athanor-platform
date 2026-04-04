@@ -4,9 +4,10 @@
  * This is the core loop that:
  * 1. Starts the VM (if not running)
  * 2. SSH into the VM
- * 3. Runs evaluate.py with decrypted credentials
- * 4. Streams progress back to the database
- * 5. Cleans up and optionally shuts down
+ * 3. Auto-pulls the repo (clones if missing) and builds Docker image
+ * 4. Runs evaluate.py with decrypted credentials
+ * 5. Streams progress back to the database
+ * 6. Cleans up and optionally shuts down
  *
  * Called from POST /api/runs when a run is created.
  */
@@ -18,6 +19,7 @@ import { join } from "path";
 import { promisify } from "util";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { prepareRunEnvironment, ENV_REPO_MAP } from "./executor";
+import { ENVIRONMENT_REGISTRY } from "@/data/environment-registry";
 import { startVM, stopVM, cleanupVM } from "./vm-manager";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -61,6 +63,132 @@ function writeSshKeyToTempFile(): string | null {
 function buildSshOpts(sshKeyPath: string | null): string {
   const base = "-o StrictHostKeyChecking=no -o ConnectTimeout=30";
   return sshKeyPath ? `${base} -i ${sshKeyPath}` : base;
+}
+
+/** Timeout for Docker builds — large images can take 15+ minutes. */
+const DOCKER_BUILD_TIMEOUT_MS = 20 * 60 * 1000;
+
+/** Timeout for git clone / pull operations. */
+const GIT_TIMEOUT_MS = 5 * 60 * 1000;
+
+/**
+ * Ensure the environment repo is cloned, up-to-date, and the Docker image
+ * is built on the VM before we run evaluate.py.
+ *
+ * Steps:
+ *   1. Clone the repo if it doesn't exist yet.
+ *   2. `git pull` to get the latest code.
+ *   3. Build the Docker image if it hasn't been built yet.
+ */
+async function ensureEnvironmentReady(
+  envSlug: string,
+  repoDir: string,
+  sshOpts: string,
+): Promise<void> {
+  const SSH = `ssh ${sshOpts} ${SSH_TARGET}`;
+  const repoPath = `~/athanor-ai-repos/${repoDir}`;
+  const imageName = repoDir
+    .replace(/_/g, "-")
+    .replace(/ /g, "-")
+    .toLowerCase();
+
+  // Look up the GitHub repo URL from the registry
+  const registryEntry = ENVIRONMENT_REGISTRY.find((e) => e.slug === envSlug);
+  const repoUrl = registryEntry
+    ? `https://github.com/${registryEntry.repo}.git`
+    : null;
+
+  // --- 1. Clone if the repo directory doesn't exist ---
+  console.log(`[env-prep] Checking if ${repoPath} exists on VM...`);
+  try {
+    await execAsync(`${SSH} "test -d ${repoPath}"`, { timeout: 15000 });
+    console.log(`[env-prep] Repo directory exists.`);
+  } catch {
+    // Directory doesn't exist — clone it
+    if (!repoUrl) {
+      throw new Error(
+        `Repo directory ${repoPath} missing and no repo URL found for slug "${envSlug}"`,
+      );
+    }
+    console.log(`[env-prep] Cloning ${repoUrl} into ${repoPath}...`);
+    await execAsync(
+      `${SSH} "mkdir -p ~/athanor-ai-repos && git clone '${repoUrl}' '${repoPath}'"`,
+      { timeout: GIT_TIMEOUT_MS },
+    );
+    console.log(`[env-prep] Clone complete.`);
+  }
+
+  // --- 2. Git pull latest ---
+  console.log(`[env-prep] Pulling latest code in ${repoPath}...`);
+  try {
+    const { stdout: pullOutput } = await execAsync(
+      `${SSH} "cd '${repoPath}' && git pull"`,
+      { timeout: GIT_TIMEOUT_MS },
+    );
+    console.log(`[env-prep] Pull result: ${pullOutput.trim().slice(0, 200)}`);
+  } catch (pullErr) {
+    // Non-fatal: log but continue (repo may still be usable)
+    console.error(
+      `[env-prep] Warning: git pull failed — continuing with existing code.`,
+      pullErr,
+    );
+  }
+
+  // --- 3. Build Docker image if it doesn't exist ---
+  console.log(`[env-prep] Checking for Docker image "${imageName}"...`);
+  try {
+    await execAsync(
+      `${SSH} "docker image inspect '${imageName}' > /dev/null 2>&1"`,
+      { timeout: 15000 },
+    );
+    console.log(`[env-prep] Docker image "${imageName}" already exists.`);
+  } catch {
+    // Image doesn't exist — build it
+    console.log(
+      `[env-prep] Docker image not found. Building "${imageName}" from ${repoPath}/Containerfile...`,
+    );
+    console.log(
+      `[env-prep] This may take 10-15 minutes for large images.`,
+    );
+    try {
+      const { stdout: buildOutput } = await execAsync(
+        `${SSH} "cd '${repoPath}' && docker build -f Containerfile -t '${imageName}' ."`,
+        { timeout: DOCKER_BUILD_TIMEOUT_MS, maxBuffer: 50 * 1024 * 1024 },
+      );
+      // Log the last few lines of build output
+      const lastLines = buildOutput.trim().split("\n").slice(-5).join("\n");
+      console.log(`[env-prep] Docker build complete. Last output:\n${lastLines}`);
+    } catch (buildErr) {
+      const errMsg =
+        buildErr instanceof Error ? buildErr.message : String(buildErr);
+      throw new Error(
+        `Docker build failed for image "${imageName}": ${errMsg.slice(0, 500)}`,
+      );
+    }
+  }
+
+  console.log(
+    `[env-prep] Environment "${envSlug}" is ready (repo: ${repoPath}, image: ${imageName}).`,
+  );
+}
+
+/**
+ * Convert a model name to LiteLLM format if needed.
+ *
+ * evaluate.py expects LiteLLM-style model identifiers such as
+ * "anthropic/claude-sonnet-4-6".  If the model name is already prefixed
+ * with a provider we leave it alone; otherwise we add the "anthropic/"
+ * prefix for Claude models.
+ */
+function toLiteLLMModelName(modelName: string): string {
+  // Already has a provider prefix (e.g. "openai/gpt-4o", "anthropic/…")
+  if (modelName.includes("/")) return modelName;
+
+  // Claude models → anthropic/ prefix
+  if (modelName.startsWith("claude-")) return `anthropic/${modelName}`;
+
+  // Everything else: pass through as-is (litellm will try to resolve)
+  return modelName;
 }
 
 /**
@@ -109,22 +237,25 @@ export async function executeRun(
     const repoDir = ENV_REPO_MAP[envSlug];
     if (!repoDir) throw new Error(`Unknown env slug: ${envSlug}`);
 
-    const modelName = run.model_name as string;
+    // 5. Ensure repo is cloned, up-to-date, and Docker image is built
+    await ensureEnvironmentReady(envSlug, repoDir, sshOpts);
+
+    const modelName = toLiteLLMModelName(run.model_name as string);
     const outputFile = `/tmp/platform-run-${runId}.json`;
 
-    // 5. Build the SSH command
+    // 6. Build the SSH command
     // Export env vars + run evaluate.py
     const envExports = Object.entries(envVars)
       .map(([k, v]) => `export ${k}='${v.replace(/'/g, "'\\''")}'`)
       .join(" && ");
 
     const evalCmd = [
-      `cd ~/${repoDir}`,
+      `cd ~/athanor-ai-repos/${repoDir}`,
       envExports,
       `python3 scripts/evaluate.py . --all-tasks --model '${modelName}' --max-time 900 --output '${outputFile}'`,
     ].join(" && ");
 
-    // 6. Execute via SSH and stream output
+    // 7. Execute via SSH and stream output
     await executeSSHWithProgress(
       evalCmd,
       runId,
@@ -133,13 +264,13 @@ export async function executeRun(
       options.onProgress,
     );
 
-    // 7. Fetch results from the VM
+    // 8. Fetch results from the VM
     const { stdout: resultJson } = await execAsync(
       `ssh ${sshOpts} ${SSH_TARGET} "cat '${outputFile}' 2>/dev/null"`,
       { timeout: 30000, maxBuffer: 10 * 1024 * 1024 },
     );
 
-    // 8. Parse and store results
+    // 9. Parse and store results
     const results = JSON.parse(resultJson);
     const taskResults = (results.results || []).map((r: Record<string, unknown>) => ({
       run_id: runId,
@@ -155,7 +286,7 @@ export async function executeRun(
       await supabase.from("run_results").upsert(taskResults);
     }
 
-    // 9. Calculate mean score and mark complete
+    // 10. Calculate mean score and mark complete
     const scores = taskResults
       .map((r: { raw_score: number }) => r.raw_score)
       .filter((s: number) => s !== null);
