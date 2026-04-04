@@ -12,6 +12,12 @@ import { PiArrowLeft } from "react-icons/pi";
 /*  Types                                                              */
 /* ------------------------------------------------------------------ */
 
+interface BaseUrlStatus {
+  envVar: string;
+  label: string;
+  configured: boolean;
+}
+
 interface PlatformKeyStatus {
   provider: string;
   displayName: string;
@@ -21,6 +27,7 @@ interface PlatformKeyStatus {
   maskedKey: string | null;
   baseUrlEnvVar?: string;
   baseUrlConfigured?: boolean;
+  baseUrls?: BaseUrlStatus[];
 }
 
 interface PlatformKeysResponse {
@@ -86,6 +93,28 @@ function KeyCard({ keyInfo }: { keyInfo: PlatformKeyStatus }) {
             </span>
           </div>
         )}
+
+        {keyInfo.baseUrls &&
+          keyInfo.baseUrls.map((baseUrl) => (
+            <div
+              key={baseUrl.envVar}
+              className="flex items-center justify-between"
+            >
+              <span className="text-[11px] text-text-tertiary">
+                {baseUrl.label}
+              </span>
+              <div className="flex items-center gap-1.5">
+                <code className="rounded bg-surface-overlay px-1.5 py-0.5 font-mono text-[10px] text-text-tertiary">
+                  {baseUrl.envVar}
+                </code>
+                {baseUrl.configured ? (
+                  <span className="h-1.5 w-1.5 rounded-full bg-success" />
+                ) : (
+                  <span className="h-1.5 w-1.5 rounded-full bg-text-tertiary" />
+                )}
+              </div>
+            </div>
+          ))}
 
         {keyInfo.baseUrlEnvVar && (
           <div className="flex items-center justify-between">
