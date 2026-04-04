@@ -29,7 +29,7 @@ function getServiceClient() {
   );
 }
 
-const SSH_TARGET = process.env.AZURE_VM_SSH_TARGET || "azureuser@20.245.2.136";
+const SSH_TARGET = process.env.AZURE_VM_SSH_TARGET || "azureuser@52.234.26.150";
 const SSH_OPTS = "-o StrictHostKeyChecking=no -o ConnectTimeout=30";
 
 interface ProgressUpdate {
