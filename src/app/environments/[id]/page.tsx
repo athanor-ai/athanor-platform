@@ -1,7 +1,8 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import { PiDownloadSimple, PiGithubLogo } from "react-icons/pi";
 import {
   useEnvironment,
   useEnvironmentVersions,
@@ -15,10 +16,39 @@ import { StatusBadge } from "@/components/ui/StatusBadge";
 import { Button } from "@/components/ui/Button";
 import { LoadingState } from "@/components/ui/LoadingState";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { REAL_HEATMAP_DATA } from "@/data/heatmap";
+import { BASELINE_MODELS } from "@/data/models";
 import type { EnvironmentVersion, Task } from "@/types/database";
+
+function getEnvStats(slug: string) {
+  const heatmap = REAL_HEATMAP_DATA[slug];
+  if (!heatmap) return { tasks: 0, meanScore: 0, hardest: 0 };
+
+  const allScores: number[] = [];
+  for (const model of BASELINE_MODELS) {
+    const cells = heatmap[model.slug];
+    if (cells) {
+      for (const c of cells) allScores.push(c.score);
+    }
+  }
+
+  const tasks = new Set(
+    Object.values(heatmap).flatMap((cells) => cells.map((c) => c.task)),
+  ).size;
+
+  const mean =
+    allScores.length > 0
+      ? allScores.reduce((a, b) => a + b, 0) / allScores.length
+      : 0;
+
+  const hardest = allScores.filter((s) => s < 0.05).length;
+
+  return { tasks, meanScore: mean, hardest };
+}
 
 export default function EnvironmentDetailPage() {
   const params = useParams();
+  const router = useRouter();
   const id = params.id as string;
 
   const environment = useEnvironment(id);
@@ -57,6 +87,9 @@ export default function EnvironmentDetailPage() {
       new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
   );
   const latestVersion = sortedVersions[0]?.version_tag ?? "No versions";
+
+  // Download stats from heatmap data
+  const stats = getEnvStats(env.slug);
 
   const versionColumns: Column<EnvironmentVersion>[] = [
     {
@@ -126,15 +159,6 @@ export default function EnvironmentDetailPage() {
       header: "Difficulty",
       render: (t) => <StatusBadge status={t.difficulty} />,
     },
-    {
-      key: "max_steps",
-      header: "Max Steps",
-      render: (t) => (
-        <span className="font-mono text-xs text-text-secondary">
-          {t.max_steps}
-        </span>
-      ),
-    },
   ];
 
   return (
@@ -159,6 +183,75 @@ export default function EnvironmentDetailPage() {
         <MetricCard label="Latest Version" value={latestVersion} />
       </div>
 
+      {/* Download section */}
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle>Download</CardTitle>
+        </CardHeader>
+        <div className="space-y-3 px-6 pb-6">
+          <p className="text-sm text-text-secondary">
+            Self-contained package. Download, build, evaluate. No platform
+            dependency required.
+          </p>
+          <div className="grid grid-cols-3 gap-2 text-center">
+            <div className="rounded-md bg-surface-secondary p-2">
+              <div className="text-lg font-semibold text-text-primary">
+                {stats.tasks}
+              </div>
+              <div className="text-xs text-text-tertiary">tasks</div>
+            </div>
+            <div className="rounded-md bg-surface-secondary p-2">
+              <div className="text-lg font-semibold text-text-primary">
+                {stats.meanScore.toFixed(2)}
+              </div>
+              <div className="text-xs text-text-tertiary">avg score</div>
+            </div>
+            <div className="rounded-md bg-surface-secondary p-2">
+              <div className="text-lg font-semibold text-text-primary">
+                {stats.hardest}
+              </div>
+              <div className="text-xs text-text-tertiary">frontier</div>
+            </div>
+          </div>
+
+          <div className="flex gap-2">
+            <Button
+              variant="primary"
+              size="sm"
+              className="flex-1"
+              onClick={() =>
+                window.open(
+                  `https://github.com/athanor-ai/${env.slug}/releases/latest`,
+                  "_blank",
+                )
+              }
+            >
+              <PiDownloadSimple className="mr-1.5 h-4 w-4" />
+              Download {latestVersion}
+            </Button>
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() =>
+                window.open(
+                  `https://github.com/athanor-ai/${env.slug}`,
+                  "_blank",
+                )
+              }
+            >
+              <PiGithubLogo className="mr-1.5 h-4 w-4" />
+              GitHub
+            </Button>
+          </div>
+
+          <p className="text-xs text-text-tertiary">
+            Includes: Containerfile, scoring harness, {stats.tasks} task
+            configs, 5-model baselines, calibration toolkit, and production
+            Docker Compose.
+          </p>
+        </div>
+      </Card>
+
       {/* Versions table */}
       <Card className="mb-6">
         <CardHeader>
@@ -179,6 +272,7 @@ export default function EnvironmentDetailPage() {
         <DataTable
           columns={taskColumns}
           data={taskList}
+          onRowClick={(task) => router.push(`/tasks?task=${task.id}`)}
           emptyMessage="No tasks defined for this environment"
         />
       </Card>
