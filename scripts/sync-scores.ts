@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
 /**
- * Sync scores from the 6 environment repos into platform data files.
+ * Sync scores from the 7 environment repos into platform data files.
  *
  * Reads runs/*.json from each env repo, computes mean scores per task per model,
  * and writes src/data/heatmap.ts with fresh data.
@@ -20,6 +20,7 @@ const ENV_MAP: Record<string, { dir: string; slug: string }> = {
   "congestion-control": { dir: "congestion-control", slug: "congestion-control" },
   "distributed-consensus": { dir: "distributed-consensus", slug: "distributed-consensus" },
   "cedar-env": { dir: "cedar-env", slug: "cedar-policy-verification" },
+  "computational-biology": { dir: "computational-biology", slug: "protein-synthesis" },
 };
 
 const MODEL_ORDER = [
