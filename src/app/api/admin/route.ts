@@ -8,6 +8,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { getSupabaseServerClient } from "@/lib/supabase-server";
+import { derivePassword } from "@/lib/crypto";
 
 function getServiceClient() {
   return createClient(
@@ -17,16 +18,29 @@ function getServiceClient() {
   );
 }
 
-const ADMIN_EMAILS = new Set([
-  "aidan@athanorl.com",
-  "hongsksam@gmail.com",
-]);
-
 async function verifyInternalAdmin(request?: Request) {
+  const service = getServiceClient();
+
   // Method 1: Cloudflare Access header (when behind Zero Trust)
   if (request) {
     const cfEmail = request.headers.get("cf-access-authenticated-user-email");
-    if (cfEmail && ADMIN_EMAILS.has(cfEmail.toLowerCase())) return true;
+    if (cfEmail) {
+      const { data: profile } = await service
+        .from("profiles")
+        .select("organization_id")
+        .eq("email", cfEmail.toLowerCase())
+        .single();
+
+      if (profile) {
+        const { data: org } = await service
+          .from("organizations")
+          .select("plan")
+          .eq("id", profile.organization_id)
+          .single();
+
+        if (org?.plan === "internal") return true;
+      }
+    }
   }
 
   // Method 2: Supabase auth session (when using platform login)
@@ -35,7 +49,6 @@ async function verifyInternalAdmin(request?: Request) {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return false;
 
-    const service = getServiceClient();
     const { data: profile } = await service
       .from("profiles")
       .select("organization_id, role")
@@ -175,9 +188,7 @@ export async function POST(request: NextRequest) {
       }
       const emailLower = email.trim().toLowerCase();
       // Create Supabase auth user
-      const nodeCrypto = await import("crypto");
-      const secret = process.env.CREDENTIAL_ENCRYPTION_KEY || "fallback";
-      const password = nodeCrypto.createHmac("sha256", secret).update(`athanor-bridge:${emailLower}`).digest("hex").slice(0, 32);
+      const password = derivePassword(emailLower);
 
       const { data: authData, error: authError } = await service.auth.admin.createUser({
         email: emailLower,

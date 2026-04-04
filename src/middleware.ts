@@ -16,21 +16,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import { createClient } from "@supabase/supabase-js";
-import crypto from "crypto";
-
-/**
- * Derive a deterministic password for a user email.
- * This is NOT user-facing -- it's an internal bridge between Cloudflare and Supabase.
- * The password is never shown to the user; they authenticate via Cloudflare.
- */
-function derivePassword(email: string): string {
-  const secret = process.env.CREDENTIAL_ENCRYPTION_KEY || "fallback-dev-key";
-  return crypto
-    .createHmac("sha256", secret)
-    .update(`athanor-bridge:${email.toLowerCase()}`)
-    .digest("hex")
-    .slice(0, 32);
-}
+import { derivePassword } from "@/lib/crypto";
 
 export async function middleware(request: NextRequest) {
   const response = NextResponse.next();
