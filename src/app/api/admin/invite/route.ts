@@ -15,19 +15,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { addAccessEmails } from "@/lib/cloudflare-access";
-import nodeCrypto from "crypto";
-
-/** Same derivation as middleware -- keeps passwords in sync */
-function derivePassword(email: string): string {
-  const secret = process.env.CREDENTIAL_ENCRYPTION_KEY || "fallback-dev-key";
-  return nodeCrypto
-    .createHmac("sha256", secret)
-    .update(`athanor-bridge:${email.toLowerCase()}`)
-    .digest("hex")
-    .slice(0, 32);
-}
-
-const ADMIN_EMAILS = new Set(["aidan@athanorl.com", "hongsksam@gmail.com"]);
+import { derivePassword } from "@/lib/crypto";
 
 function getServiceClient() {
   return createClient(
@@ -37,13 +25,30 @@ function getServiceClient() {
   );
 }
 
-function verifyAdmin(request: NextRequest): boolean {
+async function verifyAdmin(request: NextRequest): Promise<boolean> {
   const cfEmail = request.headers.get("cf-access-authenticated-user-email");
-  return !!cfEmail && ADMIN_EMAILS.has(cfEmail.toLowerCase());
+  if (!cfEmail) return false;
+
+  const service = getServiceClient();
+  const { data: profile } = await service
+    .from("profiles")
+    .select("organization_id")
+    .eq("email", cfEmail.toLowerCase())
+    .single();
+
+  if (!profile) return false;
+
+  const { data: org } = await service
+    .from("organizations")
+    .select("plan")
+    .eq("id", profile.organization_id)
+    .single();
+
+  return org?.plan === "internal";
 }
 
 export async function POST(request: NextRequest) {
-  if (!verifyAdmin(request)) {
+  if (!(await verifyAdmin(request))) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 

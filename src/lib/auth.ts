@@ -11,12 +11,6 @@
 import { createClient } from "@supabase/supabase-js";
 import { getSupabaseServerClient } from "./supabase-server";
 
-const ADMIN_EMAILS = new Set([
-  "aidan@athanorl.com",
-  "hongsksam@gmail.com",
-  "spencer.sw.hong@gmail.com",
-]);
-
 export interface AuthUser {
   id: string;
   email: string;
@@ -30,6 +24,21 @@ function getServiceClient() {
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!,
   );
+}
+
+/**
+ * Check whether an organization has the internal plan (admin status).
+ */
+async function isInternalOrg(
+  service: ReturnType<typeof getServiceClient>,
+  organizationId: string,
+): Promise<boolean> {
+  const { data: org } = await service
+    .from("organizations")
+    .select("plan")
+    .eq("id", organizationId)
+    .single();
+  return org?.plan === "internal";
 }
 
 /**
@@ -56,7 +65,7 @@ export async function getAuthUser(request?: Request): Promise<AuthUser | null> {
           email,
           organizationId: profile.organization_id,
           role: profile.role,
-          isAdmin: ADMIN_EMAILS.has(email.toLowerCase()),
+          isAdmin: await isInternalOrg(service, profile.organization_id),
         };
       }
     }
@@ -65,7 +74,9 @@ export async function getAuthUser(request?: Request): Promise<AuthUser | null> {
   // Method 2: Supabase auth session
   try {
     const supabase = await getSupabaseServerClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     if (user?.email) {
       const { data: profile } = await service
         .from("profiles")
@@ -79,7 +90,7 @@ export async function getAuthUser(request?: Request): Promise<AuthUser | null> {
           email: user.email,
           organizationId: profile.organization_id,
           role: profile.role,
-          isAdmin: ADMIN_EMAILS.has(user.email.toLowerCase()),
+          isAdmin: await isInternalOrg(service, profile.organization_id),
         };
       }
     }
@@ -103,18 +114,7 @@ export async function getAuthUser(request?: Request): Promise<AuthUser | null> {
           email: cfEmail.toLowerCase(),
           organizationId: profile.organization_id,
           role: profile.role,
-          isAdmin: ADMIN_EMAILS.has(cfEmail.toLowerCase()),
-        };
-      }
-
-      // Known admin email but no profile yet
-      if (ADMIN_EMAILS.has(cfEmail.toLowerCase())) {
-        return {
-          id: "admin",
-          email: cfEmail.toLowerCase(),
-          organizationId: "00000000-0000-0000-0000-000000000001",
-          role: "owner",
-          isAdmin: true,
+          isAdmin: await isInternalOrg(service, profile.organization_id),
         };
       }
     }
