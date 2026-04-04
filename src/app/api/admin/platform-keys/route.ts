@@ -32,13 +32,22 @@ const PLATFORM_KEY_DEFINITIONS: Array<{
   provider: string;
   displayName: string;
   envVar: string;
+  /** Alternative env var name (checked as fallback) */
+  altEnvVar?: string;
   models: string[];
   baseUrlEnvVar?: string;
 }> = [
   {
+    provider: "anthropic",
+    displayName: "Anthropic",
+    envVar: "ANTHROPIC_API_KEY",
+    models: ["Claude Sonnet 4.6", "Claude Sonnet 4", "Claude Opus 4"],
+  },
+  {
     provider: "google",
     displayName: "Google AI",
     envVar: "GOOGLE_API_KEY",
+    altEnvVar: "GEMINI_API_KEY",
     models: ["Gemini 2.5 Flash", "Gemini 3.1 Pro"],
   },
   {
@@ -73,7 +82,7 @@ export async function GET(request: NextRequest) {
     process.env.ATHANOR_USE_PLATFORM_KEYS === "true";
 
   const keys: PlatformKeyStatus[] = PLATFORM_KEY_DEFINITIONS.map((def) => {
-    const value = process.env[def.envVar];
+    const value = process.env[def.envVar] || (def.altEnvVar ? process.env[def.altEnvVar] : undefined);
     const isConfigured = !!value && value.length > 0;
 
     const result: PlatformKeyStatus = {

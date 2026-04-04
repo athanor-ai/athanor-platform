@@ -241,6 +241,9 @@ export const mockBaselineRuns: BaselineRun[] = realBaselineRuns;
  * Mock credentials — safe metadata only.
  * SECURITY: Never include encrypted_key or raw key material in client data.
  * Only a masked key_suffix is provided for user identification.
+ *
+ * Covers all baseline model providers so the launch wizard shows all
+ * baseline models as usable in dev / demo mode.
  */
 export const mockCredentials: CredentialSummary[] = [
   {
@@ -262,6 +265,30 @@ export const mockCredentials: CredentialSummary[] = [
     label: "Google AI API Key",
     key_suffix: "...p8v2",
     base_url: null,
+    is_active: true,
+    last_verified_at: dayAgo,
+    created_at: weekAgo,
+    updated_at: dayAgo,
+  },
+  {
+    id: "cred-003",
+    organization_id: "org-athanor",
+    provider: "openai",
+    label: "OpenAI-Compatible (Azure AI)",
+    key_suffix: "...x4q9",
+    base_url: "https://models.inference.ai.azure.com",
+    is_active: true,
+    last_verified_at: dayAgo,
+    created_at: weekAgo,
+    updated_at: dayAgo,
+  },
+  {
+    id: "cred-004",
+    organization_id: "org-athanor",
+    provider: "azure",
+    label: "Azure AI Endpoint",
+    key_suffix: "...r7w1",
+    base_url: "https://models.inference.ai.azure.com",
     is_active: true,
     last_verified_at: dayAgo,
     created_at: weekAgo,
