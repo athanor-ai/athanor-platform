@@ -18,7 +18,7 @@ import {
   PiLightning,
   PiDownloadSimple,
 } from "react-icons/pi";
-import { ATHANOR_ENVIRONMENTS } from "@/data/environments";
+import { useUser } from "@/hooks/useUser";
 
 interface NavItem {
   label: string;
@@ -80,6 +80,9 @@ function NavLink({ item, pathname }: { item: NavItem; pathname: string }) {
 
 export function Sidebar() {
   const pathname = usePathname();
+  const { data: user } = useUser();
+
+  const orgInitial = user?.organizationName?.[0]?.toUpperCase() ?? "A";
 
   return (
     <aside className="flex h-full w-[200px] flex-col border-r border-border bg-surface">
@@ -116,17 +119,31 @@ export function Sidebar() {
         </ul>
       </nav>
 
-      {/* Footer — org identity */}
+      {/* Footer — user & org identity */}
       <div className="border-t border-border px-4 py-3">
-        <Link href="/overview" className="flex items-center gap-2">
-          <div className="flex h-6 w-6 items-center justify-center rounded-full bg-accent/20 text-[10px] font-bold text-accent">
-            A
+        <div className="flex items-start gap-2">
+          <div className="mt-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-accent/20 text-[10px] font-bold text-accent">
+            {orgInitial}
           </div>
           <div className="min-w-0 flex-1">
-            <div className="truncate text-xs text-text-primary">Athanor Labs</div>
-            <div className="text-[10px] text-text-tertiary">{ATHANOR_ENVIRONMENTS.length} shipped environments</div>
+            <div className="truncate text-xs font-medium text-text-primary">
+              Athanor Labs
+            </div>
+            {user?.email && (
+              <div
+                className="truncate text-[10px] text-text-tertiary"
+                title={user.email}
+              >
+                {user.email}
+              </div>
+            )}
+            {user?.organizationName && (
+              <div className="truncate text-[10px] text-text-tertiary">
+                Org: {user.organizationSlug ?? user.organizationName}
+              </div>
+            )}
           </div>
-        </Link>
+        </div>
       </div>
     </aside>
   );
