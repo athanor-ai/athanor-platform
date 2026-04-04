@@ -3,13 +3,14 @@
 import { useMemo, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import clsx from "clsx";
+import { PiCaretDown, PiCaretRight } from "react-icons/pi";
 import { useRun, useRunResults } from "@/hooks/useRuns";
 import { useEnvironments } from "@/hooks/useEnvironments";
 import { useTasks } from "@/hooks/useTasks";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { Card, CardHeader, CardTitle } from "@/components/ui/Card";
-import { DataTable, type Column } from "@/components/ui/DataTable";
 import { Button } from "@/components/ui/Button";
 import { LoadingState } from "@/components/ui/LoadingState";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -43,17 +44,42 @@ function computeRunDuration(
   return formatDuration(end - start);
 }
 
-function deriveToolUseSummary(resultList: RunResult[]) {
-  const totalSteps = resultList.reduce((s, r) => s + r.steps_used, 0);
-  const maxSteps = resultList.reduce((s, r) => s + r.max_steps, 0);
-  const avgSteps =
+/** Count tool_call actions across all results by synthesising traces. */
+function deriveToolUseSummary(
+  resultList: RunResult[],
+  envSlug: string,
+) {
+  let totalToolCalls = 0;
+
+  for (const r of resultList) {
+    const trace = buildTrace(r, envSlug);
+    totalToolCalls += trace.filter((e) => e.action === "tool_call").length;
+  }
+
+  const avgToolCalls =
     resultList.length > 0
-      ? Math.round(totalSteps / resultList.length)
+      ? Math.round(totalToolCalls / resultList.length)
       : 0;
-  const efficiency =
-    maxSteps > 0 ? Math.round((totalSteps / maxSteps) * 100) : 0;
   const errored = resultList.filter((r) => r.error).length;
-  return { totalSteps, avgSteps, efficiency, errored };
+
+  return { totalToolCalls, avgToolCalls, errored };
+}
+
+/** Build the trace for a single result — shared helper. */
+function buildTrace(result: RunResult, envSlug: string): TraceEntry[] {
+  if (result.trajectory.length > 0) {
+    return result.trajectory as TraceEntry[];
+  }
+  const taskSlug =
+    result.task_id.split("-").slice(1).join("-") || result.task_id;
+  return synthesizeTrace(
+    taskSlug,
+    envSlug,
+    result.raw_score,
+    result.steps_used,
+    result.duration_ms,
+    result.error,
+  );
 }
 
 /* ------------------------------------------------------------------ */
@@ -92,7 +118,7 @@ const ACTION_STYLES: Record<
 };
 
 /* ------------------------------------------------------------------ */
-/*  Trace entry component                                              */
+/*  Trace entry card (reused from previous implementation)             */
 /* ------------------------------------------------------------------ */
 
 function TraceEntryCard({
@@ -113,49 +139,36 @@ function TraceEntryCard({
       className="w-full cursor-pointer rounded-md border border-border/50 bg-background px-3 py-2 text-left transition-colors hover:border-border"
     >
       <div className="flex items-center gap-2">
-        {/* Step number */}
         <span className="shrink-0 rounded-sm bg-surface-overlay px-1.5 py-0.5 font-mono text-[9px] text-text-tertiary">
           S{entry.step}
         </span>
-
-        {/* Action badge */}
         <span
           className={`shrink-0 rounded-sm px-1.5 py-0.5 text-[9px] font-medium uppercase ${style.bg} ${style.text}`}
         >
           {style.label}
         </span>
-
-        {/* Tool name if present */}
         {entry.tool && (
           <span className="shrink-0 rounded-sm bg-accent/5 px-1.5 py-0.5 font-mono text-[10px] text-accent">
             {entry.tool}
           </span>
         )}
-
-        {/* Success/fail indicator */}
         <span
           className={`ml-auto shrink-0 text-[10px] ${entry.success ? "text-success" : "text-error"}`}
         >
           {entry.success ? "\u2713" : "\u2717"}
         </span>
-
-        {/* Duration */}
         <span className="shrink-0 font-mono text-[10px] text-text-tertiary">
           {formatDuration(entry.duration_ms)}
         </span>
-
-        {/* Expand arrow */}
         <span className="shrink-0 text-[10px] text-text-tertiary">
           {isExpanded ? "\u25B2" : "\u25BC"}
         </span>
       </div>
 
-      {/* Summary line (always visible) */}
       <div className="mt-1 truncate text-[11px] text-text-secondary">
         {entry.input_summary}
       </div>
 
-      {/* Expanded details */}
       {isExpanded && (
         <div className="mt-2 space-y-1.5 rounded-md bg-surface-overlay p-2">
           <div>
@@ -196,42 +209,84 @@ function TraceEntryCard({
 }
 
 /* ------------------------------------------------------------------ */
-/*  Task trace section                                                 */
+/*  Log entry component                                                */
 /* ------------------------------------------------------------------ */
 
-function TaskTraceSection({
+function LogEntry({
+  ts,
+  level,
+  message,
+}: {
+  ts: string;
+  level: "info" | "error" | "warn";
+  message: string;
+}) {
+  return (
+    <div className="flex items-start gap-3 border-b border-border/50 px-1 py-2 last:border-b-0">
+      <span className="shrink-0 font-mono text-[10px] text-text-tertiary">
+        {new Date(ts).toLocaleTimeString()}
+      </span>
+      <span
+        className={`shrink-0 rounded-sm px-1 py-0.5 font-mono text-[9px] font-medium uppercase ${
+          level === "error"
+            ? "bg-error/10 text-error"
+            : level === "warn"
+              ? "bg-accent/10 text-accent"
+              : "bg-surface-overlay text-text-tertiary"
+        }`}
+      >
+        {level}
+      </span>
+      <span className="text-xs leading-relaxed text-text-secondary">
+        {message}
+      </span>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Expandable task result row                                         */
+/* ------------------------------------------------------------------ */
+
+function TaskResultRow({
   result,
   taskName,
   envSlug,
   index,
+  isExpanded,
+  onToggle,
+  runData,
+  shortId,
+  envName,
+  duration,
 }: {
   result: RunResult;
   taskName: string;
   envSlug: string;
   index: number;
+  isExpanded: boolean;
+  onToggle: () => void;
+  runData: { created_at: string; started_at: string | null; completed_at: string | null; model_name: string; status: string; total_tasks: number; completed_tasks: number; mean_score: number | null };
+  shortId: string;
+  envName: string;
+  duration: string;
 }) {
-  const [isOpen, setIsOpen] = useState(false);
   const [expandedEntries, setExpandedEntries] = useState<Set<number>>(
     new Set(),
   );
 
-  /* Build the trace. If the RunResult has real trajectory data, use it.
-     Otherwise, synthesize a realistic trace from the run metadata. */
-  const trace: TraceEntry[] = useMemo(() => {
-    if (result.trajectory.length > 0) {
-      return result.trajectory as TraceEntry[];
-    }
-    const taskSlug =
-      result.task_id.split("-").slice(1).join("-") || result.task_id;
-    return synthesizeTrace(
-      taskSlug,
-      envSlug,
-      result.raw_score,
-      result.steps_used,
-      result.duration_ms,
-      result.error,
-    );
-  }, [result, envSlug]);
+  const trace: TraceEntry[] = useMemo(
+    () => buildTrace(result, envSlug),
+    [result, envSlug],
+  );
+
+  const toolCallCount = useMemo(
+    () => trace.filter((e) => e.action === "tool_call").length,
+    [trace],
+  );
+
+  const successfulSteps = trace.filter((e) => e.success).length;
+  const toolCalls = trace.filter((e) => e.action === "tool_call");
 
   const toggleEntry = (idx: number) => {
     setExpandedEntries((prev) => {
@@ -245,96 +300,143 @@ function TaskTraceSection({
     });
   };
 
-  const toolCalls = trace.filter((e) => e.action === "tool_call");
-  const successfulSteps = trace.filter((e) => e.success).length;
-
   return (
     <div className="rounded-md border border-border bg-surface">
-      {/* Header (always visible, click to expand) */}
+      {/* Collapsed row header */}
       <button
         type="button"
-        onClick={() => setIsOpen(!isOpen)}
-        className="flex w-full items-center justify-between px-3 py-2.5 text-left transition-colors hover:bg-surface-overlay"
+        onClick={onToggle}
+        className={clsx(
+          "flex w-full items-center justify-between px-3 py-2.5 text-left transition-colors hover:bg-surface-overlay",
+          isExpanded && "bg-surface-overlay",
+        )}
       >
         <div className="flex items-center gap-2">
+          {isExpanded ? (
+            <PiCaretDown className="h-3.5 w-3.5 shrink-0 text-text-tertiary" />
+          ) : (
+            <PiCaretRight className="h-3.5 w-3.5 shrink-0 text-text-tertiary" />
+          )}
           <span className="rounded-sm bg-surface-overlay px-1.5 py-0.5 font-mono text-[10px] text-text-tertiary">
             #{index + 1}
           </span>
           <span className="text-xs font-medium text-text-primary">
             {taskName}
           </span>
-          <span className="rounded-sm bg-surface-overlay px-1.5 py-0.5 text-[10px] text-text-tertiary">
-            {trace.length} actions
-          </span>
-          <span className="rounded-sm bg-surface-overlay px-1.5 py-0.5 text-[10px] text-text-tertiary">
-            {toolCalls.length} tool calls
-          </span>
-        </div>
-        <div className="flex items-center gap-3">
-          <span className="font-mono text-[11px] text-text-secondary">
-            {result.raw_score.toFixed(3)} &rarr;{" "}
-            <span className="text-accent">
-              {result.calibrated_score.toFixed(3)}
+          {result.error && (
+            <span className="rounded-sm bg-error/10 px-1.5 py-0.5 text-[10px] font-medium text-error">
+              Error
             </span>
+          )}
+        </div>
+        <div className="flex items-center gap-4">
+          <span className="font-mono text-[11px] text-accent">
+            {result.calibrated_score.toFixed(3)}
           </span>
           <span className="text-[11px] text-text-tertiary">
-            {result.steps_used} steps &middot;{" "}
-            {formatDuration(result.duration_ms)}
+            {toolCallCount} tool call{toolCallCount !== 1 ? "s" : ""}
           </span>
-          <span className="text-[10px] text-text-tertiary">
-            {isOpen ? "\u25B2" : "\u25BC"}
+          <span className="text-[11px] text-text-tertiary">
+            {formatDuration(result.duration_ms)}
           </span>
         </div>
       </button>
 
-      {/* Expanded trace */}
-      {isOpen && (
-        <div className="border-t border-border/50 px-3 py-3">
-          {/* Summary strip */}
-          <div className="mb-3 flex items-center gap-4 rounded-md bg-background px-3 py-2">
-            <div className="text-[10px] text-text-tertiary">
-              <span className="font-medium text-text-secondary">
-                {trace.length}
-              </span>{" "}
-              trace entries
-            </div>
-            <div className="text-[10px] text-text-tertiary">
-              <span className="font-medium text-success">
-                {successfulSteps}
-              </span>{" "}
-              succeeded
-            </div>
-            <div className="text-[10px] text-text-tertiary">
-              <span className="font-medium text-error">
-                {trace.length - successfulSteps}
-              </span>{" "}
-              failed
-            </div>
-            <div className="text-[10px] text-text-tertiary">
-              Tools:{" "}
-              <span className="font-mono text-text-secondary">
-                {[...new Set(toolCalls.map((t) => t.tool))].join(", ") ||
-                  "none"}
-              </span>
-            </div>
-          </div>
-
+      {/* Expanded content */}
+      {isExpanded && (
+        <div className="border-t border-border/50 px-3 py-3 space-y-4">
+          {/* Error banner */}
           {result.error && (
-            <div className="mb-3 rounded-md border border-error/20 bg-error/5 px-3 py-2 text-[11px] text-error">
+            <div className="rounded-md border border-error/20 bg-error/5 px-3 py-2 text-[11px] text-error">
               Error: {result.error}
             </div>
           )}
 
-          {/* Trace entries */}
-          <div className="space-y-1.5">
-            {trace.map((entry, i) => (
-              <TraceEntryCard
-                key={`${entry.step}-${i}`}
-                entry={entry}
-                isExpanded={expandedEntries.has(i)}
-                onToggle={() => toggleEntry(i)}
-              />
-            ))}
+          {/* Agent Traces section */}
+          <div>
+            <div className="mb-2 text-[10px] font-medium uppercase tracking-wider text-text-tertiary">
+              Agent Traces
+            </div>
+
+            {/* Summary strip */}
+            <div className="mb-3 flex items-center gap-4 rounded-md bg-background px-3 py-2">
+              <div className="text-[10px] text-text-tertiary">
+                <span className="font-medium text-text-secondary">
+                  {trace.length}
+                </span>{" "}
+                trace entries
+              </div>
+              <div className="text-[10px] text-text-tertiary">
+                <span className="font-medium text-success">
+                  {successfulSteps}
+                </span>{" "}
+                succeeded
+              </div>
+              <div className="text-[10px] text-text-tertiary">
+                <span className="font-medium text-error">
+                  {trace.length - successfulSteps}
+                </span>{" "}
+                failed
+              </div>
+              <div className="text-[10px] text-text-tertiary">
+                Tools:{" "}
+                <span className="font-mono text-text-secondary">
+                  {[...new Set(toolCalls.map((t) => t.tool))].join(", ") ||
+                    "none"}
+                </span>
+              </div>
+            </div>
+
+            {/* Trace entries */}
+            <div className="space-y-1.5">
+              {trace.map((entry, i) => (
+                <TraceEntryCard
+                  key={`${entry.step}-${i}`}
+                  entry={entry}
+                  isExpanded={expandedEntries.has(i)}
+                  onToggle={() => toggleEntry(i)}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Run Logs section */}
+          <div>
+            <div className="mb-2 text-[10px] font-medium uppercase tracking-wider text-text-tertiary">
+              Run Logs
+            </div>
+            <div className="rounded-md border border-border/50 bg-background">
+              <div className="space-y-0">
+                <LogEntry
+                  ts={runData.created_at}
+                  level="info"
+                  message={`Run ${shortId} created \u2014 ${runData.model_name} targeting ${envName}`}
+                />
+                {runData.started_at && (
+                  <LogEntry
+                    ts={runData.started_at}
+                    level="info"
+                    message={`Execution started \u2014 ${runData.total_tasks} tasks queued`}
+                  />
+                )}
+                <LogEntry
+                  ts={result.created_at}
+                  level={result.error ? "error" : "info"}
+                  message={
+                    result.error
+                      ? `Task "${taskName}" failed \u2014 ${result.error}`
+                      : `Task "${taskName}" completed \u2014 score ${result.calibrated_score.toFixed(3)}, ${formatDuration(result.duration_ms)}`
+                  }
+                />
+                {runData.completed_at && (
+                  <LogEntry
+                    ts={runData.completed_at}
+                    level={runData.status === "failed" ? "error" : "info"}
+                    message={`Run ${runData.status} \u2014 ${runData.completed_tasks}/${runData.total_tasks} tasks, mean score ${runData.mean_score?.toFixed(3) ?? "n/a"}, wall time ${duration}`}
+                  />
+                )}
+              </div>
+            </div>
           </div>
         </div>
       )}
@@ -346,17 +448,18 @@ function TaskTraceSection({
 /*  Page                                                               */
 /* ------------------------------------------------------------------ */
 
-type DetailTab = "results" | "traces" | "logs";
-
 export default function RunDetailPage() {
   const routeParams = useParams();
   const id = routeParams.id as string;
-  const [activeTab, setActiveTab] = useState<DetailTab>("results");
 
   const run = useRun(id);
   const results = useRunResults(id);
   const environments = useEnvironments();
   const tasks = useTasks();
+
+  const [expandedResultId, setExpandedResultId] = useState<string | null>(
+    null,
+  );
 
   const isPending =
     run.isPending ||
@@ -403,72 +506,11 @@ export default function RunDetailPage() {
     runData.started_at,
     runData.completed_at,
   );
-  const toolUsage = deriveToolUseSummary(resultList);
+  const toolUsage = deriveToolUseSummary(resultList, envSlug);
 
-  const resultColumns: Column<RunResult>[] = [
-    {
-      key: "task",
-      header: "Task",
-      render: (r) => (
-        <span className="text-xs font-medium text-text-primary">
-          {taskMap.get(r.task_id) ?? r.task_id.slice(0, 8)}
-        </span>
-      ),
-    },
-    {
-      key: "raw_score",
-      header: "Raw Score",
-      render: (r) => (
-        <span className="font-mono text-xs text-text-primary">
-          {r.raw_score.toFixed(3)}
-        </span>
-      ),
-    },
-    {
-      key: "calibrated_score",
-      header: "Calibrated Score",
-      render: (r) => (
-        <span className="font-mono text-xs text-accent">
-          {r.calibrated_score.toFixed(3)}
-        </span>
-      ),
-    },
-    {
-      key: "steps_used",
-      header: "Steps",
-      render: (r) => (
-        <span className="font-mono text-xs text-text-secondary">
-          {r.steps_used}/{r.max_steps}
-        </span>
-      ),
-    },
-    {
-      key: "duration",
-      header: "Duration",
-      render: (r) => (
-        <span className="text-xs text-text-secondary">
-          {formatDuration(r.duration_ms)}
-        </span>
-      ),
-    },
-    {
-      key: "error",
-      header: "Error",
-      className: "max-w-[200px]",
-      render: (r) =>
-        r.error ? (
-          <span className="block truncate text-xs text-error">{r.error}</span>
-        ) : (
-          <span className="text-xs text-text-tertiary">{"\u2014"}</span>
-        ),
-    },
-  ];
-
-  const tabs: { key: DetailTab; label: string }[] = [
-    { key: "results", label: "Task Results" },
-    { key: "traces", label: "Agent Traces" },
-    { key: "logs", label: "Run Logs" },
-  ];
+  const toggleResult = (resultId: string) => {
+    setExpandedResultId((prev) => (prev === resultId ? null : resultId));
+  };
 
   return (
     <>
@@ -509,38 +551,27 @@ export default function RunDetailPage() {
         <MetricCard label="Wall Time" value={duration} />
       </div>
 
-      {/* Tool-use summary strip */}
+      {/* Tool Usage Summary */}
       {resultList.length > 0 && (
         <Card className="mb-6">
           <CardHeader>
             <CardTitle>Tool Usage Summary</CardTitle>
           </CardHeader>
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+          <div className="grid grid-cols-3 gap-4">
             <div>
               <div className="text-[11px] font-medium uppercase tracking-wider text-text-tertiary">
-                Total Steps
+                Total Tool Calls
               </div>
               <div className="mt-0.5 font-mono text-lg text-text-primary">
-                {toolUsage.totalSteps}
+                {toolUsage.totalToolCalls}
               </div>
             </div>
             <div>
               <div className="text-[11px] font-medium uppercase tracking-wider text-text-tertiary">
-                Avg Steps / Task
+                Avg Tool Calls / Task
               </div>
               <div className="mt-0.5 font-mono text-lg text-text-primary">
-                {toolUsage.avgSteps}
-              </div>
-            </div>
-            <div>
-              <div className="text-[11px] font-medium uppercase tracking-wider text-text-tertiary">
-                Step Efficiency
-              </div>
-              <div className="mt-0.5 font-mono text-lg text-text-primary">
-                {toolUsage.efficiency}%
-              </div>
-              <div className="text-[10px] text-text-tertiary">
-                of max budget used
+                {toolUsage.avgToolCalls}
               </div>
             </div>
             <div>
@@ -558,162 +589,43 @@ export default function RunDetailPage() {
         </Card>
       )}
 
-      {/* Tab navigation */}
-      <div className="mb-4 flex items-center gap-1 border-b border-border">
-        {tabs.map((tab) => (
-          <button
-            key={tab.key}
-            onClick={() => setActiveTab(tab.key)}
-            className={`px-3 py-2 text-xs font-medium transition-colors ${
-              activeTab === tab.key
-                ? "border-b-2 border-accent text-accent"
-                : "text-text-tertiary hover:text-text-primary"
-            }`}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
-
-      {/* Tab content */}
-      {activeTab === "results" && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Per-Task Results</CardTitle>
-            <span className="text-[11px] text-text-tertiary">
-              {resultList.length} result{resultList.length !== 1 ? "s" : ""}
-            </span>
-          </CardHeader>
-          <DataTable
-            columns={resultColumns}
-            data={resultList}
-            emptyMessage="No results recorded for this run yet"
-          />
-        </Card>
-      )}
-
-      {activeTab === "traces" && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Agent Traces</CardTitle>
-            <span className="text-[11px] text-text-tertiary">
-              Step-by-step agent actions and tool calls &mdash; click a task to
-              expand its full trace
-            </span>
-          </CardHeader>
-          {resultList.length > 0 ? (
-            <div className="space-y-2">
-              {resultList.map((r, i) => {
-                const taskName =
-                  taskMap.get(r.task_id) ?? r.task_id.slice(0, 8);
-                return (
-                  <TaskTraceSection
-                    key={r.id}
-                    result={r}
-                    taskName={taskName}
-                    envSlug={envSlug}
-                    index={i}
-                  />
-                );
-              })}
-            </div>
-          ) : (
-            <div className="py-8 text-center text-xs text-text-tertiary">
-              No trace data available &mdash; traces are recorded as tasks
-              execute.
-            </div>
-          )}
-        </Card>
-      )}
-
-      {activeTab === "logs" && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Run Logs</CardTitle>
-            <span className="text-[11px] text-text-tertiary">
-              Execution timeline and system events
-            </span>
-          </CardHeader>
-          <div className="space-y-0">
-            <LogEntry
-              ts={runData.created_at}
-              level="info"
-              message={`Run ${shortId} created \u2014 ${runData.model_name} targeting ${envName}`}
-            />
-            {runData.started_at && (
-              <LogEntry
-                ts={runData.started_at}
-                level="info"
-                message={`Execution started \u2014 ${runData.total_tasks} tasks queued`}
-              />
-            )}
-            {resultList.map((r) => {
+      {/* Task Results — unified expandable list */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Task Results</CardTitle>
+          <span className="text-[11px] text-text-tertiary">
+            {resultList.length} result{resultList.length !== 1 ? "s" : ""}{" "}
+            &mdash; click a task to expand traces and logs
+          </span>
+        </CardHeader>
+        {resultList.length > 0 ? (
+          <div className="space-y-2">
+            {resultList.map((r, i) => {
               const taskName =
                 taskMap.get(r.task_id) ?? r.task_id.slice(0, 8);
               return (
-                <LogEntry
+                <TaskResultRow
                   key={r.id}
-                  ts={r.created_at}
-                  level={r.error ? "error" : "info"}
-                  message={
-                    r.error
-                      ? `Task "${taskName}" failed \u2014 ${r.error}`
-                      : `Task "${taskName}" completed \u2014 score ${r.calibrated_score.toFixed(3)}, ${r.steps_used} steps, ${formatDuration(r.duration_ms)}`
-                  }
+                  result={r}
+                  taskName={taskName}
+                  envSlug={envSlug}
+                  index={i}
+                  isExpanded={expandedResultId === r.id}
+                  onToggle={() => toggleResult(r.id)}
+                  runData={runData}
+                  shortId={shortId}
+                  envName={envName}
+                  duration={duration}
                 />
               );
             })}
-            {runData.completed_at && (
-              <LogEntry
-                ts={runData.completed_at}
-                level={runData.status === "failed" ? "error" : "info"}
-                message={`Run ${runData.status} \u2014 ${runData.completed_tasks}/${runData.total_tasks} tasks, mean score ${runData.mean_score?.toFixed(3) ?? "n/a"}, wall time ${duration}`}
-              />
-            )}
-            {!runData.started_at && (
-              <div className="py-6 text-center text-xs text-text-tertiary">
-                Run is pending &mdash; logs will stream once execution begins.
-              </div>
-            )}
           </div>
-        </Card>
-      )}
+        ) : (
+          <div className="py-8 text-center text-xs text-text-tertiary">
+            No results recorded for this run yet.
+          </div>
+        )}
+      </Card>
     </>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/*  Log entry component                                                */
-/* ------------------------------------------------------------------ */
-
-function LogEntry({
-  ts,
-  level,
-  message,
-}: {
-  ts: string;
-  level: "info" | "error" | "warn";
-  message: string;
-}) {
-  return (
-    <div className="flex items-start gap-3 border-b border-border/50 px-1 py-2 last:border-b-0">
-      <span className="shrink-0 font-mono text-[10px] text-text-tertiary">
-        {new Date(ts).toLocaleTimeString()}
-      </span>
-      <span
-        className={`shrink-0 rounded-sm px-1 py-0.5 font-mono text-[9px] font-medium uppercase ${
-          level === "error"
-            ? "bg-error/10 text-error"
-            : level === "warn"
-              ? "bg-accent/10 text-accent"
-              : "bg-surface-overlay text-text-tertiary"
-        }`}
-      >
-        {level}
-      </span>
-      <span className="text-xs leading-relaxed text-text-secondary">
-        {message}
-      </span>
-    </div>
   );
 }
