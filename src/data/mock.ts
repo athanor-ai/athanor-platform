@@ -148,8 +148,8 @@ export const mockEnvironmentVersions: EnvironmentVersion[] = [
     environment_id: "env-protein",
     version_tag: "v1.0.0",
     changelog:
-      "20 protein synthesis & computational neuroscience tasks: protein folding, neural circuits, gene regulatory networks, pharmacokinetics, population genetics, connectomics",
-    docker_image: "athanor/protein-synthesis:1.0.0",
+      "25 computational biology tasks: protein dynamics, neural circuits, gene regulatory networks, systems biology, population genetics, connectomics, neuro-symbolic proofs",
+    docker_image: "athanor/computational-biology:1.0.0",
     status: "published",
     published_at: dayAgo,
     created_at: dayAgo,
@@ -158,7 +158,7 @@ export const mockEnvironmentVersions: EnvironmentVersion[] = [
 ];
 
 /* ------------------------------------------------------------------ */
-/*  Tasks — real 174 tasks from the 7 Athanor repos                    */
+/*  Tasks — real 179 tasks from the 7 Athanor repos                    */
 /* ------------------------------------------------------------------ */
 
 export const mockTasks: Task[] = realTasks;
@@ -290,7 +290,7 @@ export const mockDocsPages: DocsPage[] = [
     slug: "environments-overview",
     title: "Environments Overview",
     content:
-      "Tahoe connects to six core Athanor environments with 154 total tasks: Lean Theorem Proving (30), Cedar Policy Verification (20), Distributed Consensus (26), Congestion Control (24), C-to-Rust (28), and Hardware Verification EBMC (26). Each environment is tested against 5 models with 3 runs each.",
+      "Tahoe connects to seven core Athanor environments with 179 total tasks: Lean Theorem Proving (30), Cedar Policy Verification (20), Distributed Consensus (26), Congestion Control (24), C-to-Rust (28), Hardware Verification EBMC (26), and Computational Biology (25). Each environment is tested against 5 models with 3 runs each.",
     category: "concepts",
     sort_order: 1,
     created_at: weekAgo,
