@@ -107,13 +107,14 @@ export async function POST(request: NextRequest) {
   const envGranted: string[] = [];
   const envErrors: string[] = [];
 
-  // Resolve slugs to IDs in a single batch query
+  // Resolve slugs to IDs in a single batch query (scoped to active environments)
   const envIds = [...(environmentIds || [])];
   if (environmentSlugs?.length) {
     const { data: matchedEnvs, error: envLookupError } = await supabase
       .from("environments")
       .select("id, slug")
-      .in("slug", environmentSlugs);
+      .in("slug", environmentSlugs)
+      .eq("status", "active");
 
     if (envLookupError) {
       envErrors.push(`Slug lookup failed: ${envLookupError.message}`);
@@ -121,10 +122,21 @@ export async function POST(request: NextRequest) {
       for (const env of matchedEnvs) {
         envIds.push(env.id);
       }
+      // Warn about any slugs that didn't resolve
+      if (matchedEnvs.length !== environmentSlugs.length) {
+        const foundSlugs = new Set(matchedEnvs.map((e: { slug: string }) => e.slug));
+        const missing = environmentSlugs.filter((s: string) => !foundSlugs.has(s));
+        if (missing.length > 0) {
+          envErrors.push(`Slugs not found: ${missing.join(", ")}`);
+        }
+      }
     }
   }
 
-  for (const envId of envIds) {
+  // Deduplicate in case both IDs and slugs resolve to the same environment
+  const uniqueEnvIds = [...new Set(envIds)];
+
+  for (const envId of uniqueEnvIds) {
     const { error } = await supabase
       .from("organization_environments")
       .insert({
