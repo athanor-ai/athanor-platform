@@ -1,9 +1,9 @@
 /**
  * GET /api/cron — VM safety watchdog endpoint for external cron services.
  *
- * Call every 30 minutes from Vercel Cron, Azure Logic Apps, or a simple
- * curl cron job. If the VM is idle or has exceeded the 6-hour uptime limit,
- * it gets deallocated automatically.
+ * Runs once daily via Vercel Cron (Hobby plan limit). Can also be called
+ * from Azure Logic Apps or a simple curl cron job. If the VM is idle or
+ * has exceeded the 6-hour uptime limit, it gets deallocated automatically.
  *
  * Auth: Bearer token from CRON_SECRET env var (not user auth).
  * Vercel Cron sends this automatically via the Authorization header.
