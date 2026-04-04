@@ -20,7 +20,7 @@ const ENV_MAP: Record<string, { dir: string; slug: string }> = {
   "congestion-control": { dir: "congestion-control", slug: "congestion-control" },
   "distributed-consensus": { dir: "distributed-consensus", slug: "distributed-consensus" },
   "cedar-env": { dir: "cedar-env", slug: "cedar-policy-verification" },
-  "computational-biology": { dir: "computational-biology", slug: "protein-synthesis" },
+  "computational-biology": { dir: "computational-biology", slug: "computational-biology" },
 };
 
 const MODEL_ORDER = [

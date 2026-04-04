@@ -1,5 +1,5 @@
 -- =============================================================================
--- Seed data: Athanor internal org + 7 environments + 174 tasks
+-- Seed data: Athanor internal org + 7 environments + 179 tasks
 -- Run after migrations: psql < supabase/seed.sql
 -- =============================================================================
 
@@ -16,7 +16,7 @@ INSERT INTO environments (id, organization_id, name, slug, engine, status, confi
   ('00000000-0000-0000-0000-000000000013', '00000000-0000-0000-0000-000000000001', 'Network Protocols',          'congestion-control',      'network-sim','active', '{"tasks": 24, "repo": "athanor-ai/congestion-control"}'),
   ('00000000-0000-0000-0000-000000000014', '00000000-0000-0000-0000-000000000001', 'Distributed Consensus',      'distributed-consensus',   'go-test',    'active', '{"tasks": 26, "repo": "athanor-ai/distributed-consensus"}'),
   ('00000000-0000-0000-0000-000000000015', '00000000-0000-0000-0000-000000000001', 'Authorization Policies',     'cedar-policy-verification','cedar-cli', 'active', '{"tasks": 20, "repo": "athanor-ai/cedar-policy-verification"}'),
-  ('00000000-0000-0000-0000-000000000016', '00000000-0000-0000-0000-000000000001', 'Protein Synthesis & Computational Neuroscience', 'protein-synthesis', 'python-sci', 'active', '{"tasks": 20, "repo": "athanor-ai/protein-synthesis"}')
+  ('00000000-0000-0000-0000-000000000016', '00000000-0000-0000-0000-000000000001', 'Computational Biology', 'computational-biology', 'python-sci', 'active', '{"tasks": 25, "repo": "athanor-ai/computational-biology"}')
 ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name, slug = EXCLUDED.slug, config = EXCLUDED.config;
 
 -- Internal org has access to all environments
@@ -38,5 +38,5 @@ INSERT INTO environment_versions (id, environment_id, version_tag, changelog, do
   ('00000000-0000-0000-0000-000000000023', '00000000-0000-0000-0000-000000000013', '1.0.0', 'Initial release: 24 tasks, 5-model baselines', 'athanor/congestion-control:1.0.0',      'active'),
   ('00000000-0000-0000-0000-000000000024', '00000000-0000-0000-0000-000000000014', '1.0.0', 'Initial release: 26 tasks, 5-model baselines', 'athanor/distributed-consensus:1.0.0',   'active'),
   ('00000000-0000-0000-0000-000000000025', '00000000-0000-0000-0000-000000000015', '1.0.0', 'Initial release: 20 tasks, 5-model baselines', 'athanor/cedar-policy-verification:1.0.0','active'),
-  ('00000000-0000-0000-0000-000000000026', '00000000-0000-0000-0000-000000000016', '1.0.0', 'Initial release: protein synthesis & computational neuroscience', 'athanor/protein-synthesis:1.0.0','active')
+  ('00000000-0000-0000-0000-000000000026', '00000000-0000-0000-0000-000000000016', '1.0.0', 'Initial release: 25 tasks, 5-model baselines', 'athanor/computational-biology:1.0.0','active')
 ON CONFLICT (id) DO NOTHING;

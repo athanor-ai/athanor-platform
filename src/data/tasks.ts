@@ -6,7 +6,7 @@
  * Difficulty inferred from Claude Sonnet 4.6 run-1 scores.
  * Categories derived from task-name prefix patterns + repo conventions.
  *
- * Total: 174 tasks across 7 environments.
+ * Total: 179 tasks across 7 environments.
  */
 
 import type { Task } from "@/types/database";
@@ -15,7 +15,7 @@ const now = new Date().toISOString();
 const weekAgo = new Date(Date.now() - 604800000).toISOString();
 
 /**
- * All 174 real tasks sourced from Athanor environment repos.
+ * All 179 real tasks sourced from Athanor environment repos.
  */
 export const realTasks: Task[] = [
   {
@@ -31,7 +31,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/lean-theorem-proving/blob/main/src/environment/tasks/ackermann_level3/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/lean-theorem-proving/ackermann-level3",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -48,7 +48,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/lean-theorem-proving/blob/main/src/environment/tasks/binary_search/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/lean-theorem-proving/binary-search",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -65,7 +65,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/lean-theorem-proving/blob/main/src/environment/tasks/church_rosser/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/lean-theorem-proving/church-rosser",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -82,7 +82,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/lean-theorem-proving/blob/main/src/environment/tasks/compiler_correctness/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/lean-theorem-proving/compiler-correctness",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -99,7 +99,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/lean-theorem-proving/blob/main/src/environment/tasks/fib_add_formula/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/lean-theorem-proving/fib-add-formula",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -116,7 +116,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/lean-theorem-proving/blob/main/src/environment/tasks/first_duplicate/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/lean-theorem-proving/first-duplicate",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -133,7 +133,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/lean-theorem-proving/blob/main/src/environment/tasks/fix_proof_errors/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/lean-theorem-proving/fix-proof-errors",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -150,7 +150,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/lean-theorem-proving/blob/main/src/environment/tasks/fix_wrong_lemma/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/lean-theorem-proving/fix-wrong-lemma",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -167,7 +167,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/lean-theorem-proving/blob/main/src/environment/tasks/increasing_triplet/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/lean-theorem-proving/increasing-triplet",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -184,7 +184,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/lean-theorem-proving/blob/main/src/environment/tasks/last_digit_squares/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/lean-theorem-proving/last-digit-squares",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -201,7 +201,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/lean-theorem-proving/blob/main/src/environment/tasks/list_advanced/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/lean-theorem-proving/list-advanced",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -218,7 +218,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/lean-theorem-proving/blob/main/src/environment/tasks/list_filter/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/lean-theorem-proving/list-filter",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -235,7 +235,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/lean-theorem-proving/blob/main/src/environment/tasks/longest_streak/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/lean-theorem-proving/longest-streak",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -252,7 +252,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/lean-theorem-proving/blob/main/src/environment/tasks/majority_element/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/lean-theorem-proving/majority-element",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -269,7 +269,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/lean-theorem-proving/blob/main/src/environment/tasks/max_subarray/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/lean-theorem-proving/max-subarray",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -286,7 +286,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/lean-theorem-proving/blob/main/src/environment/tasks/merge_sorted/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/lean-theorem-proving/merge-sorted",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -303,7 +303,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/lean-theorem-proving/blob/main/src/environment/tasks/nat_arith_combined/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/lean-theorem-proving/nat-arith-combined",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -320,7 +320,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/lean-theorem-proving/blob/main/src/environment/tasks/nat_divisibility/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/lean-theorem-proving/nat-divisibility",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -337,7 +337,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/lean-theorem-proving/blob/main/src/environment/tasks/nat_induction_hard/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/lean-theorem-proving/nat-induction-hard",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -354,7 +354,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/lean-theorem-proving/blob/main/src/environment/tasks/partition_evens_odds/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/lean-theorem-proving/partition-evens-odds",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -371,7 +371,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/lean-theorem-proving/blob/main/src/environment/tasks/prime_factor_exists/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/lean-theorem-proving/prime-factor-exists",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -388,7 +388,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/lean-theorem-proving/blob/main/src/environment/tasks/pythagorean_div3/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/lean-theorem-proving/pythagorean-div3",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -405,7 +405,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/lean-theorem-proving/blob/main/src/environment/tasks/red_black_invariant/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/lean-theorem-proving/red-black-invariant",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -422,7 +422,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/lean-theorem-proving/blob/main/src/environment/tasks/regex_derivative/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/lean-theorem-proving/regex-derivative",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -439,7 +439,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/lean-theorem-proving/blob/main/src/environment/tasks/sqrt2_irrational/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/lean-theorem-proving/sqrt2-irrational",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -456,7 +456,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/lean-theorem-proving/blob/main/src/environment/tasks/sqrt3_irrational/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/lean-theorem-proving/sqrt3-irrational",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -473,7 +473,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/lean-theorem-proving/blob/main/src/environment/tasks/squares_mod_arith/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/lean-theorem-proving/squares-mod-arith",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -490,7 +490,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/lean-theorem-proving/blob/main/src/environment/tasks/stock_profit/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/lean-theorem-proving/stock-profit",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -507,7 +507,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/lean-theorem-proving/blob/main/src/environment/tasks/two_sum/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/lean-theorem-proving/two-sum",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -524,7 +524,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/lean-theorem-proving/blob/main/src/environment/tasks/well_founded_order/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/lean-theorem-proving/well-founded-order",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -541,7 +541,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/cedar-policy-verification/blob/main/src/environment/tasks/adversarial_policy_audit/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/cedar-policy-verification/adversarial_policy_audit",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -558,7 +558,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/cedar-policy-verification/blob/main/src/environment/tasks/debug_healthcare_records/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/cedar-policy-verification/debug_healthcare_records",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -575,7 +575,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/cedar-policy-verification/blob/main/src/environment/tasks/debug_multi_tenant_authorization/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/cedar-policy-verification/debug_multi_tenant_authorization",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -592,7 +592,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/cedar-policy-verification/blob/main/src/environment/tasks/debug_recursive_hierarchy_access/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/cedar-policy-verification/debug_recursive_hierarchy_access",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -609,7 +609,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/cedar-policy-verification/blob/main/src/environment/tasks/find_authorization_bypass/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/cedar-policy-verification/find_authorization_bypass",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -626,7 +626,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/cedar-policy-verification/blob/main/src/environment/tasks/fix_action_group_conflicts/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/cedar-policy-verification/fix_action_group_conflicts",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -643,7 +643,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/cedar-policy-verification/blob/main/src/environment/tasks/fix_ip_time_geo_policies/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/cedar-policy-verification/fix_ip_time_geo_policies",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -660,7 +660,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/cedar-policy-verification/blob/main/src/environment/tasks/fix_photo_sharing_bugs/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/cedar-policy-verification/fix_photo_sharing_bugs",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -677,7 +677,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/cedar-policy-verification/blob/main/src/environment/tasks/fix_schema_type_errors/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/cedar-policy-verification/fix_schema_type_errors",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -694,7 +694,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/cedar-policy-verification/blob/main/src/environment/tasks/fix_scope_and_condition_bugs/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/cedar-policy-verification/fix_scope_and_condition_bugs",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -711,7 +711,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/cedar-policy-verification/blob/main/src/environment/tasks/fix_template_instantiation_bugs/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/cedar-policy-verification/fix_template_instantiation_bugs",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -728,7 +728,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/cedar-policy-verification/blob/main/src/environment/tasks/fix_unsafe_attribute_access/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/cedar-policy-verification/fix_unsafe_attribute_access",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -745,7 +745,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/cedar-policy-verification/blob/main/src/environment/tasks/full_hospital_authorization_system/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/cedar-policy-verification/full_hospital_authorization_system",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -762,7 +762,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/cedar-policy-verification/blob/main/src/environment/tasks/implement_and_verify_refactoring/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/cedar-policy-verification/implement_and_verify_refactoring",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -779,7 +779,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/cedar-policy-verification/blob/main/src/environment/tasks/policy_equivalence_analysis/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/cedar-policy-verification/policy_equivalence_analysis",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -796,7 +796,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/cedar-policy-verification/blob/main/src/environment/tasks/prove_emergency_override_safety/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/cedar-policy-verification/prove_emergency_override_safety",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -813,7 +813,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/cedar-policy-verification/blob/main/src/environment/tasks/prove_forbid_overrides_permit/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/cedar-policy-verification/prove_forbid_overrides_permit",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -830,7 +830,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/cedar-policy-verification/blob/main/src/environment/tasks/prove_policy_slicing_soundness/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/cedar-policy-verification/prove_policy_slicing_soundness",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -847,7 +847,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/cedar-policy-verification/blob/main/src/environment/tasks/prove_schema_validation_soundness/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/cedar-policy-verification/prove_schema_validation_soundness",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -864,7 +864,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/cedar-policy-verification/blob/main/src/environment/tasks/schema_evolution_migration/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/cedar-policy-verification/schema_evolution_migration",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -881,7 +881,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/distributed-consensus/blob/main/src/environment/tasks/fix_consistent_hash_replication/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/distributed-consensus/fix_consistent_hash_replication",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -898,7 +898,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/distributed-consensus/blob/main/src/environment/tasks/fix_distributed_lock/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/distributed-consensus/fix_distributed_lock",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -915,7 +915,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/distributed-consensus/blob/main/src/environment/tasks/fix_distributed_snapshot/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/distributed-consensus/fix_distributed_snapshot",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -932,7 +932,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/distributed-consensus/blob/main/src/environment/tasks/fix_raft_safety/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/distributed-consensus/fix_raft_safety",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -949,7 +949,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/distributed-consensus/blob/main/src/environment/tasks/fix_raft_snapshot_crdt/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/distributed-consensus/fix_raft_snapshot_crdt",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -966,7 +966,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/distributed-consensus/blob/main/src/environment/tasks/fix_snapshot_replication/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/distributed-consensus/fix_snapshot_replication",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -983,7 +983,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/distributed-consensus/blob/main/src/environment/tasks/fix_txn_coordinator/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/distributed-consensus/fix_txn_coordinator",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1000,7 +1000,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/distributed-consensus/blob/main/src/environment/tasks/hybrid_clock/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/distributed-consensus/hybrid_clock",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1017,7 +1017,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/distributed-consensus/blob/main/src/environment/tasks/implement_bft_kv_store/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/distributed-consensus/implement_bft_kv_store",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1034,7 +1034,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/distributed-consensus/blob/main/src/environment/tasks/implement_chain_replication/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/distributed-consensus/implement_chain_replication",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1051,7 +1051,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/distributed-consensus/blob/main/src/environment/tasks/implement_consistent_broadcast/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/distributed-consensus/implement_consistent_broadcast",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1068,7 +1068,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/distributed-consensus/blob/main/src/environment/tasks/implement_crdt_raft/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/distributed-consensus/implement_crdt_raft",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1085,7 +1085,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/distributed-consensus/blob/main/src/environment/tasks/implement_epidemic_broadcast/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/distributed-consensus/implement_epidemic_broadcast",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1102,7 +1102,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/distributed-consensus/blob/main/src/environment/tasks/implement_lsm_compaction/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/distributed-consensus/implement_lsm_compaction",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1119,7 +1119,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/distributed-consensus/blob/main/src/environment/tasks/implement_pbft/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/distributed-consensus/implement_pbft",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1136,7 +1136,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/distributed-consensus/blob/main/src/environment/tasks/implement_raft_log/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/distributed-consensus/implement_raft_log",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1153,7 +1153,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/distributed-consensus/blob/main/src/environment/tasks/implement_read_repair/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/distributed-consensus/implement_read_repair",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1170,7 +1170,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/distributed-consensus/blob/main/src/environment/tasks/implement_shard_migration/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/distributed-consensus/implement_shard_migration",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1187,7 +1187,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/distributed-consensus/blob/main/src/environment/tasks/paxos_prepare/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/distributed-consensus/paxos_prepare",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1204,7 +1204,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/distributed-consensus/blob/main/src/environment/tasks/swim_protocol/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/distributed-consensus/swim_protocol",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1221,7 +1221,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/distributed-consensus/blob/main/src/environment/tasks/twopc_crash/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/distributed-consensus/twopc_crash",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1238,7 +1238,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/distributed-consensus/blob/main/src/environment/tasks/verify_distributed_lock/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/distributed-consensus/verify_distributed_lock",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1255,7 +1255,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/distributed-consensus/blob/main/src/environment/tasks/verify_log_compaction/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/distributed-consensus/verify_log_compaction",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1272,7 +1272,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/distributed-consensus/blob/main/src/environment/tasks/verify_replicated_kv/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/distributed-consensus/verify_replicated_kv",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1289,7 +1289,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/distributed-consensus/blob/main/src/environment/tasks/verify_two_phase_commit/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/distributed-consensus/verify_two_phase_commit",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1306,7 +1306,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/distributed-consensus/blob/main/src/environment/tasks/virtual_nodes/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/distributed-consensus/virtual_nodes",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1323,7 +1323,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/congestion-control/blob/master/src/environment/tasks/fix_aimd/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/congestion-control/fix_aimd",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1340,7 +1340,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/congestion-control/blob/master/src/environment/tasks/fix_competing_flows/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/congestion-control/fix_competing_flows",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1357,7 +1357,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/congestion-control/blob/master/src/environment/tasks/fix_cubic_slow_start/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/congestion-control/fix_cubic_slow_start",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1374,7 +1374,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/congestion-control/blob/master/src/environment/tasks/fix_cubic_units/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/congestion-control/fix_cubic_units",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1391,7 +1391,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/congestion-control/blob/master/src/environment/tasks/fix_fairness_under_competition/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/congestion-control/fix_fairness_under_competition",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1408,7 +1408,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/congestion-control/blob/master/src/environment/tasks/fix_recovery_deadlock/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/congestion-control/fix_recovery_deadlock",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1425,7 +1425,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/congestion-control/blob/master/src/environment/tasks/fix_slow_convergence/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/congestion-control/fix_slow_convergence",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1442,7 +1442,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/congestion-control/blob/master/src/environment/tasks/fix_stale_ssthresh/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/congestion-control/fix_stale_ssthresh",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1459,7 +1459,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/congestion-control/blob/master/src/environment/tasks/fix_three_bugs/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/congestion-control/fix_three_bugs",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1476,7 +1476,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/congestion-control/blob/master/src/environment/tasks/fix_timeout_handling/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/congestion-control/fix_timeout_handling",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1493,7 +1493,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/congestion-control/blob/master/src/environment/tasks/implement_bbr/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/congestion-control/implement_bbr",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1510,7 +1510,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/congestion-control/blob/master/src/environment/tasks/implement_compound/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/congestion-control/implement_compound",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1527,7 +1527,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/congestion-control/blob/master/src/environment/tasks/implement_cubic/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/congestion-control/implement_cubic",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1544,7 +1544,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/congestion-control/blob/master/src/environment/tasks/implement_fast_recovery/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/congestion-control/implement_fast_recovery",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1561,7 +1561,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/congestion-control/blob/master/src/environment/tasks/implement_ledbat/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/congestion-control/implement_ledbat",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1578,7 +1578,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/congestion-control/blob/master/src/environment/tasks/implement_loss_differentiated/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/congestion-control/implement_loss_differentiated",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1595,7 +1595,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/congestion-control/blob/master/src/environment/tasks/implement_mult_decrease/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/congestion-control/implement_mult_decrease",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1612,7 +1612,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/congestion-control/blob/master/src/environment/tasks/implement_pcc/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/congestion-control/implement_pcc",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1629,7 +1629,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/congestion-control/blob/master/src/environment/tasks/implement_vegas/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/congestion-control/implement_vegas",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1646,7 +1646,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/congestion-control/blob/master/src/environment/tasks/implement_westwood/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/congestion-control/implement_westwood",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1663,7 +1663,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/congestion-control/blob/master/src/environment/tasks/tune_high_bdp/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/congestion-control/tune_high_bdp",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1680,7 +1680,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/congestion-control/blob/master/src/environment/tasks/verify_aimd_safety/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/congestion-control/verify_aimd_safety",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1697,7 +1697,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/congestion-control/blob/master/src/environment/tasks/verify_flow_fairness/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/congestion-control/verify_flow_fairness",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1714,7 +1714,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/congestion-control/blob/master/src/environment/tasks/verify_sliding_window/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/congestion-control/verify_sliding_window",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1731,7 +1731,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/c-to-rust/blob/master/src/environment/tasks/csc_col_norm/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/c-to-rust/csc-col-norm",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1748,7 +1748,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/c-to-rust/blob/master/src/environment/tasks/csc_filter/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/c-to-rust/csc-filter",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1765,7 +1765,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/c-to-rust/blob/master/src/environment/tasks/csc_matvec/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/c-to-rust/csc-matvec",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1782,7 +1782,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/c-to-rust/blob/master/src/environment/tasks/csc_nnz/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/c-to-rust/csc-nnz",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1799,7 +1799,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/c-to-rust/blob/master/src/environment/tasks/csparse_cumsum/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/c-to-rust/csparse-cumsum",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1816,7 +1816,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/c-to-rust/blob/master/src/environment/tasks/csparse_dfs/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/c-to-rust/csparse-dfs",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1833,7 +1833,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/c-to-rust/blob/master/src/environment/tasks/csparse_gaxpy/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/c-to-rust/csparse-gaxpy",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1850,7 +1850,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/c-to-rust/blob/master/src/environment/tasks/csparse_ipvec/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/c-to-rust/csparse-ipvec",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1867,7 +1867,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/c-to-rust/blob/master/src/environment/tasks/csparse_lsolve/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/c-to-rust/csparse-lsolve",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1884,7 +1884,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/c-to-rust/blob/master/src/environment/tasks/csparse_lu/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/c-to-rust/csparse-lu",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1901,7 +1901,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/c-to-rust/blob/master/src/environment/tasks/csparse_multiply/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/c-to-rust/csparse-multiply",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1918,7 +1918,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/c-to-rust/blob/master/src/environment/tasks/csparse_norm/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/c-to-rust/csparse-norm",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1935,7 +1935,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/c-to-rust/blob/master/src/environment/tasks/csparse_pvec/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/c-to-rust/csparse-pvec",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1952,7 +1952,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/c-to-rust/blob/master/src/environment/tasks/csparse_reach/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/c-to-rust/csparse-reach",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1969,7 +1969,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/c-to-rust/blob/master/src/environment/tasks/csparse_scatter/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/c-to-rust/csparse-scatter",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -1986,7 +1986,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/c-to-rust/blob/master/src/environment/tasks/csparse_spsolve/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/c-to-rust/csparse-spsolve",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -2003,7 +2003,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/c-to-rust/blob/master/src/environment/tasks/csparse_symperm/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/c-to-rust/csparse-symperm",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -2020,7 +2020,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/c-to-rust/blob/master/src/environment/tasks/csparse_transpose/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/c-to-rust/csparse-transpose",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -2037,7 +2037,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/c-to-rust/blob/master/src/environment/tasks/csparse_usolve/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/c-to-rust/csparse-usolve",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -2054,7 +2054,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/c-to-rust/blob/master/src/environment/tasks/dense_to_csc/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/c-to-rust/dense-to-csc",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -2071,7 +2071,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/c-to-rust/blob/master/src/environment/tasks/mat_diag/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/c-to-rust/mat-diag",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -2088,7 +2088,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/c-to-rust/blob/master/src/environment/tasks/vec_add/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/c-to-rust/vec-add",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -2105,7 +2105,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/c-to-rust/blob/master/src/environment/tasks/vec_dot/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/c-to-rust/vec-dot",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -2122,7 +2122,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/c-to-rust/blob/master/src/environment/tasks/vec_max/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/c-to-rust/vec-max",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -2139,7 +2139,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/c-to-rust/blob/master/src/environment/tasks/vec_scale/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/c-to-rust/vec-scale",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -2156,7 +2156,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/c-to-rust/blob/master/src/environment/tasks/verus_cumsum_proof/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/c-to-rust/verus-cumsum-proof",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -2173,7 +2173,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/c-to-rust/blob/master/src/environment/tasks/verus_perm_proof/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/c-to-rust/verus-perm-proof",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -2190,7 +2190,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/c-to-rust/blob/master/src/environment/tasks/verus_vec_add_proof/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/c-to-rust/verus-vec-add-proof",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -2207,7 +2207,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/hw-cbmc/blob/master/src/environment/tasks/fix_arb_lock/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/hw-cbmc/fix-arb-lock",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -2224,7 +2224,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/hw-cbmc/blob/master/src/environment/tasks/fix_booth_mul/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/hw-cbmc/fix-booth-mul",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -2241,7 +2241,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/hw-cbmc/blob/master/src/environment/tasks/fix_branch_pred/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/hw-cbmc/fix-branch-pred",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -2258,7 +2258,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/hw-cbmc/blob/master/src/environment/tasks/fix_cache_ctrl/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/hw-cbmc/fix-cache-ctrl",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -2275,7 +2275,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/hw-cbmc/blob/master/src/environment/tasks/fix_dma_engine/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/hw-cbmc/fix-dma-engine",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -2292,7 +2292,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/hw-cbmc/blob/master/src/environment/tasks/fix_fifo_async/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/hw-cbmc/fix-fifo-async",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -2309,7 +2309,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/hw-cbmc/blob/master/src/environment/tasks/fix_fifo_credit/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/hw-cbmc/fix-fifo-credit",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -2326,7 +2326,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/hw-cbmc/blob/master/src/environment/tasks/fix_fifo_ptrs/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/hw-cbmc/fix-fifo-ptrs",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -2343,7 +2343,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/hw-cbmc/blob/master/src/environment/tasks/fix_i2c_ctrl/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/hw-cbmc/fix-i2c-ctrl",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -2360,7 +2360,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/hw-cbmc/blob/master/src/environment/tasks/fix_lfsr/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/hw-cbmc/fix-lfsr",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -2377,7 +2377,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/hw-cbmc/blob/master/src/environment/tasks/fix_mem_ctrl/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/hw-cbmc/fix-mem-ctrl",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -2394,7 +2394,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/hw-cbmc/blob/master/src/environment/tasks/fix_regfile_fwd/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/hw-cbmc/fix-regfile-fwd",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -2411,7 +2411,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/hw-cbmc/blob/master/src/environment/tasks/fix_restoring_div/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/hw-cbmc/fix-restoring-div",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -2428,7 +2428,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/hw-cbmc/blob/master/src/environment/tasks/fix_smv_ring3/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/hw-cbmc/fix-smv-ring3",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -2445,7 +2445,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/hw-cbmc/blob/master/src/environment/tasks/fix_spi_slave/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/hw-cbmc/fix-spi-slave",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -2462,7 +2462,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/hw-cbmc/blob/master/src/environment/tasks/fix_timer_irq/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/hw-cbmc/fix-timer-irq",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -2479,7 +2479,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/hw-cbmc/blob/master/src/environment/tasks/fix_tlb_ctrl/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/hw-cbmc/fix-tlb-ctrl",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -2496,7 +2496,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/hw-cbmc/blob/master/src/environment/tasks/fix_uart_rx/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/hw-cbmc/fix-uart-rx",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -2513,7 +2513,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/hw-cbmc/blob/master/src/environment/tasks/implement_arb3/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/hw-cbmc/implement-arb3",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -2530,7 +2530,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/hw-cbmc/blob/master/src/environment/tasks/write_assertions_irqctrl/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/hw-cbmc/write-assertions-irqctrl",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -2547,7 +2547,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/hw-cbmc/blob/master/src/environment/tasks/write_assertions_liveness_arbiter/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/hw-cbmc/write-assertions-liveness-arbiter",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -2564,7 +2564,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/hw-cbmc/blob/master/src/environment/tasks/write_assertions_liveness_dma/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/hw-cbmc/write-assertions-liveness-dma",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -2581,7 +2581,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/hw-cbmc/blob/master/src/environment/tasks/write_assertions_liveness_fifo/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/hw-cbmc/write-assertions-liveness-fifo",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -2598,7 +2598,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/hw-cbmc/blob/master/src/environment/tasks/write_assertions_tasksched/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/hw-cbmc/write-assertions-tasksched",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -2615,7 +2615,7 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/hw-cbmc/blob/master/src/environment/tasks/write_assertions_txnmon/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/hw-cbmc/write-assertions-txnmon",
     created_at: weekAgo,
     updated_at: now,
   },
@@ -2632,347 +2632,432 @@ export const realTasks: Task[] = [
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/hw-cbmc/blob/master/src/environment/tasks/write_assertions_wdogtimer/__init__.py",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/hw-cbmc/write-assertions-wdogtimer",
     created_at: weekAgo,
     updated_at: now,
   },
   {
     id: "task-protein-155",
     environment_id: "env-protein",
-    name: "Protein Folding Stability",
-    slug: "protein-folding-stability",
+    name: "Action Credit Assignment",
+    slug: "action-credit-assignment",
     description:
-      "Predict the thermodynamic stability of a mutant protein by computing the change in folding free energy (ΔΔG) using molecular simulation. The agent must set up the force field, run equilibrium sampling, and apply free energy perturbation methods.",
+      "Implement dopamine-dependent action credit assignment in a reinforcement learning neural circuit model. The agent must debug the credit assignment mechanism and ensure correct temporal difference signals propagate through the network.",
     difficulty: "hard",
-    category: "protein",
+    category: "credit_assignment",
     max_steps: 100,
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/athanor-tasks/tree/main/protein-synthesis/protein-folding-stability",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/computational-biology/action-credit-assignment",
     created_at: weekAgo,
     updated_at: now,
   },
   {
     id: "task-protein-156",
     environment_id: "env-protein",
-    name: "Binding Affinity Prediction",
-    slug: "binding-affinity-prediction",
+    name: "Behavioral Motif Classification",
+    slug: "behavioral-motif-classification",
     description:
-      "Estimate the binding affinity of a small-molecule ligand to a target protein using molecular docking and scoring functions. The agent must prepare receptor and ligand structures, run docking simulations, and rank poses by predicted binding energy.",
+      "Implement unsupervised behavioral motif classification from animal movement data using hidden Markov models. The agent must fix the feature extraction pipeline and clustering algorithm to correctly identify distinct behavioral states.",
     difficulty: "hard",
-    category: "protein",
+    category: "behavioral_modeling",
     max_steps: 100,
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/athanor-tasks/tree/main/protein-synthesis/binding-affinity-prediction",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/computational-biology/behavioral-motif-classification",
     created_at: weekAgo,
     updated_at: now,
   },
   {
     id: "task-protein-157",
     environment_id: "env-protein",
-    name: "Membrane Protein Insertion",
-    slug: "membrane-protein-insertion",
+    name: "Closed Loop Behavioral Optogenetics",
+    slug: "closed-loop-behavioral-optogenetics",
     description:
-      "Simulate the insertion of a transmembrane helix into a lipid bilayer using coarse-grained molecular dynamics. The agent must build the bilayer system, parameterize the protein, and analyze insertion orientation and depth.",
+      "Implement real-time optogenetic control based on ML classification of animal behavior. The agent must fix the closed-loop controller that triggers light stimulation based on decoded behavioral states from neural recordings.",
     difficulty: "expert",
-    category: "protein",
+    category: "neuroscience",
     max_steps: 100,
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/athanor-tasks/tree/main/protein-synthesis/membrane-protein-insertion",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/computational-biology/closed-loop-behavioral-optogenetics",
     created_at: weekAgo,
     updated_at: now,
   },
   {
     id: "task-protein-158",
     environment_id: "env-protein",
-    name: "Enzyme Kinetics Fitting",
-    slug: "enzyme-kinetics-fitting",
+    name: "Connectomics Graph Analysis",
+    slug: "connectomics-graph-analysis",
     description:
-      "Fit Michaelis-Menten kinetic parameters to experimental enzyme assay data using nonlinear regression. The agent must handle substrate inhibition, estimate Km and Vmax, and compute confidence intervals for the fitted parameters.",
+      "Analyze neural connectivity graph structure including shortest paths, clustering coefficients, and hub identification. The agent must fix graph construction from connectivity data and implement correct graph-theoretic measures.",
     difficulty: "medium",
-    category: "protein",
+    category: "connectomics",
     max_steps: 100,
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/athanor-tasks/tree/main/protein-synthesis/enzyme-kinetics-fitting",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/computational-biology/connectomics-graph-analysis",
     created_at: weekAgo,
     updated_at: now,
   },
   {
     id: "task-protein-159",
     environment_id: "env-protein",
-    name: "Hodgkin Huxley Simulation",
-    slug: "hodgkin-huxley-simulation",
+    name: "Connectomics Graph Analysis With Proof",
+    slug: "connectomics-graph-analysis-with-proof",
     description:
-      "Simulate action potential generation using the Hodgkin-Huxley model of neuronal membrane dynamics. The agent must implement the differential equations for sodium and potassium conductances and reproduce the characteristic spike waveform.",
+      "Analyze a neural connectivity graph and prove the Handshaking Lemma in Lean 4. The agent must fix the graph analysis code and construct a formal proof that the sum of vertex degrees equals twice the number of edges.",
     difficulty: "medium",
-    category: "neuroscience",
+    category: "connectomics",
     max_steps: 100,
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/athanor-tasks/tree/main/protein-synthesis/hodgkin-huxley-simulation",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/computational-biology/connectomics-graph-analysis-with-proof",
     created_at: weekAgo,
     updated_at: now,
   },
   {
     id: "task-protein-160",
     environment_id: "env-protein",
-    name: "Neural Circuit Oscillation",
-    slug: "neural-circuit-oscillation",
+    name: "CRE-DOG Recombination",
+    slug: "cre-dog-recombination",
     description:
-      "Model oscillatory dynamics in a recurrent inhibitory neural circuit using conductance-based neuron models. The agent must tune synaptic weights and time constants to produce gamma-band oscillations and analyze the power spectrum.",
-    difficulty: "hard",
-    category: "neuroscience",
+      "Model CRE-DOG recombination kinetics for genetic circuit design. The agent must fix the ODE system describing Cre recombinase and DOG-tag dependent protein degradation dynamics and match experimental recombination rates.",
+    difficulty: "medium",
+    category: "molecular_tools",
     max_steps: 100,
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/athanor-tasks/tree/main/protein-synthesis/neural-circuit-oscillation",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/computational-biology/cre-dog-recombination",
     created_at: weekAgo,
     updated_at: now,
   },
   {
     id: "task-protein-161",
     environment_id: "env-protein",
-    name: "Synaptic Plasticity STDP",
-    slug: "synaptic-plasticity-stdp",
+    name: "Dopaminergic Credit Assignment RNN",
+    slug: "dopaminergic-credit-assignment-rnn",
     description:
-      "Implement a spike-timing-dependent plasticity (STDP) learning rule in a network simulation and demonstrate its effect on receptive field development. The agent must model pre- and post-synaptic spike timing windows and weight update dynamics.",
-    difficulty: "hard",
+      "Implement a continuous-time RNN modeling biological eligibility traces for dopaminergic credit assignment. The agent must fix the recurrent network dynamics and ensure the eligibility trace mechanism correctly bridges temporal gaps.",
+    difficulty: "expert",
     category: "neuroscience",
     max_steps: 100,
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/athanor-tasks/tree/main/protein-synthesis/synaptic-plasticity-stdp",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/computational-biology/dopaminergic-credit-assignment-rnn",
     created_at: weekAgo,
     updated_at: now,
   },
   {
     id: "task-protein-162",
     environment_id: "env-protein",
-    name: "Calcium Signaling Cascade",
-    slug: "calcium-signaling-cascade",
+    name: "Drug Binding Scoring",
+    slug: "drug-binding-scoring",
     description:
-      "Model intracellular calcium signaling cascades involving IP3 receptors and SERCA pumps. The agent must implement the De Young-Bhalla model, simulate calcium oscillations, and analyze the frequency dependence on IP3 concentration.",
+      "Implement a protein-ligand interaction scoring function for drug binding affinity prediction. The agent must fix the scoring pipeline including electrostatic, van der Waals, and solvation energy terms to correctly rank binding poses.",
     difficulty: "medium",
-    category: "neuroscience",
+    category: "protein",
     max_steps: 100,
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/athanor-tasks/tree/main/protein-synthesis/calcium-signaling-cascade",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/computational-biology/drug-binding-scoring",
     created_at: weekAgo,
     updated_at: now,
   },
   {
     id: "task-protein-163",
     environment_id: "env-protein",
-    name: "Gene Regulatory Network",
-    slug: "gene-regulatory-network",
+    name: "Drug Binding Scoring With Proof",
+    slug: "drug-binding-scoring-with-proof",
     description:
-      "Infer the topology of a gene regulatory network from time-series gene expression data using dynamic Bayesian networks. The agent must preprocess expression profiles, fit the network model, and validate inferred edges against known interactions.",
-    difficulty: "hard",
-    category: "systems_biology",
+      "Calculate protein-ligand binding affinity and prove electrostatic monotonicity in Lean 4. The agent must fix the scoring function and construct a formal proof that the electrostatic energy decreases monotonically with distance.",
+    difficulty: "medium",
+    category: "protein",
     max_steps: 100,
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/athanor-tasks/tree/main/protein-synthesis/gene-regulatory-network",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/computational-biology/drug-binding-scoring-with-proof",
     created_at: weekAgo,
     updated_at: now,
   },
   {
     id: "task-protein-164",
     environment_id: "env-protein",
-    name: "Metabolic Flux Analysis",
-    slug: "metabolic-flux-analysis",
+    name: "Gene Regulatory Stability",
+    slug: "gene-regulatory-stability",
     description:
-      "Perform flux balance analysis on a genome-scale metabolic model to predict optimal growth rates under nutrient constraints. The agent must formulate the linear program, apply stoichiometric constraints, and identify flux distributions.",
+      "Model toggle-switch and repressilator gene regulatory circuits using ODE systems. The agent must fix the Hill function parameterization and steady-state analysis to correctly predict bistable and oscillatory dynamics.",
     difficulty: "medium",
     category: "systems_biology",
     max_steps: 100,
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/athanor-tasks/tree/main/protein-synthesis/metabolic-flux-analysis",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/computational-biology/gene-regulatory-stability",
     created_at: weekAgo,
     updated_at: now,
   },
   {
     id: "task-protein-165",
     environment_id: "env-protein",
-    name: "Cell Cycle Modeling",
-    slug: "cell-cycle-modeling",
+    name: "Gene Regulatory Stability With Proof",
+    slug: "gene-regulatory-stability-with-proof",
     description:
-      "Simulate the mammalian cell cycle using an ODE model of cyclin-CDK interactions and checkpoint controls. The agent must parameterize the model from literature values and reproduce the sequential activation of G1/S and G2/M phase transitions.",
-    difficulty: "hard",
+      "Model a genetic toggle switch and prove monotonicity of the Hill function in Lean 4. The agent must fix the ODE model and construct a formal proof that the Hill function is monotonically increasing in its argument.",
+    difficulty: "medium",
     category: "systems_biology",
     max_steps: 100,
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/athanor-tasks/tree/main/protein-synthesis/cell-cycle-modeling",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/computational-biology/gene-regulatory-stability-with-proof",
     created_at: weekAgo,
     updated_at: now,
   },
   {
     id: "task-protein-166",
     environment_id: "env-protein",
-    name: "Epidemic SIR Fitting",
-    slug: "epidemic-sir-fitting",
+    name: "Hierarchical Psychological Structure Inference",
+    slug: "hierarchical-psychological-structure-inference",
     description:
-      "Fit a compartmental SIR epidemiological model to time-series infection data and estimate the basic reproduction number R0. The agent must solve the ODEs numerically, optimize parameters against observed data, and quantify uncertainty.",
-    difficulty: "easy",
-    category: "systems_biology",
+      "Implement HDP-HMM inference of behavioral state transitions from neural and behavioral data. The agent must fix the hierarchical Dirichlet process hidden Markov model to correctly segment behavioral time series into latent states.",
+    difficulty: "expert",
+    category: "neuroscience",
     max_steps: 100,
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/athanor-tasks/tree/main/protein-synthesis/epidemic-sir-fitting",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/computational-biology/hierarchical-psychological-structure-inference",
     created_at: weekAgo,
     updated_at: now,
   },
   {
     id: "task-protein-167",
     environment_id: "env-protein",
-    name: "Population Genetics Drift",
-    slug: "population-genetics-drift",
+    name: "Hodgkin Huxley Circuit",
+    slug: "hodgkin-huxley-circuit",
     description:
-      "Simulate genetic drift in a finite population using the Wright-Fisher model and compute fixation probabilities for neutral alleles. The agent must implement the stochastic simulation, run ensemble replicates, and compare with theoretical predictions.",
+      "Implement a multi-compartment Hodgkin-Huxley neuron model with correct gating variable dynamics. The agent must fix the differential equations for sodium and potassium conductances and reproduce characteristic action potential waveforms.",
     difficulty: "medium",
-    category: "population_genetics",
+    category: "neuroscience",
     max_steps: 100,
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/athanor-tasks/tree/main/protein-synthesis/population-genetics-drift",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/computational-biology/hodgkin-huxley-circuit",
     created_at: weekAgo,
     updated_at: now,
   },
   {
     id: "task-protein-168",
     environment_id: "env-protein",
-    name: "Selection Sweep Detection",
-    slug: "selection-sweep-detection",
+    name: "MAPK Signal Transduction",
+    slug: "mapk-signal-transduction",
     description:
-      "Detect signatures of positive selection in genomic sequence data using composite likelihood ratio tests. The agent must compute site frequency spectra, calculate CLR statistics along the genome, and identify candidate sweep regions.",
-    difficulty: "hard",
-    category: "population_genetics",
+      "Model the MAPK cascade signal transduction pathway with correct enzymatic kinetics. The agent must fix the three-tier kinase cascade ODE system and ensure proper signal amplification and ultrasensitive dose-response behavior.",
+    difficulty: "medium",
+    category: "systems_biology",
     max_steps: 100,
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/athanor-tasks/tree/main/protein-synthesis/selection-sweep-detection",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/computational-biology/mapk-signal-transduction",
     created_at: weekAgo,
     updated_at: now,
   },
   {
     id: "task-protein-169",
     environment_id: "env-protein",
-    name: "Coalescent Tree Inference",
-    slug: "coalescent-tree-inference",
+    name: "MAPK Signal Transduction With Proof",
+    slug: "mapk-signal-transduction-with-proof",
     description:
-      "Infer a coalescent genealogy from population genetic samples using Markov chain Monte Carlo methods. The agent must implement the coalescent likelihood, propose tree topology changes, and estimate effective population size from the posterior.",
-    difficulty: "expert",
-    category: "population_genetics",
+      "Model the MAPK cascade and prove mass conservation of total kinase in Lean 4. The agent must fix the ODE model and construct a formal proof that the sum of phosphorylated and unphosphorylated kinase forms is conserved.",
+    difficulty: "medium",
+    category: "systems_biology",
     max_steps: 100,
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/athanor-tasks/tree/main/protein-synthesis/coalescent-tree-inference",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/computational-biology/mapk-signal-transduction-with-proof",
     created_at: weekAgo,
     updated_at: now,
   },
   {
     id: "task-protein-170",
     environment_id: "env-protein",
-    name: "Connectome Path Analysis",
-    slug: "connectome-path-analysis",
+    name: "MD Trajectory Analysis",
+    slug: "md-trajectory-analysis",
     description:
-      "Analyze shortest paths and communication efficiency in a connectome graph derived from diffusion MRI tractography. The agent must construct the structural connectivity matrix, compute graph-theoretic measures, and identify hub regions.",
+      "Compute structural metrics from molecular dynamics trajectories including RMSD, radius of gyration, and contact maps. The agent must fix the trajectory analysis pipeline to correctly compute time-resolved structural properties.",
     difficulty: "medium",
-    category: "connectomics",
+    category: "protein",
     max_steps: 100,
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/athanor-tasks/tree/main/protein-synthesis/connectome-path-analysis",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/computational-biology/md-trajectory-analysis",
     created_at: weekAgo,
     updated_at: now,
   },
   {
     id: "task-protein-171",
     environment_id: "env-protein",
-    name: "Cortical Column Simulation",
-    slug: "cortical-column-simulation",
+    name: "Metabolic Signaling Integration",
+    slug: "metabolic-signaling-integration",
     description:
-      "Simulate a cortical microcolumn with excitatory and inhibitory neuron populations using a mean-field neural mass model. The agent must implement the Jansen-Rit equations, tune parameters to produce alpha rhythms, and analyze the resulting EEG-like signals.",
-    difficulty: "expert",
-    category: "connectomics",
+      "Model a coupled metabolic-signaling system capturing crosstalk between metabolic flux and signaling pathways. The agent must fix the integrated ODE system to correctly predict steady-state metabolite concentrations under signaling perturbations.",
+    difficulty: "medium",
+    category: "systems_biology",
     max_steps: 100,
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/athanor-tasks/tree/main/protein-synthesis/cortical-column-simulation",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/computational-biology/metabolic-signaling-integration",
     created_at: weekAgo,
     updated_at: now,
   },
   {
     id: "task-protein-172",
     environment_id: "env-protein",
-    name: "Drug Dose Response",
-    slug: "drug-dose-response",
+    name: "Nanobody Conditional Stability",
+    slug: "nanobody-conditional-stability",
     description:
-      "Fit a four-parameter logistic dose-response curve to pharmacological assay data and estimate the EC50. The agent must handle Hill coefficient estimation, compute goodness-of-fit statistics, and generate the dose-response plot data.",
-    difficulty: "easy",
-    category: "pharmacology",
+      "Model conditionally stable nanobody degradation dynamics for synthetic biology applications. The agent must fix the ODE system describing ligand-dependent nanobody stabilization and match experimental half-life measurements.",
+    difficulty: "hard",
+    category: "systems_biology",
     max_steps: 100,
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/athanor-tasks/tree/main/protein-synthesis/drug-dose-response",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/computational-biology/nanobody-conditional-stability",
     created_at: weekAgo,
     updated_at: now,
   },
   {
     id: "task-protein-173",
     environment_id: "env-protein",
-    name: "PK Compartment Model",
-    slug: "pk-compartment-model",
+    name: "Nanobody Multiplexed Logic Gates",
+    slug: "nanobody-multiplexed-logic-gates",
     description:
-      "Build and simulate a two-compartment pharmacokinetic model to predict drug concentration time profiles after oral administration. The agent must estimate absorption, distribution, and elimination rate constants from clinical trial data.",
-    difficulty: "medium",
-    category: "pharmacology",
+      "Implement numerical optimization of massive AND-NOT Boolean logic ODE systems using nanobody-based genetic circuits. The agent must fix the logic gate parameterization to achieve correct Boolean truth table behavior across all input combinations.",
+    difficulty: "expert",
+    category: "systems_biology",
     max_steps: 100,
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/athanor-tasks/tree/main/protein-synthesis/pk-compartment-model",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/computational-biology/nanobody-multiplexed-logic-gates",
     created_at: weekAgo,
     updated_at: now,
   },
   {
     id: "task-protein-174",
     environment_id: "env-protein",
-    name: "Drug Interaction Prediction",
-    slug: "drug-interaction-prediction",
+    name: "Optogenetic Circuit Control",
+    slug: "optogenetic-circuit-control",
     description:
-      "Predict potential drug-drug interactions using a physiologically-based pharmacokinetic model with CYP enzyme inhibition. The agent must parameterize the PBPK model, simulate co-administration scenarios, and quantify changes in drug exposure.",
+      "Implement optogenetic neural circuit control with light-sensitive ion channel dynamics. The agent must fix the channelrhodopsin photocurrent model and closed-loop stimulation protocol to achieve target firing patterns in a neural circuit.",
     difficulty: "hard",
-    category: "pharmacology",
+    category: "neuroscience",
     max_steps: 100,
     reward_range: { min: 0, max: 1 },
     metadata: { source: "repo-config" },
     github_url:
-      "https://github.com/athanor-ai/athanor-tasks/tree/main/protein-synthesis/drug-interaction-prediction",
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/computational-biology/optogenetic-circuit-control",
+    created_at: weekAgo,
+    updated_at: now,
+  },
+  {
+    id: "task-protein-175",
+    environment_id: "env-protein",
+    name: "Protein Energy Landscape",
+    slug: "protein-energy-landscape",
+    description:
+      "Implement a coarse-grained protein energy function for folding landscape analysis. The agent must fix the energy terms including contact potentials, backbone torsion, and solvation to correctly predict native-state stability.",
+    difficulty: "medium",
+    category: "protein",
+    max_steps: 100,
+    reward_range: { min: 0, max: 1 },
+    metadata: { source: "repo-config" },
+    github_url:
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/computational-biology/protein-energy-landscape",
+    created_at: weekAgo,
+    updated_at: now,
+  },
+  {
+    id: "task-protein-176",
+    environment_id: "env-protein",
+    name: "Spatiotemporal CRE Recombination PDE",
+    slug: "spatiotemporal-cre-recombination-pde",
+    description:
+      "Model spatial diffusion and Cre recombination using 2D partial differential equations. The agent must fix the reaction-diffusion PDE system and boundary conditions to correctly predict spatiotemporal recombination patterns.",
+    difficulty: "expert",
+    category: "systems_biology",
+    max_steps: 100,
+    reward_range: { min: 0, max: 1 },
+    metadata: { source: "repo-config" },
+    github_url:
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/computational-biology/spatiotemporal-cre-recombination-pde",
+    created_at: weekAgo,
+    updated_at: now,
+  },
+  {
+    id: "task-protein-177",
+    environment_id: "env-protein",
+    name: "STDP Synaptic Plasticity",
+    slug: "stdp-synaptic-plasticity",
+    description:
+      "Implement spike-timing-dependent plasticity learning rules in a spiking neural network. The agent must fix the STDP window function and weight update dynamics to correctly reproduce experimentally observed long-term potentiation and depression.",
+    difficulty: "medium",
+    category: "neuroscience",
+    max_steps: 100,
+    reward_range: { min: 0, max: 1 },
+    metadata: { source: "repo-config" },
+    github_url:
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/computational-biology/stdp-synaptic-plasticity",
+    created_at: weekAgo,
+    updated_at: now,
+  },
+  {
+    id: "task-protein-178",
+    environment_id: "env-protein",
+    name: "Wright Fisher Dynamics",
+    slug: "wright-fisher-dynamics",
+    description:
+      "Simulate Wright-Fisher population genetics dynamics with selection, mutation, and genetic drift. The agent must fix the stochastic simulation to correctly model allele frequency trajectories and match theoretical fixation probabilities.",
+    difficulty: "medium",
+    category: "population_genetics",
+    max_steps: 100,
+    reward_range: { min: 0, max: 1 },
+    metadata: { source: "repo-config" },
+    github_url:
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/computational-biology/wright-fisher-dynamics",
+    created_at: weekAgo,
+    updated_at: now,
+  },
+  {
+    id: "task-protein-179",
+    environment_id: "env-protein",
+    name: "Wright Fisher Dynamics With Proof",
+    slug: "wright-fisher-dynamics-with-proof",
+    description:
+      "Simulate genetic drift using the Wright-Fisher model and prove probability conservation in Lean 4. The agent must fix the simulation code and construct a formal proof that transition probabilities sum to one across all states.",
+    difficulty: "medium",
+    category: "population_genetics",
+    max_steps: 100,
+    reward_range: { min: 0, max: 1 },
+    metadata: { source: "repo-config" },
+    github_url:
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/computational-biology/wright-fisher-dynamics-with-proof",
     created_at: weekAgo,
     updated_at: now,
   },

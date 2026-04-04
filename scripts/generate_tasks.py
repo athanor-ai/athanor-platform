@@ -16,10 +16,10 @@ ENV_SLUGS = {
     "env-congestion": "congestion-control",
     "env-c2rust": "c-to-rust",
     "env-hwcbmc": "hw-cbmc",
-    "env-protein": "protein-synthesis",
+    "env-protein": "computational-biology",
 }
 
-# All 174 tasks with their properties
+# All 179 tasks with their properties
 # Format: (id, env_id, name, slug, difficulty, category, description)
 TASKS = [
     # --- Lean Theorem Proving (30 tasks) ---
@@ -342,47 +342,57 @@ TASKS = [
     ("task-hwcbmc-154", "env-hwcbmc", "Write Assertions Wdogtimer", "write-assertions-wdogtimer", "easy", "assertion-synthesis",
      "Write SVA assertions for a watchdog timer module verifying timeout detection and reset behavior. The agent must prove that the watchdog fires within the configured interval if not refreshed and that a refresh correctly resets the countdown."),
 
-    # --- Protein Synthesis & Computational Neuroscience (20 tasks) ---
-    ("task-protein-155", "env-protein", "Protein Folding Stability", "protein-folding-stability", "hard", "protein",
-     "Predict the thermodynamic stability of a mutant protein by computing the change in folding free energy (ΔΔG) using molecular simulation. The agent must set up the force field, run equilibrium sampling, and apply free energy perturbation methods."),
-    ("task-protein-156", "env-protein", "Binding Affinity Prediction", "binding-affinity-prediction", "hard", "protein",
-     "Estimate the binding affinity of a small-molecule ligand to a target protein using molecular docking and scoring functions. The agent must prepare receptor and ligand structures, run docking simulations, and rank poses by predicted binding energy."),
-    ("task-protein-157", "env-protein", "Membrane Protein Insertion", "membrane-protein-insertion", "expert", "protein",
-     "Simulate the insertion of a transmembrane helix into a lipid bilayer using coarse-grained molecular dynamics. The agent must build the bilayer system, parameterize the protein, and analyze insertion orientation and depth."),
-    ("task-protein-158", "env-protein", "Enzyme Kinetics Fitting", "enzyme-kinetics-fitting", "medium", "protein",
-     "Fit Michaelis-Menten kinetic parameters to experimental enzyme assay data using nonlinear regression. The agent must handle substrate inhibition, estimate Km and Vmax, and compute confidence intervals for the fitted parameters."),
-    ("task-protein-159", "env-protein", "Hodgkin Huxley Simulation", "hodgkin-huxley-simulation", "medium", "neuroscience",
-     "Simulate action potential generation using the Hodgkin-Huxley model of neuronal membrane dynamics. The agent must implement the differential equations for sodium and potassium conductances and reproduce the characteristic spike waveform."),
-    ("task-protein-160", "env-protein", "Neural Circuit Oscillation", "neural-circuit-oscillation", "hard", "neuroscience",
-     "Model oscillatory dynamics in a recurrent inhibitory neural circuit using conductance-based neuron models. The agent must tune synaptic weights and time constants to produce gamma-band oscillations and analyze the power spectrum."),
-    ("task-protein-161", "env-protein", "Synaptic Plasticity STDP", "synaptic-plasticity-stdp", "hard", "neuroscience",
-     "Implement a spike-timing-dependent plasticity (STDP) learning rule in a network simulation and demonstrate its effect on receptive field development. The agent must model pre- and post-synaptic spike timing windows and weight update dynamics."),
-    ("task-protein-162", "env-protein", "Calcium Signaling Cascade", "calcium-signaling-cascade", "medium", "neuroscience",
-     "Model intracellular calcium signaling cascades involving IP3 receptors and SERCA pumps. The agent must implement the De Young-Bhalla model, simulate calcium oscillations, and analyze the frequency dependence on IP3 concentration."),
-    ("task-protein-163", "env-protein", "Gene Regulatory Network", "gene-regulatory-network", "hard", "systems_biology",
-     "Infer the topology of a gene regulatory network from time-series gene expression data using dynamic Bayesian networks. The agent must preprocess expression profiles, fit the network model, and validate inferred edges against known interactions."),
-    ("task-protein-164", "env-protein", "Metabolic Flux Analysis", "metabolic-flux-analysis", "medium", "systems_biology",
-     "Perform flux balance analysis on a genome-scale metabolic model to predict optimal growth rates under nutrient constraints. The agent must formulate the linear program, apply stoichiometric constraints, and identify flux distributions."),
-    ("task-protein-165", "env-protein", "Cell Cycle Modeling", "cell-cycle-modeling", "hard", "systems_biology",
-     "Simulate the mammalian cell cycle using an ODE model of cyclin-CDK interactions and checkpoint controls. The agent must parameterize the model from literature values and reproduce the sequential activation of G1/S and G2/M phase transitions."),
-    ("task-protein-166", "env-protein", "Epidemic SIR Fitting", "epidemic-sir-fitting", "easy", "systems_biology",
-     "Fit a compartmental SIR epidemiological model to time-series infection data and estimate the basic reproduction number R0. The agent must solve the ODEs numerically, optimize parameters against observed data, and quantify uncertainty."),
-    ("task-protein-167", "env-protein", "Population Genetics Drift", "population-genetics-drift", "medium", "population_genetics",
-     "Simulate genetic drift in a finite population using the Wright-Fisher model and compute fixation probabilities for neutral alleles. The agent must implement the stochastic simulation, run ensemble replicates, and compare with theoretical predictions."),
-    ("task-protein-168", "env-protein", "Selection Sweep Detection", "selection-sweep-detection", "hard", "population_genetics",
-     "Detect signatures of positive selection in genomic sequence data using composite likelihood ratio tests. The agent must compute site frequency spectra, calculate CLR statistics along the genome, and identify candidate sweep regions."),
-    ("task-protein-169", "env-protein", "Coalescent Tree Inference", "coalescent-tree-inference", "expert", "population_genetics",
-     "Infer a coalescent genealogy from population genetic samples using Markov chain Monte Carlo methods. The agent must implement the coalescent likelihood, propose tree topology changes, and estimate effective population size from the posterior."),
-    ("task-protein-170", "env-protein", "Connectome Path Analysis", "connectome-path-analysis", "medium", "connectomics",
-     "Analyze shortest paths and communication efficiency in a connectome graph derived from diffusion MRI tractography. The agent must construct the structural connectivity matrix, compute graph-theoretic measures, and identify hub regions."),
-    ("task-protein-171", "env-protein", "Cortical Column Simulation", "cortical-column-simulation", "expert", "connectomics",
-     "Simulate a cortical microcolumn with excitatory and inhibitory neuron populations using a mean-field neural mass model. The agent must implement the Jansen-Rit equations, tune parameters to produce alpha rhythms, and analyze the resulting EEG-like signals."),
-    ("task-protein-172", "env-protein", "Drug Dose Response", "drug-dose-response", "easy", "pharmacology",
-     "Fit a four-parameter logistic dose-response curve to pharmacological assay data and estimate the EC50. The agent must handle Hill coefficient estimation, compute goodness-of-fit statistics, and generate the dose-response plot data."),
-    ("task-protein-173", "env-protein", "PK Compartment Model", "pk-compartment-model", "medium", "pharmacology",
-     "Build and simulate a two-compartment pharmacokinetic model to predict drug concentration time profiles after oral administration. The agent must estimate absorption, distribution, and elimination rate constants from clinical trial data."),
-    ("task-protein-174", "env-protein", "Drug Interaction Prediction", "drug-interaction-prediction", "hard", "pharmacology",
-     "Predict potential drug-drug interactions using a physiologically-based pharmacokinetic model with CYP enzyme inhibition. The agent must parameterize the PBPK model, simulate co-administration scenarios, and quantify changes in drug exposure."),
+    # --- Computational Biology (25 tasks) ---
+    ("task-protein-155", "env-protein", "Action Credit Assignment", "action-credit-assignment", "hard", "credit_assignment",
+     "Implement dopamine-dependent action credit assignment in a reinforcement learning neural circuit model. The agent must debug the credit assignment mechanism and ensure correct temporal difference signals propagate through the network."),
+    ("task-protein-156", "env-protein", "Behavioral Motif Classification", "behavioral-motif-classification", "hard", "behavioral_modeling",
+     "Implement unsupervised behavioral motif classification from animal movement data using hidden Markov models. The agent must fix the feature extraction pipeline and clustering algorithm to correctly identify distinct behavioral states."),
+    ("task-protein-157", "env-protein", "Closed Loop Behavioral Optogenetics", "closed-loop-behavioral-optogenetics", "expert", "neuroscience",
+     "Implement real-time optogenetic control based on ML classification of animal behavior. The agent must fix the closed-loop controller that triggers light stimulation based on decoded behavioral states from neural recordings."),
+    ("task-protein-158", "env-protein", "Connectomics Graph Analysis", "connectomics-graph-analysis", "medium", "connectomics",
+     "Analyze neural connectivity graph structure including shortest paths, clustering coefficients, and hub identification. The agent must fix graph construction from connectivity data and implement correct graph-theoretic measures."),
+    ("task-protein-159", "env-protein", "Connectomics Graph Analysis With Proof", "connectomics-graph-analysis-with-proof", "medium", "connectomics",
+     "Analyze a neural connectivity graph and prove the Handshaking Lemma in Lean 4. The agent must fix the graph analysis code and construct a formal proof that the sum of vertex degrees equals twice the number of edges."),
+    ("task-protein-160", "env-protein", "CRE-DOG Recombination", "cre-dog-recombination", "medium", "molecular_tools",
+     "Model CRE-DOG recombination kinetics for genetic circuit design. The agent must fix the ODE system describing Cre recombinase and DOG-tag dependent protein degradation dynamics and match experimental recombination rates."),
+    ("task-protein-161", "env-protein", "Dopaminergic Credit Assignment RNN", "dopaminergic-credit-assignment-rnn", "expert", "neuroscience",
+     "Implement a continuous-time RNN modeling biological eligibility traces for dopaminergic credit assignment. The agent must fix the recurrent network dynamics and ensure the eligibility trace mechanism correctly bridges temporal gaps."),
+    ("task-protein-162", "env-protein", "Drug Binding Scoring", "drug-binding-scoring", "medium", "protein",
+     "Implement a protein-ligand interaction scoring function for drug binding affinity prediction. The agent must fix the scoring pipeline including electrostatic, van der Waals, and solvation energy terms to correctly rank binding poses."),
+    ("task-protein-163", "env-protein", "Drug Binding Scoring With Proof", "drug-binding-scoring-with-proof", "medium", "protein",
+     "Calculate protein-ligand binding affinity and prove electrostatic monotonicity in Lean 4. The agent must fix the scoring function and construct a formal proof that the electrostatic energy decreases monotonically with distance."),
+    ("task-protein-164", "env-protein", "Gene Regulatory Stability", "gene-regulatory-stability", "medium", "systems_biology",
+     "Model toggle-switch and repressilator gene regulatory circuits using ODE systems. The agent must fix the Hill function parameterization and steady-state analysis to correctly predict bistable and oscillatory dynamics."),
+    ("task-protein-165", "env-protein", "Gene Regulatory Stability With Proof", "gene-regulatory-stability-with-proof", "medium", "systems_biology",
+     "Model a genetic toggle switch and prove monotonicity of the Hill function in Lean 4. The agent must fix the ODE model and construct a formal proof that the Hill function is monotonically increasing in its argument."),
+    ("task-protein-166", "env-protein", "Hierarchical Psychological Structure Inference", "hierarchical-psychological-structure-inference", "expert", "neuroscience",
+     "Implement HDP-HMM inference of behavioral state transitions from neural and behavioral data. The agent must fix the hierarchical Dirichlet process hidden Markov model to correctly segment behavioral time series into latent states."),
+    ("task-protein-167", "env-protein", "Hodgkin Huxley Circuit", "hodgkin-huxley-circuit", "medium", "neuroscience",
+     "Implement a multi-compartment Hodgkin-Huxley neuron model with correct gating variable dynamics. The agent must fix the differential equations for sodium and potassium conductances and reproduce characteristic action potential waveforms."),
+    ("task-protein-168", "env-protein", "MAPK Signal Transduction", "mapk-signal-transduction", "medium", "systems_biology",
+     "Model the MAPK cascade signal transduction pathway with correct enzymatic kinetics. The agent must fix the three-tier kinase cascade ODE system and ensure proper signal amplification and ultrasensitive dose-response behavior."),
+    ("task-protein-169", "env-protein", "MAPK Signal Transduction With Proof", "mapk-signal-transduction-with-proof", "medium", "systems_biology",
+     "Model the MAPK cascade and prove mass conservation of total kinase in Lean 4. The agent must fix the ODE model and construct a formal proof that the sum of phosphorylated and unphosphorylated kinase forms is conserved."),
+    ("task-protein-170", "env-protein", "MD Trajectory Analysis", "md-trajectory-analysis", "medium", "protein",
+     "Compute structural metrics from molecular dynamics trajectories including RMSD, radius of gyration, and contact maps. The agent must fix the trajectory analysis pipeline to correctly compute time-resolved structural properties."),
+    ("task-protein-171", "env-protein", "Metabolic Signaling Integration", "metabolic-signaling-integration", "medium", "systems_biology",
+     "Model a coupled metabolic-signaling system capturing crosstalk between metabolic flux and signaling pathways. The agent must fix the integrated ODE system to correctly predict steady-state metabolite concentrations under signaling perturbations."),
+    ("task-protein-172", "env-protein", "Nanobody Conditional Stability", "nanobody-conditional-stability", "hard", "systems_biology",
+     "Model conditionally stable nanobody degradation dynamics for synthetic biology applications. The agent must fix the ODE system describing ligand-dependent nanobody stabilization and match experimental half-life measurements."),
+    ("task-protein-173", "env-protein", "Nanobody Multiplexed Logic Gates", "nanobody-multiplexed-logic-gates", "expert", "systems_biology",
+     "Implement numerical optimization of massive AND-NOT Boolean logic ODE systems using nanobody-based genetic circuits. The agent must fix the logic gate parameterization to achieve correct Boolean truth table behavior across all input combinations."),
+    ("task-protein-174", "env-protein", "Optogenetic Circuit Control", "optogenetic-circuit-control", "hard", "neuroscience",
+     "Implement optogenetic neural circuit control with light-sensitive ion channel dynamics. The agent must fix the channelrhodopsin photocurrent model and closed-loop stimulation protocol to achieve target firing patterns in a neural circuit."),
+    ("task-protein-175", "env-protein", "Protein Energy Landscape", "protein-energy-landscape", "medium", "protein",
+     "Implement a coarse-grained protein energy function for folding landscape analysis. The agent must fix the energy terms including contact potentials, backbone torsion, and solvation to correctly predict native-state stability."),
+    ("task-protein-176", "env-protein", "Spatiotemporal CRE Recombination PDE", "spatiotemporal-cre-recombination-pde", "expert", "systems_biology",
+     "Model spatial diffusion and Cre recombination using 2D partial differential equations. The agent must fix the reaction-diffusion PDE system and boundary conditions to correctly predict spatiotemporal recombination patterns."),
+    ("task-protein-177", "env-protein", "STDP Synaptic Plasticity", "stdp-synaptic-plasticity", "medium", "neuroscience",
+     "Implement spike-timing-dependent plasticity learning rules in a spiking neural network. The agent must fix the STDP window function and weight update dynamics to correctly reproduce experimentally observed long-term potentiation and depression."),
+    ("task-protein-178", "env-protein", "Wright Fisher Dynamics", "wright-fisher-dynamics", "medium", "population_genetics",
+     "Simulate Wright-Fisher population genetics dynamics with selection, mutation, and genetic drift. The agent must fix the stochastic simulation to correctly model allele frequency trajectories and match theoretical fixation probabilities."),
+    ("task-protein-179", "env-protein", "Wright Fisher Dynamics With Proof", "wright-fisher-dynamics-with-proof", "medium", "population_genetics",
+     "Simulate genetic drift using the Wright-Fisher model and prove probability conservation in Lean 4. The agent must fix the simulation code and construct a formal proof that transition probabilities sum to one across all states."),
 ]
 
 
@@ -409,7 +419,7 @@ def generate_tasks_ts() -> str:
     lines.append(' * Difficulty inferred from Claude Sonnet 4.6 run-1 scores.')
     lines.append(' * Categories derived from task-name prefix patterns + repo conventions.')
     lines.append(' *')
-    lines.append(' * Total: 174 tasks across 7 environments.')
+    lines.append(' * Total: 179 tasks across 7 environments.')
     lines.append(' */')
     lines.append('')
     lines.append('import type { Task } from "@/types/database";')
@@ -418,7 +428,7 @@ def generate_tasks_ts() -> str:
     lines.append('const weekAgo = new Date(Date.now() - 604800000).toISOString();')
     lines.append('')
     lines.append('/**')
-    lines.append(' * All 174 real tasks sourced from Athanor environment repos.')
+    lines.append(' * All 179 real tasks sourced from Athanor environment repos.')
     lines.append(' */')
     lines.append('export const realTasks: Task[] = [')
 
