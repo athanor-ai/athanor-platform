@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import Link from "next/link";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Card, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
@@ -199,6 +200,14 @@ export default function AdminPage() {
       <PageHeader
         title="Admin"
         description="Manage customer organizations and environment access"
+        actions={
+          <Link
+            href="/admin/keys"
+            className="rounded-md bg-surface-overlay px-3 py-1.5 text-xs font-medium text-text-secondary transition-colors hover:bg-accent-subtle hover:text-accent"
+          >
+            Platform API Keys
+          </Link>
+        }
       />
 
       {/* Invite Customer */}
