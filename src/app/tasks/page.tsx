@@ -13,15 +13,60 @@ import { Card } from "@/components/ui/Card";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { LoadingState } from "@/components/ui/LoadingState";
 import { EmptyState } from "@/components/ui/EmptyState";
+import {
+  ColumnFilter,
+  type ColumnFilterConfig,
+} from "@/components/ui/ColumnFilter";
+import {
+  useColumnFilters,
+  matchesTextFilter,
+  matchesSelectFilter,
+  matchesBucketFilter,
+  uniqueOptions,
+} from "@/hooks/useColumnFilters";
 import type { Task } from "@/types/database";
+
+/* ------------------------------------------------------------------ */
+/*  Max-steps bucket helpers                                           */
+/* ------------------------------------------------------------------ */
+
+const STEPS_BUCKETS = [
+  { label: "< 50", value: "lt50" },
+  { label: "50 – 100", value: "50-100" },
+  { label: "100 – 200", value: "100-200" },
+  { label: "> 200", value: "gt200" },
+];
+
+function stepsBucketKey(steps: number): string {
+  if (steps < 50) return "lt50";
+  if (steps <= 100) return "50-100";
+  if (steps <= 200) return "100-200";
+  return "gt200";
+}
+
+/* ------------------------------------------------------------------ */
+/*  Difficulty options (static)                                        */
+/* ------------------------------------------------------------------ */
+
+const DIFFICULTY_OPTIONS = [
+  { label: "trivial", value: "trivial" },
+  { label: "easy", value: "easy" },
+  { label: "medium", value: "medium" },
+  { label: "hard", value: "hard" },
+  { label: "expert", value: "expert" },
+];
+
+/* ------------------------------------------------------------------ */
+/*  Page                                                               */
+/* ------------------------------------------------------------------ */
 
 export default function TasksPage() {
   const tasks = useTasks();
   const runs = useRuns();
   const environments = useEnvironments();
 
-  const [search, setSearch] = useState("");
-  const [envFilter, setEnvFilter] = useState<string>("all");
+  const { filters, setColumnFilter, activeCount, clearAll } =
+    useColumnFilters();
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   const isPending = tasks.isPending || environments.isPending || runs.isPending;
@@ -31,7 +76,19 @@ export default function TasksPage() {
     [environments.data],
   );
 
-  const envList = environments.data ?? [];
+  /* Build dynamic filter options from data */
+  const envOptions = useMemo(
+    () => uniqueOptions((environments.data ?? []).map((e) => e.name)),
+    [environments.data],
+  );
+
+  const categoryOptions = useMemo(
+    () => uniqueOptions((tasks.data ?? []).map((t) => t.category)),
+    [tasks.data],
+  );
+
+  /* Resolve environment_id → name for filtering */
+  const envIdToName = envMap;
 
   /** Map each task ID to the runs that include results for it. */
   const taskRunMap = useMemo(() => {
@@ -46,7 +103,6 @@ export default function TasksPage() {
       if (!run) continue;
 
       const existing = map.get(rr.task_id) ?? [];
-      // Avoid duplicating the same run for the same task
       if (!existing.some((e) => e.runId === rr.run_id)) {
         existing.push({
           runId: rr.run_id,
@@ -63,26 +119,46 @@ export default function TasksPage() {
   const filteredTasks = useMemo(() => {
     let list = tasks.data ?? [];
 
-    if (envFilter !== "all") {
-      list = list.filter((t) => t.environment_id === envFilter);
-    }
+    list = list.filter((t) => {
+      const envName = envIdToName.get(t.environment_id) ?? "Unknown";
 
-    if (search.trim()) {
-      const q = search.toLowerCase();
-      list = list.filter(
-        (t) =>
-          t.name.toLowerCase().includes(q) ||
-          t.description.toLowerCase().includes(q) ||
-          t.category.toLowerCase().includes(q),
+      return (
+        matchesTextFilter(filters.name, t.name) &&
+        matchesSelectFilter(filters.environment, envName) &&
+        matchesSelectFilter(filters.category, t.category) &&
+        matchesSelectFilter(filters.difficulty, t.difficulty) &&
+        matchesBucketFilter(filters.maxSteps, stepsBucketKey(t.max_steps))
       );
-    }
+    });
 
     return list;
-  }, [tasks.data, envFilter, search]);
+  }, [tasks.data, filters, envIdToName]);
 
   function toggleRow(taskId: string) {
     setExpandedId((prev) => (prev === taskId ? null : taskId));
   }
+
+  /* ---- Filter configs ---- */
+  const nameFilterConfig: ColumnFilterConfig = {
+    type: "text",
+    placeholder: "Filter by name...",
+  };
+  const envFilterConfig: ColumnFilterConfig = {
+    type: "select",
+    options: envOptions,
+  };
+  const categoryFilterConfig: ColumnFilterConfig = {
+    type: "select",
+    options: categoryOptions,
+  };
+  const difficultyFilterConfig: ColumnFilterConfig = {
+    type: "select",
+    options: DIFFICULTY_OPTIONS,
+  };
+  const stepsFilterConfig: ColumnFilterConfig = {
+    type: "range",
+    options: STEPS_BUCKETS,
+  };
 
   if (isPending) {
     return (
@@ -118,33 +194,24 @@ export default function TasksPage() {
         description="Browse and filter evaluation tasks across environments"
       />
 
-      {/* Filter area */}
-      <Card padding="sm" className="mb-6">
-        <div className="flex flex-wrap items-center gap-3">
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search tasks by name, description, or category..."
-            className="min-w-[280px] flex-1 rounded-md border border-border bg-background px-3 py-1.5 text-sm text-text-primary placeholder:text-text-tertiary focus:border-accent focus:outline-none"
-          />
-          <select
-            value={envFilter}
-            onChange={(e) => setEnvFilter(e.target.value)}
-            className="rounded-md border border-border bg-background px-3 py-1.5 text-sm text-text-primary focus:border-accent focus:outline-none"
-          >
-            <option value="all">All Environments</option>
-            {envList.map((env) => (
-              <option key={env.id} value={env.id}>
-                {env.name}
-              </option>
-            ))}
-          </select>
+      {/* Active filter indicator */}
+      {activeCount > 0 && (
+        <div className="mb-3 flex items-center gap-2">
           <span className="text-[11px] text-text-tertiary">
-            {filteredTasks.length} task{filteredTasks.length !== 1 ? "s" : ""}
+            {activeCount} filter{activeCount !== 1 ? "s" : ""} active
+          </span>
+          <button
+            onClick={clearAll}
+            className="text-[11px] text-accent hover:underline"
+          >
+            Clear all
+          </button>
+          <span className="ml-auto text-[11px] text-text-tertiary">
+            {filteredTasks.length} task
+            {filteredTasks.length !== 1 ? "s" : ""}
           </span>
         </div>
-      </Card>
+      )}
 
       {/* Results table */}
       <Card padding="none">
@@ -159,19 +226,56 @@ export default function TasksPage() {
                 <tr className="border-b border-border text-left">
                   <th className="w-8 pb-2 pl-4 pr-1 pt-4" />
                   <th className="pb-2 pr-4 pt-4 text-[11px] font-medium uppercase tracking-wider text-text-tertiary">
-                    Name
+                    <span className="inline-flex items-center gap-0.5">
+                      Name
+                      <ColumnFilter
+                        config={nameFilterConfig}
+                        value={filters.name ?? {}}
+                        onChange={(next) => setColumnFilter("name", next)}
+                      />
+                    </span>
                   </th>
                   <th className="pb-2 pr-4 pt-4 text-[11px] font-medium uppercase tracking-wider text-text-tertiary">
-                    Environment
+                    <span className="inline-flex items-center gap-0.5">
+                      Environment
+                      <ColumnFilter
+                        config={envFilterConfig}
+                        value={filters.environment ?? {}}
+                        onChange={(next) =>
+                          setColumnFilter("environment", next)
+                        }
+                      />
+                    </span>
                   </th>
                   <th className="pb-2 pr-4 pt-4 text-[11px] font-medium uppercase tracking-wider text-text-tertiary">
-                    Category
+                    <span className="inline-flex items-center gap-0.5">
+                      Category
+                      <ColumnFilter
+                        config={categoryFilterConfig}
+                        value={filters.category ?? {}}
+                        onChange={(next) => setColumnFilter("category", next)}
+                      />
+                    </span>
                   </th>
                   <th className="pb-2 pr-4 pt-4 text-[11px] font-medium uppercase tracking-wider text-text-tertiary">
-                    Difficulty
+                    <span className="inline-flex items-center gap-0.5">
+                      Difficulty
+                      <ColumnFilter
+                        config={difficultyFilterConfig}
+                        value={filters.difficulty ?? {}}
+                        onChange={(next) => setColumnFilter("difficulty", next)}
+                      />
+                    </span>
                   </th>
                   <th className="pb-2 pr-4 pt-4 text-[11px] font-medium uppercase tracking-wider text-text-tertiary">
-                    Max Steps
+                    <span className="inline-flex items-center gap-0.5">
+                      Max Steps
+                      <ColumnFilter
+                        config={stepsFilterConfig}
+                        value={filters.maxSteps ?? {}}
+                        onChange={(next) => setColumnFilter("maxSteps", next)}
+                      />
+                    </span>
                   </th>
                 </tr>
               </thead>
@@ -229,7 +333,7 @@ function TaskRow({
         onClick={onToggle}
       >
         {/* Chevron */}
-        <td className="pl-4 pr-1 py-2.5">
+        <td className="py-2.5 pl-4 pr-1">
           {isExpanded ? (
             <PiCaretDown className="h-3.5 w-3.5 text-text-tertiary" />
           ) : (

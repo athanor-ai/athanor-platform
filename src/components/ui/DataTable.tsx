@@ -1,10 +1,17 @@
 import clsx from "clsx";
+import {
+  ColumnFilter,
+  type ColumnFilterConfig,
+  type ColumnFilterState,
+} from "@/components/ui/ColumnFilter";
 
 export interface Column<T> {
   key: string;
   header: string;
   className?: string;
   sortable?: boolean;
+  /** When provided, a filter dropdown icon is rendered in the column header. */
+  filterConfig?: ColumnFilterConfig;
   render: (item: T) => React.ReactNode;
 }
 
@@ -15,6 +22,8 @@ export function DataTable<T extends { id: string }>({
   onHeaderClick,
   sortKey,
   sortDir,
+  filters,
+  onFilterChange,
   emptyMessage = "No data available",
   className,
 }: {
@@ -24,6 +33,10 @@ export function DataTable<T extends { id: string }>({
   onHeaderClick?: (key: string) => void;
   sortKey?: string;
   sortDir?: "asc" | "desc";
+  /** Current per-column filter state keyed by column key. */
+  filters?: Record<string, ColumnFilterState>;
+  /** Called when a column filter changes. */
+  onFilterChange?: (key: string, state: ColumnFilterState) => void;
   emptyMessage?: string;
   className?: string;
 }) {
@@ -48,16 +61,31 @@ export function DataTable<T extends { id: string }>({
                   col.className,
                 )}
               >
-                {col.sortable && onHeaderClick ? (
-                  <button
-                    onClick={() => onHeaderClick(col.key)}
-                    className="hover:text-text-primary cursor-pointer"
-                  >
-                    {col.header} {sortKey === col.key ? (sortDir === "asc" ? "↑" : "↓") : ""}
-                  </button>
-                ) : (
-                  col.header
-                )}
+                <span className="inline-flex items-center gap-0.5">
+                  {col.sortable && onHeaderClick ? (
+                    <button
+                      onClick={() => onHeaderClick(col.key)}
+                      className="cursor-pointer hover:text-text-primary"
+                    >
+                      {col.header}{" "}
+                      {sortKey === col.key
+                        ? sortDir === "asc"
+                          ? "\u2191"
+                          : "\u2193"
+                        : ""}
+                    </button>
+                  ) : (
+                    col.header
+                  )}
+
+                  {col.filterConfig && onFilterChange && (
+                    <ColumnFilter
+                      config={col.filterConfig}
+                      value={filters?.[col.key] ?? {}}
+                      onChange={(next) => onFilterChange(col.key, next)}
+                    />
+                  )}
+                </span>
               </th>
             ))}
           </tr>
@@ -73,7 +101,10 @@ export function DataTable<T extends { id: string }>({
               onClick={() => onRowClick?.(item)}
             >
               {columns.map((col) => (
-                <td key={col.key} className={clsx("py-2.5 pr-4", col.className)}>
+                <td
+                  key={col.key}
+                  className={clsx("py-2.5 pr-4", col.className)}
+                >
                   {col.render(item)}
                 </td>
               ))}
