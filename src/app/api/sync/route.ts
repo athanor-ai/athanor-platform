@@ -2,9 +2,9 @@
  * POST /api/sync — Sync scores from env repos into the platform.
  *
  * Actions:
- *   { action: "scores" } — Pull latest run data from all 6 env repos (on VM or local)
+ *   { action: "scores" } — Pull latest run data from all env repos (on VM or local)
  *   { action: "validate" } — Run validate_env.py on all envs
- *   { action: "rebuild-containers" } — Rebuild all 6 container images
+ *   { action: "rebuild-containers" } — Rebuild all container images
  *
  * Admin-only. Used after new runs complete or env-builder changes are pushed.
  */
@@ -12,19 +12,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseServerClient } from "@/lib/supabase-server";
 import { exec } from "child_process";
 import { promisify } from "util";
+import { ALL_VM_DIR_NAMES } from "@/data/environment-registry";
 
 const execAsync = promisify(exec);
 const SSH_TARGET = process.env.AZURE_VM_SSH_TARGET;
 const SSH_OPTS = "-o StrictHostKeyChecking=no -o ConnectTimeout=30";
 
-const ENVS = [
-  "hw-cbmc-env",
-  "lean-demo",
-  "csparse-rust-env",
-  "congestion-control",
-  "distributed-consensus",
-  "cedar-env",
-];
+const ENVS = ALL_VM_DIR_NAMES;
 
 async function verifyAdmin() {
   const supabase = await getSupabaseServerClient();
@@ -99,7 +93,7 @@ print(json.dumps({'files': total, 'complete': complete}))
     }
 
     case "rebuild-containers": {
-      // Rebuild all 6 container images
+      // Rebuild all container images
       const results: Record<string, unknown> = {};
       for (const env of ENVS) {
         try {
