@@ -13,6 +13,12 @@
 import { createClient } from "@supabase/supabase-js";
 import { decryptKey } from "@/lib/encryption";
 import { buildRunEnvVars } from "@/lib/platform-credentials";
+import { ENV_REPO_MAP } from "@/data/environment-registry";
+
+/**
+ * Re-export ENV_REPO_MAP so existing consumers can keep importing from here.
+ */
+export { ENV_REPO_MAP } from "@/data/environment-registry";
 
 /**
  * Service-role Supabase client for executor operations.
@@ -76,18 +82,6 @@ export async function prepareRunEnvironment(
 
   return { envVars, run };
 }
-
-/**
- * Map environment slug to the local repo directory.
- */
-export const ENV_REPO_MAP: Record<string, string> = {
-  "lean-theorem-proving": "lean-demo",
-  "cedar-policy-verification": "cedar-env",
-  "distributed-consensus": "distributed-consensus",
-  "congestion-control": "congestion-control",
-  "c-to-rust": "csparse-rust-env",
-  "hw-cbmc": "hw-cbmc-env",
-};
 
 /**
  * Get the evaluate.py command for an environment.
