@@ -16,34 +16,11 @@ import { StatusBadge } from "@/components/ui/StatusBadge";
 import { Button } from "@/components/ui/Button";
 import { LoadingState } from "@/components/ui/LoadingState";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { REAL_HEATMAP_DATA } from "@/data/heatmap";
-import { BASELINE_MODELS } from "@/data/models";
 import type { EnvironmentVersion, Task } from "@/types/database";
 
-function getEnvStats(slug: string) {
-  const heatmap = REAL_HEATMAP_DATA[slug];
-  if (!heatmap) return { tasks: 0, meanScore: 0, hardest: 0 };
-
-  const allScores: number[] = [];
-  for (const model of BASELINE_MODELS) {
-    const cells = heatmap[model.slug];
-    if (cells) {
-      for (const c of cells) allScores.push(c.score);
-    }
-  }
-
-  const tasks = new Set(
-    Object.values(heatmap).flatMap((cells) => cells.map((c) => c.task)),
-  ).size;
-
-  const mean =
-    allScores.length > 0
-      ? allScores.reduce((a, b) => a + b, 0) / allScores.length
-      : 0;
-
-  const hardest = allScores.filter((s) => s < 0.05).length;
-
-  return { tasks, meanScore: mean, hardest };
+/** Build the GitHub download link for a task file. */
+function taskGithubUrl(task: Task): string {
+  return `https://github.com/athanor-ai/congestion-control/blob/master/student_data/${task.slug}`;
 }
 
 export default function EnvironmentDetailPage() {
@@ -87,9 +64,6 @@ export default function EnvironmentDetailPage() {
       new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
   );
   const latestVersion = sortedVersions[0]?.version_tag ?? "No versions";
-
-  // Download stats from heatmap data
-  const stats = getEnvStats(env.slug);
 
   const versionColumns: Column<EnvironmentVersion>[] = [
     {
@@ -159,6 +133,22 @@ export default function EnvironmentDetailPage() {
       header: "Difficulty",
       render: (t) => <StatusBadge status={t.difficulty} />,
     },
+    {
+      key: "download",
+      header: "Download",
+      render: (t) => (
+        <a
+          href={taskGithubUrl(t)}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={(e) => e.stopPropagation()}
+          className="inline-flex items-center gap-1 rounded-sm border border-border bg-background px-1.5 py-0.5 text-[10px] font-medium text-text-secondary transition-colors hover:border-accent/30 hover:text-accent"
+        >
+          <PiGithubLogo className="h-3 w-3" />
+          Source
+        </a>
+      ),
+    },
   ];
 
   return (
@@ -190,64 +180,41 @@ export default function EnvironmentDetailPage() {
         </CardHeader>
         <div className="space-y-3 px-6 pb-6">
           <p className="text-sm text-text-secondary">
-            Self-contained package. Download, build, evaluate. No platform
-            dependency required.
+            Download task files for this environment. Each task is available as a
+            source file on GitHub.
           </p>
-          <div className="grid grid-cols-3 gap-2 text-center">
-            <div className="rounded-md bg-surface-secondary p-2">
-              <div className="text-lg font-semibold text-text-primary">
-                {stats.tasks}
-              </div>
-              <div className="text-xs text-text-tertiary">tasks</div>
-            </div>
-            <div className="rounded-md bg-surface-secondary p-2">
-              <div className="text-lg font-semibold text-text-primary">
-                {stats.meanScore.toFixed(2)}
-              </div>
-              <div className="text-xs text-text-tertiary">avg score</div>
-            </div>
-            <div className="rounded-md bg-surface-secondary p-2">
-              <div className="text-lg font-semibold text-text-primary">
-                {stats.hardest}
-              </div>
-              <div className="text-xs text-text-tertiary">frontier</div>
-            </div>
-          </div>
-
           <div className="flex gap-2">
             <Button
               variant="primary"
               size="sm"
-              className="flex-1"
               onClick={() =>
                 window.open(
-                  `https://github.com/athanor-ai/${env.slug}/releases/latest`,
+                  "https://github.com/athanor-ai/congestion-control/tree/master/student_data",
                   "_blank",
                 )
               }
             >
               <PiDownloadSimple className="mr-1.5 h-4 w-4" />
-              Download {latestVersion}
+              Browse All Files
             </Button>
             <Button
               variant="secondary"
               size="sm"
               onClick={() =>
                 window.open(
-                  `https://github.com/athanor-ai/${env.slug}`,
+                  "https://github.com/athanor-ai/congestion-control",
                   "_blank",
                 )
               }
             >
               <PiGithubLogo className="mr-1.5 h-4 w-4" />
-              GitHub
+              GitHub Repo
             </Button>
           </div>
-
           <p className="text-xs text-text-tertiary">
-            Includes: Containerfile, scoring harness, {stats.tasks} task
-            configs, 5-model baselines, calibration toolkit, and production
-            Docker Compose.
+            Includes: Containerfile, scoring harness, {taskList.length} task
+            configs, baselines, calibration toolkit, and production Docker
+            Compose.
           </p>
         </div>
       </Card>
