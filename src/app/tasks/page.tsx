@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import clsx from "clsx";
-import { PiCaretDown, PiCaretRight } from "react-icons/pi";
+import { PiCaretDown, PiCaretRight, PiGithubLogo } from "react-icons/pi";
 import { useTasks } from "@/hooks/useTasks";
 import { useRuns } from "@/hooks/useRuns";
 import { useEnvironments } from "@/hooks/useEnvironments";
@@ -36,10 +36,14 @@ export default function TasksPage() {
   /** Map each task ID to the runs that include results for it. */
   const taskRunMap = useMemo(() => {
     const runMap = new Map((runs.data ?? []).map((r) => [r.id, r]));
-    const map = new Map<string, { runId: string; shortId: string }[]>();
+    const map = new Map<
+      string,
+      { runId: string; shortId: string; modelName: string }[]
+    >();
 
     for (const rr of mockRunResults) {
-      if (!runMap.has(rr.run_id)) continue;
+      const run = runMap.get(rr.run_id);
+      if (!run) continue;
 
       const existing = map.get(rr.task_id) ?? [];
       // Avoid duplicating the same run for the same task
@@ -47,6 +51,7 @@ export default function TasksPage() {
         existing.push({
           runId: rr.run_id,
           shortId: rr.run_id.slice(0, 8),
+          modelName: run.model_name,
         });
       }
       map.set(rr.task_id, existing);
@@ -209,7 +214,7 @@ function TaskRow({
   task: Task;
   isExpanded: boolean;
   envName: string;
-  linkedRuns: { runId: string; shortId: string }[];
+  linkedRuns: { runId: string; shortId: string; modelName: string }[];
   onToggle: () => void;
 }) {
   return (
@@ -269,10 +274,22 @@ function TaskRow({
         <tr className="border-b border-border bg-surface-overlay">
           <td colSpan={6} className="px-4 py-3">
             <div className="space-y-3">
-              {/* Description */}
+              {/* Description + GitHub link */}
               <div>
-                <div className="text-[10px] font-medium uppercase tracking-wider text-text-tertiary">
-                  Description
+                <div className="flex items-center gap-2">
+                  <div className="text-[10px] font-medium uppercase tracking-wider text-text-tertiary">
+                    Description
+                  </div>
+                  <a
+                    href={task.github_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="inline-flex items-center gap-1 rounded-sm border border-border bg-background px-1.5 py-0.5 text-[10px] font-medium text-text-secondary transition-colors hover:border-accent/30 hover:text-accent"
+                  >
+                    <PiGithubLogo className="h-3 w-3" />
+                    Source
+                  </a>
                 </div>
                 <p className="mt-1 text-xs leading-relaxed text-text-secondary">
                   {task.description}
@@ -293,7 +310,7 @@ function TaskRow({
                         onClick={(e) => e.stopPropagation()}
                         className="inline-flex items-center rounded-sm border border-border bg-background px-2 py-1 font-mono text-[11px] text-accent transition-colors hover:border-accent/30 hover:bg-accent-subtle"
                       >
-                        View in Run {lr.shortId}
+                        {lr.modelName} run
                       </Link>
                     ))}
                   </div>
