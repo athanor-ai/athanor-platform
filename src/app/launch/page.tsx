@@ -26,10 +26,14 @@ function LaunchButton({
   canLaunch,
   selectedEnvironment,
   selectedModels,
+  selectedTaskIds,
+  totalTasks,
 }: {
   canLaunch: boolean;
   selectedEnvironment: string | null;
   selectedModels: AthanorModel[];
+  selectedTaskIds: string[];
+  totalTasks: number;
 }) {
   const router = useRouter();
   const launch = useLaunchRun();
@@ -44,11 +48,13 @@ function LaunchButton({
 
     try {
       // Launch one run per model
+      const allSelected = selectedTaskIds.length === totalTasks;
       for (const model of selectedModels) {
         const result = await launch.mutateAsync({
           environment_id: selectedEnvironment,
           model_name: model.slug,
           autoShutdown: true,
+          selected_task_ids: allSelected ? undefined : selectedTaskIds,
         });
         // Navigate to runs page after first successful launch
         if (result.run_id) {
@@ -344,7 +350,7 @@ function CredentialReadiness({
 /*  Page                                                               */
 /* ------------------------------------------------------------------ */
 
-type LaunchStep = "environment" | "models" | "review";
+type LaunchStep = "environment" | "tasks" | "models" | "review";
 
 export default function LaunchPage() {
   const credentials = useCredentials();
@@ -353,6 +359,7 @@ export default function LaunchPage() {
 
   const [currentStep, setCurrentStep] = useState<LaunchStep>("environment");
   const [selectedEnvironment, setSelectedEnvironment] = useState<string | null>(null);
+  const [selectedTaskIds, setSelectedTaskIds] = useState<Set<string>>(new Set());
   const [selectedModelSlugs, setSelectedModelSlugs] = useState<Set<string>>(new Set());
 
   const isPending = credentials.isPending || environments.isPending || allTasks.isPending;
@@ -378,6 +385,43 @@ export default function LaunchPage() {
     return (allTasks.data ?? []).filter((t) => t.environment_id === selectedEnvironment);
   }, [allTasks.data, selectedEnvironment]);
 
+  // Handler for environment selection — selects all tasks by default
+  const handleSelectEnvironment = (envId: string) => {
+    setSelectedEnvironment(envId);
+    const tasksForEnv = (allTasks.data ?? []).filter(
+      (t) => t.environment_id === envId,
+    );
+    setSelectedTaskIds(new Set(tasksForEnv.map((t) => t.id)));
+  };
+
+  // Selected tasks as objects
+  const selectedTasks = useMemo(
+    () => environmentTasks.filter((t) => selectedTaskIds.has(t.id)),
+    [environmentTasks, selectedTaskIds],
+  );
+
+  const allTasksSelected = environmentTasks.length > 0 && selectedTaskIds.size === environmentTasks.length;
+
+  const handleToggleTask = (taskId: string) => {
+    setSelectedTaskIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(taskId)) {
+        next.delete(taskId);
+      } else {
+        next.add(taskId);
+      }
+      return next;
+    });
+  };
+
+  const handleToggleAllTasks = () => {
+    if (allTasksSelected) {
+      setSelectedTaskIds(new Set());
+    } else {
+      setSelectedTaskIds(new Set(environmentTasks.map((t) => t.id)));
+    }
+  };
+
   // Selected models as objects
   const selectedModels = useMemo(
     () => ATHANOR_MODELS.filter((m) => selectedModelSlugs.has(m.slug)),
@@ -395,8 +439,9 @@ export default function LaunchPage() {
   );
 
   const canProceedFromEnvironment = selectedEnvironment !== null;
+  const canProceedFromTasks = selectedTasks.length > 0;
   const canProceedFromModels = selectedModels.length > 0;
-  const canLaunch = canProceedFromEnvironment && canProceedFromModels && allModelsHaveCredentials;
+  const canLaunch = canProceedFromEnvironment && canProceedFromTasks && canProceedFromModels && allModelsHaveCredentials;
 
   const handleToggleModel = (slug: string) => {
     setSelectedModelSlugs((prev) => {
@@ -445,13 +490,23 @@ export default function LaunchPage() {
         <div className="h-px flex-1 bg-border" />
         <StepIndicator
           step={2}
+          label="Tasks"
+          isActive={currentStep === "tasks"}
+          isComplete={
+            (currentStep === "models" || currentStep === "review") &&
+            canProceedFromTasks
+          }
+        />
+        <div className="h-px flex-1 bg-border" />
+        <StepIndicator
+          step={3}
           label="Models"
           isActive={currentStep === "models"}
           isComplete={currentStep === "review" && canProceedFromModels}
         />
         <div className="h-px flex-1 bg-border" />
         <StepIndicator
-          step={3}
+          step={4}
           label="Review & Launch"
           isActive={currentStep === "review"}
           isComplete={false}
@@ -472,7 +527,7 @@ export default function LaunchPage() {
             <EnvironmentSelector
               environments={environments.data ?? []}
               selectedId={selectedEnvironment}
-              onSelect={setSelectedEnvironment}
+              onSelect={handleSelectEnvironment}
               taskCounts={taskCounts}
             />
           </Card>
@@ -482,6 +537,110 @@ export default function LaunchPage() {
               variant="primary"
               size="sm"
               disabled={!canProceedFromEnvironment}
+              onClick={() => setCurrentStep("tasks")}
+            >
+              Continue to Task Selection
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {/* Step 2: Task Selection */}
+      {currentStep === "tasks" && (
+        <div className="space-y-4">
+          <Card padding="lg">
+            <CardHeader>
+              <div>
+                <CardTitle>Select Tasks</CardTitle>
+                <p className="mt-1 text-xs text-text-secondary">
+                  Environment:{" "}
+                  <span className="font-medium text-accent">
+                    {selectedEnvObj?.name ?? "Unknown"}
+                  </span>
+                </p>
+              </div>
+              <div className="flex items-center gap-3">
+                <span className="text-[11px] text-text-tertiary">
+                  {selectedTaskIds.size} of {environmentTasks.length} tasks
+                  selected
+                </span>
+                <button
+                  type="button"
+                  className="cursor-pointer text-[11px] font-medium text-accent hover:text-accent/80"
+                  onClick={handleToggleAllTasks}
+                >
+                  {allTasksSelected ? "Deselect All" : "Select All"}
+                </button>
+              </div>
+            </CardHeader>
+
+            <div className="space-y-1.5">
+              {environmentTasks.map((task) => {
+                const isSelected = selectedTaskIds.has(task.id);
+                return (
+                  <button
+                    key={task.id}
+                    type="button"
+                    className={`flex w-full cursor-pointer items-center gap-3 rounded-md border px-3 py-2 text-left transition-all ${
+                      isSelected
+                        ? "border-accent bg-accent-subtle"
+                        : "border-border bg-surface-raised hover:border-accent/30"
+                    }`}
+                    onClick={() => handleToggleTask(task.id)}
+                  >
+                    <div
+                      className={`flex h-4 w-4 shrink-0 items-center justify-center rounded border transition-colors ${
+                        isSelected
+                          ? "border-accent bg-accent"
+                          : "border-border bg-surface"
+                      }`}
+                    >
+                      {isSelected && (
+                        <svg
+                          width="10"
+                          height="10"
+                          viewBox="0 0 16 16"
+                          fill="none"
+                        >
+                          <path
+                            d="M13.5 4.5L6 12L2.5 8.5"
+                            stroke="white"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      )}
+                    </div>
+                    <div className="flex flex-1 items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm text-text-primary">
+                          {task.name}
+                        </span>
+                        <span className="text-[10px] text-text-tertiary">
+                          {task.category}
+                        </span>
+                      </div>
+                      <StatusBadge status={task.difficulty} />
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </Card>
+
+          <div className="flex items-center justify-between">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setCurrentStep("environment")}
+            >
+              Back
+            </Button>
+            <Button
+              variant="primary"
+              size="sm"
+              disabled={!canProceedFromTasks}
               onClick={() => setCurrentStep("models")}
             >
               Continue to Model Selection
@@ -490,7 +649,7 @@ export default function LaunchPage() {
         </div>
       )}
 
-      {/* Step 2: Model Selection */}
+      {/* Step 3: Model Selection */}
       {currentStep === "models" && (
         <div className="space-y-4">
           <Card padding="lg">
@@ -502,7 +661,7 @@ export default function LaunchPage() {
                   <span className="font-medium text-accent">
                     {selectedEnvObj?.name ?? "Unknown"}
                   </span>
-                  {" "}({environmentTasks.length} tasks)
+                  {" "}({selectedTasks.length} of {environmentTasks.length} tasks)
                 </p>
               </div>
               <Button variant="secondary" size="sm" onClick={handleSelectAllBaseline}>
@@ -565,7 +724,7 @@ export default function LaunchPage() {
           </Card>
 
           <div className="flex items-center justify-between">
-            <Button variant="ghost" size="sm" onClick={() => setCurrentStep("environment")}>
+            <Button variant="ghost" size="sm" onClick={() => setCurrentStep("tasks")}>
               Back
             </Button>
             <Button
@@ -580,7 +739,7 @@ export default function LaunchPage() {
         </div>
       )}
 
-      {/* Step 3: Review & Launch */}
+      {/* Step 4: Review & Launch */}
       {currentStep === "review" && (
         <div className="space-y-4">
           {/* Summary */}
@@ -601,7 +760,7 @@ export default function LaunchPage() {
                   </span>
                   <StatusBadge status="active" />
                   <span className="text-xs text-text-tertiary">
-                    {environmentTasks.length} tasks
+                    {selectedTasks.length} of {environmentTasks.length} tasks selected
                   </span>
                 </div>
               </div>
@@ -629,10 +788,10 @@ export default function LaunchPage() {
               {/* Task preview */}
               <div>
                 <span className="text-[11px] font-medium uppercase tracking-wider text-text-tertiary">
-                  Task Preview (first 5)
+                  Selected Tasks ({selectedTasks.length})
                 </span>
                 <div className="mt-1 space-y-1">
-                  {environmentTasks.slice(0, 5).map((task) => (
+                  {selectedTasks.slice(0, 5).map((task) => (
                     <div
                       key={task.id}
                       className="flex items-center justify-between rounded-md bg-surface-overlay px-3 py-1.5"
@@ -641,9 +800,9 @@ export default function LaunchPage() {
                       <StatusBadge status={task.difficulty} />
                     </div>
                   ))}
-                  {environmentTasks.length > 5 && (
+                  {selectedTasks.length > 5 && (
                     <p className="px-3 text-[10px] text-text-tertiary">
-                      + {environmentTasks.length - 5} more tasks
+                      + {selectedTasks.length - 5} more tasks
                     </p>
                   )}
                 </div>
@@ -654,12 +813,12 @@ export default function LaunchPage() {
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-text-secondary">Total evaluations</span>
                   <span className="font-mono text-sm font-medium text-accent">
-                    {selectedModels.length * environmentTasks.length}
+                    {selectedModels.length * selectedTasks.length}
                   </span>
                 </div>
                 <p className="mt-1 text-[10px] text-text-tertiary">
                   {selectedModels.length} model{selectedModels.length !== 1 ? "s" : ""} &times;{" "}
-                  {environmentTasks.length} tasks
+                  {selectedTasks.length} task{selectedTasks.length !== 1 ? "s" : ""}
                 </p>
               </div>
             </div>
@@ -701,6 +860,8 @@ export default function LaunchPage() {
                   canLaunch={canLaunch}
                   selectedEnvironment={selectedEnvironment}
                   selectedModels={selectedModels}
+                  selectedTaskIds={Array.from(selectedTaskIds)}
+                  totalTasks={environmentTasks.length}
                 />
               </div>
             </div>
