@@ -56,6 +56,7 @@ export interface Task {
   max_steps: number;
   reward_range: { min: number; max: number } | null;
   metadata: Record<string, unknown>;
+  github_url: string;
   created_at: string;
   updated_at: string;
 }
