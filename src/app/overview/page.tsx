@@ -164,27 +164,6 @@ export default function OverviewPage() {
           onRowClick={(run) => router.push(`/runs/${run.id}`)}
         />
       </Card>
-
-      {/* Quick navigation */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Quick Navigation</CardTitle>
-        </CardHeader>
-        <div className="flex flex-wrap gap-3">
-          <Link href="/environments">
-            <Button variant="primary">Environments</Button>
-          </Link>
-          <Link href="/runs">
-            <Button variant="secondary">Run History</Button>
-          </Link>
-          <Link href="/scores">
-            <Button variant="secondary">Scores</Button>
-          </Link>
-          <Link href="/baselines">
-            <Button variant="secondary">Baselines</Button>
-          </Link>
-        </div>
-      </Card>
     </>
   );
 }
