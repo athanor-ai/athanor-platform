@@ -150,8 +150,11 @@ export default function AdminPage() {
 
       const created = data.users.filter((u: { status: string }) => u.status === "created").length;
       const cfAdded = data.cloudflare?.added?.length || 0;
+      const envWarning = data.environmentErrors?.length
+        ? ` (env warnings: ${data.environmentErrors.join("; ")})`
+        : "";
       setInviteResult(
-        `${inviteOrg} created: ${created}/${emails.length} users, ${data.environments.length} env(s), ${cfAdded} emails added to Cloudflare access.`
+        `${inviteOrg} created: ${created}/${emails.length} users, ${data.environments.length} env(s), ${cfAdded} emails added to Cloudflare access.${envWarning}`
       );
       setInviteEmails("");
       setInviteOrg("");
