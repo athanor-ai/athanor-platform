@@ -341,6 +341,8 @@ ALTER TABLE organization_environments ENABLE ROW LEVEL SECURITY;
 
 CREATE INDEX idx_organization_environments_organization_id ON organization_environments(organization_id);
 CREATE INDEX idx_organization_environments_environment_id ON organization_environments(environment_id);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_organization_environments_org_env_unique
+  ON organization_environments(organization_id, environment_id);
 
 -- =============================================================================
 -- Athanor RL Training Platform - Row Level Security Policies

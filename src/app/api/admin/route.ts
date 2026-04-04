@@ -13,6 +13,7 @@ function getServiceClient() {
   return createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    { auth: { autoRefreshToken: false, persistSession: false } },
   );
 }
 
@@ -139,11 +140,14 @@ export async function POST(request: NextRequest) {
       if (!organization_id || !envId) {
         return NextResponse.json({ error: "Missing organization_id or environment_id/slug" }, { status: 400 });
       }
-      const { error } = await service.from("organization_environments").upsert({
-        organization_id,
-        environment_id: envId,
-        access_level: access_level || "full",
-      });
+      const { error } = await service.from("organization_environments").upsert(
+        {
+          organization_id,
+          environment_id: envId,
+          access_level: access_level || "full",
+        },
+        { onConflict: "organization_id,environment_id" },
+      );
       if (error) return NextResponse.json({ error: error.message }, { status: 500 });
       return NextResponse.json({ success: true, action: "grant-access" });
     }

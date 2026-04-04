@@ -8,7 +8,8 @@
  * {
  *   orgName: "Acme Corp",
  *   emails: ["alice@acme.com", "bob@acme.com"],
- *   environmentIds: ["00000000-0000-0000-0000-000000000010", ...]
+ *   environmentSlugs: ["lean-theorem-proving", "hw-cbmc"],
+ *   environmentIds: ["00000000-0000-0000-0000-000000000010", ...]  // optional
  * }
  */
 import { NextRequest, NextResponse } from "next/server";
@@ -32,6 +33,7 @@ function getServiceClient() {
   return createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    { auth: { autoRefreshToken: false, persistSession: false } },
   );
 }
 
@@ -58,10 +60,10 @@ export async function POST(request: NextRequest) {
   const results: Array<{ email: string; status: string; error?: string }> = [];
 
   // 1. Create organization
-  const slug = orgName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  const orgSlug = orgName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
   const { data: org, error: orgError } = await supabase
     .from("organizations")
-    .insert({ name: orgName, slug, plan: "customer" })
+    .insert({ name: orgName, slug: orgSlug, plan: "customer" })
     .select("id")
     .single();
 
@@ -103,13 +105,22 @@ export async function POST(request: NextRequest) {
 
   // 3. Grant environment access (support both IDs and slugs)
   const envGranted: string[] = [];
+  const envErrors: string[] = [];
 
-  // Resolve slugs to IDs
+  // Resolve slugs to IDs in a single batch query
   const envIds = [...(environmentIds || [])];
   if (environmentSlugs?.length) {
-    for (const slug of environmentSlugs) {
-      const { data: env } = await supabase.from("environments").select("id").eq("slug", slug).single();
-      if (env) envIds.push(env.id);
+    const { data: matchedEnvs, error: envLookupError } = await supabase
+      .from("environments")
+      .select("id, slug")
+      .in("slug", environmentSlugs);
+
+    if (envLookupError) {
+      envErrors.push(`Slug lookup failed: ${envLookupError.message}`);
+    } else if (matchedEnvs) {
+      for (const env of matchedEnvs) {
+        envIds.push(env.id);
+      }
     }
   }
 
@@ -121,7 +132,11 @@ export async function POST(request: NextRequest) {
         environment_id: envId,
         access_level: "full",
       });
-    if (!error) envGranted.push(envId);
+    if (error) {
+      envErrors.push(`Grant ${envId}: ${error.message}`);
+    } else {
+      envGranted.push(envId);
+    }
   }
 
   // 4. Add emails to Cloudflare Access policy
@@ -137,9 +152,10 @@ export async function POST(request: NextRequest) {
   }
 
   return NextResponse.json({
-    organization: { id: org.id, name: orgName, slug },
+    organization: { id: org.id, name: orgName, slug: orgSlug },
     users: results,
     environments: envGranted,
+    environmentErrors: envErrors.length > 0 ? envErrors : undefined,
     cloudflare: cfResult,
   }, { status: 201 });
 }
