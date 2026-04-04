@@ -1,11 +1,16 @@
 /**
  * POST /api/credentials — Create a new credential (encrypt + store)
  * GET  /api/credentials — List credential summaries (safe metadata only)
+ *
+ * When ATHANOR_USE_PLATFORM_KEYS=true, the GET endpoint also includes
+ * platform-owned credentials (Vercel env vars) so the launch page can
+ * show them as available providers.
  */
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseServerClient } from "@/lib/supabase-server";
 import { encryptKey, getKeySuffix } from "@/lib/encryption";
 import { getAuthUser } from "@/lib/auth";
+import { getPlatformCredentialSummariesForAPI } from "@/lib/platform-credentials";
 
 export async function POST(request: NextRequest) {
   const authUser = await getAuthUser(request);
@@ -74,5 +79,16 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  return NextResponse.json(data);
+  const dbCredentials = data ?? [];
+
+  // Merge platform-owned credentials (Vercel env vars) when enabled.
+  // Platform keys act as fallback — skip providers already covered by
+  // the organization's own credentials to avoid duplicates.
+  const platformSummaries = getPlatformCredentialSummariesForAPI();
+  const dbProviders = new Set(dbCredentials.map((c) => c.provider));
+  const platformExtras = platformSummaries.filter(
+    (p) => !dbProviders.has(p.provider),
+  );
+
+  return NextResponse.json([...dbCredentials, ...platformExtras]);
 }

@@ -45,12 +45,24 @@ export function getPlatformCredentials(): PlatformCredential[] {
 
   const creds: PlatformCredential[] = [];
 
+  // Anthropic (Claude Sonnet 4.6, Claude Sonnet 4, Claude Opus 4)
+  if (process.env.ANTHROPIC_API_KEY) {
+    creds.push({
+      provider: "anthropic",
+      envVar: "ANTHROPIC_API_KEY",
+      value: process.env.ANTHROPIC_API_KEY,
+      models: ["claude-sonnet-4-6", "claude-sonnet-4", "claude-opus-4"],
+    });
+  }
+
   // Google AI (Gemini Flash, Gemini Pro)
-  if (process.env.GOOGLE_API_KEY) {
+  // Supports both GOOGLE_API_KEY and GEMINI_API_KEY env var names
+  const googleKey = process.env.GOOGLE_API_KEY || process.env.GEMINI_API_KEY;
+  if (googleKey) {
     creds.push({
       provider: "google",
       envVar: "GOOGLE_API_KEY",
-      value: process.env.GOOGLE_API_KEY,
+      value: googleKey,
       models: ["gemini-2.5-flash", "gemini-3.1-pro-preview"],
     });
   }
@@ -68,7 +80,7 @@ export function getPlatformCredentials(): PlatformCredential[] {
     });
   }
 
-  // Fallback: OpenAI-compatible endpoint (same Azure AI, different env var name)
+  // Fallback: OpenAI-compatible endpoint (same Azure AI, different routing)
   // LiteLLM routes through OPENAI_API_KEY + OPENAI_API_BASE
   if (process.env.OPENAI_API_KEY && process.env.OPENAI_API_BASE) {
     creds.push({
@@ -161,4 +173,51 @@ export function getPlatformCredentialSummaries(): Array<{
     models: c.models,
     configured: true,
   }));
+}
+
+/**
+ * Get platform credentials as CredentialSummary objects for merging with
+ * database credentials in the /api/credentials endpoint.
+ *
+ * Returns summaries that match the CredentialSummary shape so the launch
+ * page can treat platform keys identically to user-provided keys.
+ *
+ * SECURITY: Never includes actual key values — only masked suffix.
+ */
+export function getPlatformCredentialSummariesForAPI(): Array<{
+  id: string;
+  organization_id: string;
+  provider: string;
+  label: string;
+  key_suffix: string;
+  base_url: string | null;
+  is_active: boolean;
+  last_verified_at: string | null;
+  created_at: string;
+  updated_at: string;
+}> {
+  if (!isPlatformKeysEnabled()) return [];
+
+  const now = new Date().toISOString();
+
+  return getPlatformCredentials()
+    .filter((c) => c.provider !== "huggingface")
+    .map((c) => {
+      const suffix = c.value.length > 4
+        ? `...${c.value.slice(-4)}`
+        : "***";
+
+      return {
+        id: `platform-${c.provider}`,
+        organization_id: "platform",
+        provider: c.provider,
+        label: `Platform ${c.envVar}`,
+        key_suffix: suffix,
+        base_url: c.baseUrl ?? null,
+        is_active: true,
+        last_verified_at: now,
+        created_at: now,
+        updated_at: now,
+      };
+    });
 }
