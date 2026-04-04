@@ -1,8 +1,8 @@
 /**
  * Real runs and baselines — generated from heatmap-data.json.
  *
- * 30 Run records (6 envs x 5 models), 770 RunResult records,
- * and 30 BaselineRun records.
+ * Run records (envs x models), RunResult records,
+ * and BaselineRun records.
  *
  * Auto-generated. Do not edit manually.
  */

@@ -1,12 +1,12 @@
 /**
- * Real task definitions — derived from actual task configs in the 6 Athanor repos.
+ * Real task definitions — derived from actual task configs in the 7 Athanor repos.
  *
  * Source: root_data/eval/configs/*.json in each athanor-ai/* repo.
  * Task names derived from config file slugs.
  * Difficulty inferred from Claude Sonnet 4.6 run-1 scores.
  * Categories derived from task-name prefix patterns + repo conventions.
  *
- * Total: 154 tasks across 6 environments.
+ * Total: 174 tasks across 7 environments.
  */
 
 import type { Task } from "@/types/database";
@@ -15,7 +15,7 @@ const now = new Date().toISOString();
 const weekAgo = new Date(Date.now() - 604800000).toISOString();
 
 /**
- * All 154 real tasks sourced from Athanor environment repos.
+ * All 174 real tasks sourced from Athanor environment repos.
  */
 export const realTasks: Task[] = [
   {
@@ -2633,6 +2633,346 @@ export const realTasks: Task[] = [
     metadata: { source: "repo-config" },
     github_url:
       "https://github.com/athanor-ai/athanor-tasks/tree/main/hw-cbmc/write-assertions-wdogtimer",
+    created_at: weekAgo,
+    updated_at: now,
+  },
+  {
+    id: "task-protein-155",
+    environment_id: "env-protein",
+    name: "Protein Folding Stability",
+    slug: "protein-folding-stability",
+    description:
+      "Predict the thermodynamic stability of a mutant protein by computing the change in folding free energy (ΔΔG) using molecular simulation. The agent must set up the force field, run equilibrium sampling, and apply free energy perturbation methods.",
+    difficulty: "hard",
+    category: "protein",
+    max_steps: 100,
+    reward_range: { min: 0, max: 1 },
+    metadata: { source: "repo-config" },
+    github_url:
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/protein-synthesis/protein-folding-stability",
+    created_at: weekAgo,
+    updated_at: now,
+  },
+  {
+    id: "task-protein-156",
+    environment_id: "env-protein",
+    name: "Binding Affinity Prediction",
+    slug: "binding-affinity-prediction",
+    description:
+      "Estimate the binding affinity of a small-molecule ligand to a target protein using molecular docking and scoring functions. The agent must prepare receptor and ligand structures, run docking simulations, and rank poses by predicted binding energy.",
+    difficulty: "hard",
+    category: "protein",
+    max_steps: 100,
+    reward_range: { min: 0, max: 1 },
+    metadata: { source: "repo-config" },
+    github_url:
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/protein-synthesis/binding-affinity-prediction",
+    created_at: weekAgo,
+    updated_at: now,
+  },
+  {
+    id: "task-protein-157",
+    environment_id: "env-protein",
+    name: "Membrane Protein Insertion",
+    slug: "membrane-protein-insertion",
+    description:
+      "Simulate the insertion of a transmembrane helix into a lipid bilayer using coarse-grained molecular dynamics. The agent must build the bilayer system, parameterize the protein, and analyze insertion orientation and depth.",
+    difficulty: "expert",
+    category: "protein",
+    max_steps: 100,
+    reward_range: { min: 0, max: 1 },
+    metadata: { source: "repo-config" },
+    github_url:
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/protein-synthesis/membrane-protein-insertion",
+    created_at: weekAgo,
+    updated_at: now,
+  },
+  {
+    id: "task-protein-158",
+    environment_id: "env-protein",
+    name: "Enzyme Kinetics Fitting",
+    slug: "enzyme-kinetics-fitting",
+    description:
+      "Fit Michaelis-Menten kinetic parameters to experimental enzyme assay data using nonlinear regression. The agent must handle substrate inhibition, estimate Km and Vmax, and compute confidence intervals for the fitted parameters.",
+    difficulty: "medium",
+    category: "protein",
+    max_steps: 100,
+    reward_range: { min: 0, max: 1 },
+    metadata: { source: "repo-config" },
+    github_url:
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/protein-synthesis/enzyme-kinetics-fitting",
+    created_at: weekAgo,
+    updated_at: now,
+  },
+  {
+    id: "task-protein-159",
+    environment_id: "env-protein",
+    name: "Hodgkin Huxley Simulation",
+    slug: "hodgkin-huxley-simulation",
+    description:
+      "Simulate action potential generation using the Hodgkin-Huxley model of neuronal membrane dynamics. The agent must implement the differential equations for sodium and potassium conductances and reproduce the characteristic spike waveform.",
+    difficulty: "medium",
+    category: "neuroscience",
+    max_steps: 100,
+    reward_range: { min: 0, max: 1 },
+    metadata: { source: "repo-config" },
+    github_url:
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/protein-synthesis/hodgkin-huxley-simulation",
+    created_at: weekAgo,
+    updated_at: now,
+  },
+  {
+    id: "task-protein-160",
+    environment_id: "env-protein",
+    name: "Neural Circuit Oscillation",
+    slug: "neural-circuit-oscillation",
+    description:
+      "Model oscillatory dynamics in a recurrent inhibitory neural circuit using conductance-based neuron models. The agent must tune synaptic weights and time constants to produce gamma-band oscillations and analyze the power spectrum.",
+    difficulty: "hard",
+    category: "neuroscience",
+    max_steps: 100,
+    reward_range: { min: 0, max: 1 },
+    metadata: { source: "repo-config" },
+    github_url:
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/protein-synthesis/neural-circuit-oscillation",
+    created_at: weekAgo,
+    updated_at: now,
+  },
+  {
+    id: "task-protein-161",
+    environment_id: "env-protein",
+    name: "Synaptic Plasticity STDP",
+    slug: "synaptic-plasticity-stdp",
+    description:
+      "Implement a spike-timing-dependent plasticity (STDP) learning rule in a network simulation and demonstrate its effect on receptive field development. The agent must model pre- and post-synaptic spike timing windows and weight update dynamics.",
+    difficulty: "hard",
+    category: "neuroscience",
+    max_steps: 100,
+    reward_range: { min: 0, max: 1 },
+    metadata: { source: "repo-config" },
+    github_url:
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/protein-synthesis/synaptic-plasticity-stdp",
+    created_at: weekAgo,
+    updated_at: now,
+  },
+  {
+    id: "task-protein-162",
+    environment_id: "env-protein",
+    name: "Calcium Signaling Cascade",
+    slug: "calcium-signaling-cascade",
+    description:
+      "Model intracellular calcium signaling cascades involving IP3 receptors and SERCA pumps. The agent must implement the De Young-Bhalla model, simulate calcium oscillations, and analyze the frequency dependence on IP3 concentration.",
+    difficulty: "medium",
+    category: "neuroscience",
+    max_steps: 100,
+    reward_range: { min: 0, max: 1 },
+    metadata: { source: "repo-config" },
+    github_url:
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/protein-synthesis/calcium-signaling-cascade",
+    created_at: weekAgo,
+    updated_at: now,
+  },
+  {
+    id: "task-protein-163",
+    environment_id: "env-protein",
+    name: "Gene Regulatory Network",
+    slug: "gene-regulatory-network",
+    description:
+      "Infer the topology of a gene regulatory network from time-series gene expression data using dynamic Bayesian networks. The agent must preprocess expression profiles, fit the network model, and validate inferred edges against known interactions.",
+    difficulty: "hard",
+    category: "systems_biology",
+    max_steps: 100,
+    reward_range: { min: 0, max: 1 },
+    metadata: { source: "repo-config" },
+    github_url:
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/protein-synthesis/gene-regulatory-network",
+    created_at: weekAgo,
+    updated_at: now,
+  },
+  {
+    id: "task-protein-164",
+    environment_id: "env-protein",
+    name: "Metabolic Flux Analysis",
+    slug: "metabolic-flux-analysis",
+    description:
+      "Perform flux balance analysis on a genome-scale metabolic model to predict optimal growth rates under nutrient constraints. The agent must formulate the linear program, apply stoichiometric constraints, and identify flux distributions.",
+    difficulty: "medium",
+    category: "systems_biology",
+    max_steps: 100,
+    reward_range: { min: 0, max: 1 },
+    metadata: { source: "repo-config" },
+    github_url:
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/protein-synthesis/metabolic-flux-analysis",
+    created_at: weekAgo,
+    updated_at: now,
+  },
+  {
+    id: "task-protein-165",
+    environment_id: "env-protein",
+    name: "Cell Cycle Modeling",
+    slug: "cell-cycle-modeling",
+    description:
+      "Simulate the mammalian cell cycle using an ODE model of cyclin-CDK interactions and checkpoint controls. The agent must parameterize the model from literature values and reproduce the sequential activation of G1/S and G2/M phase transitions.",
+    difficulty: "hard",
+    category: "systems_biology",
+    max_steps: 100,
+    reward_range: { min: 0, max: 1 },
+    metadata: { source: "repo-config" },
+    github_url:
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/protein-synthesis/cell-cycle-modeling",
+    created_at: weekAgo,
+    updated_at: now,
+  },
+  {
+    id: "task-protein-166",
+    environment_id: "env-protein",
+    name: "Epidemic SIR Fitting",
+    slug: "epidemic-sir-fitting",
+    description:
+      "Fit a compartmental SIR epidemiological model to time-series infection data and estimate the basic reproduction number R0. The agent must solve the ODEs numerically, optimize parameters against observed data, and quantify uncertainty.",
+    difficulty: "easy",
+    category: "systems_biology",
+    max_steps: 100,
+    reward_range: { min: 0, max: 1 },
+    metadata: { source: "repo-config" },
+    github_url:
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/protein-synthesis/epidemic-sir-fitting",
+    created_at: weekAgo,
+    updated_at: now,
+  },
+  {
+    id: "task-protein-167",
+    environment_id: "env-protein",
+    name: "Population Genetics Drift",
+    slug: "population-genetics-drift",
+    description:
+      "Simulate genetic drift in a finite population using the Wright-Fisher model and compute fixation probabilities for neutral alleles. The agent must implement the stochastic simulation, run ensemble replicates, and compare with theoretical predictions.",
+    difficulty: "medium",
+    category: "population_genetics",
+    max_steps: 100,
+    reward_range: { min: 0, max: 1 },
+    metadata: { source: "repo-config" },
+    github_url:
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/protein-synthesis/population-genetics-drift",
+    created_at: weekAgo,
+    updated_at: now,
+  },
+  {
+    id: "task-protein-168",
+    environment_id: "env-protein",
+    name: "Selection Sweep Detection",
+    slug: "selection-sweep-detection",
+    description:
+      "Detect signatures of positive selection in genomic sequence data using composite likelihood ratio tests. The agent must compute site frequency spectra, calculate CLR statistics along the genome, and identify candidate sweep regions.",
+    difficulty: "hard",
+    category: "population_genetics",
+    max_steps: 100,
+    reward_range: { min: 0, max: 1 },
+    metadata: { source: "repo-config" },
+    github_url:
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/protein-synthesis/selection-sweep-detection",
+    created_at: weekAgo,
+    updated_at: now,
+  },
+  {
+    id: "task-protein-169",
+    environment_id: "env-protein",
+    name: "Coalescent Tree Inference",
+    slug: "coalescent-tree-inference",
+    description:
+      "Infer a coalescent genealogy from population genetic samples using Markov chain Monte Carlo methods. The agent must implement the coalescent likelihood, propose tree topology changes, and estimate effective population size from the posterior.",
+    difficulty: "expert",
+    category: "population_genetics",
+    max_steps: 100,
+    reward_range: { min: 0, max: 1 },
+    metadata: { source: "repo-config" },
+    github_url:
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/protein-synthesis/coalescent-tree-inference",
+    created_at: weekAgo,
+    updated_at: now,
+  },
+  {
+    id: "task-protein-170",
+    environment_id: "env-protein",
+    name: "Connectome Path Analysis",
+    slug: "connectome-path-analysis",
+    description:
+      "Analyze shortest paths and communication efficiency in a connectome graph derived from diffusion MRI tractography. The agent must construct the structural connectivity matrix, compute graph-theoretic measures, and identify hub regions.",
+    difficulty: "medium",
+    category: "connectomics",
+    max_steps: 100,
+    reward_range: { min: 0, max: 1 },
+    metadata: { source: "repo-config" },
+    github_url:
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/protein-synthesis/connectome-path-analysis",
+    created_at: weekAgo,
+    updated_at: now,
+  },
+  {
+    id: "task-protein-171",
+    environment_id: "env-protein",
+    name: "Cortical Column Simulation",
+    slug: "cortical-column-simulation",
+    description:
+      "Simulate a cortical microcolumn with excitatory and inhibitory neuron populations using a mean-field neural mass model. The agent must implement the Jansen-Rit equations, tune parameters to produce alpha rhythms, and analyze the resulting EEG-like signals.",
+    difficulty: "expert",
+    category: "connectomics",
+    max_steps: 100,
+    reward_range: { min: 0, max: 1 },
+    metadata: { source: "repo-config" },
+    github_url:
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/protein-synthesis/cortical-column-simulation",
+    created_at: weekAgo,
+    updated_at: now,
+  },
+  {
+    id: "task-protein-172",
+    environment_id: "env-protein",
+    name: "Drug Dose Response",
+    slug: "drug-dose-response",
+    description:
+      "Fit a four-parameter logistic dose-response curve to pharmacological assay data and estimate the EC50. The agent must handle Hill coefficient estimation, compute goodness-of-fit statistics, and generate the dose-response plot data.",
+    difficulty: "easy",
+    category: "pharmacology",
+    max_steps: 100,
+    reward_range: { min: 0, max: 1 },
+    metadata: { source: "repo-config" },
+    github_url:
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/protein-synthesis/drug-dose-response",
+    created_at: weekAgo,
+    updated_at: now,
+  },
+  {
+    id: "task-protein-173",
+    environment_id: "env-protein",
+    name: "PK Compartment Model",
+    slug: "pk-compartment-model",
+    description:
+      "Build and simulate a two-compartment pharmacokinetic model to predict drug concentration time profiles after oral administration. The agent must estimate absorption, distribution, and elimination rate constants from clinical trial data.",
+    difficulty: "medium",
+    category: "pharmacology",
+    max_steps: 100,
+    reward_range: { min: 0, max: 1 },
+    metadata: { source: "repo-config" },
+    github_url:
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/protein-synthesis/pk-compartment-model",
+    created_at: weekAgo,
+    updated_at: now,
+  },
+  {
+    id: "task-protein-174",
+    environment_id: "env-protein",
+    name: "Drug Interaction Prediction",
+    slug: "drug-interaction-prediction",
+    description:
+      "Predict potential drug-drug interactions using a physiologically-based pharmacokinetic model with CYP enzyme inhibition. The agent must parameterize the PBPK model, simulate co-administration scenarios, and quantify changes in drug exposure.",
+    difficulty: "hard",
+    category: "pharmacology",
+    max_steps: 100,
+    reward_range: { min: 0, max: 1 },
+    metadata: { source: "repo-config" },
+    github_url:
+      "https://github.com/athanor-ai/athanor-tasks/tree/main/protein-synthesis/drug-interaction-prediction",
     created_at: weekAgo,
     updated_at: now,
   },

@@ -143,10 +143,22 @@ export const mockEnvironmentVersions: EnvironmentVersion[] = [
     created_at: dayAgo,
     updated_at: dayAgo,
   },
+  {
+    id: "ver-protein-01",
+    environment_id: "env-protein",
+    version_tag: "v1.0.0",
+    changelog:
+      "20 protein synthesis & computational neuroscience tasks: protein folding, neural circuits, gene regulatory networks, pharmacokinetics, population genetics, connectomics",
+    docker_image: "athanor/protein-synthesis:1.0.0",
+    status: "published",
+    published_at: dayAgo,
+    created_at: dayAgo,
+    updated_at: dayAgo,
+  },
 ];
 
 /* ------------------------------------------------------------------ */
-/*  Tasks — real 154 tasks from the 6 Athanor repos                    */
+/*  Tasks — real 174 tasks from the 7 Athanor repos                    */
 /* ------------------------------------------------------------------ */
 
 export const mockTasks: Task[] = realTasks;

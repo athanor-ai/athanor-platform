@@ -401,7 +401,7 @@ export default function ScoresPage() {
           <CardHeader>
             <CardTitle>Cross-Environment Heatmap</CardTitle>
             <span className="text-[11px] text-text-tertiary">
-              Mean calibrated scores across all 6 environments and 5 models
+              Mean calibrated scores across all environments and 5 models
             </span>
           </CardHeader>
           <div className="overflow-x-auto">

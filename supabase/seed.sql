@@ -1,5 +1,5 @@
 -- =============================================================================
--- Seed data: Athanor internal org + 7 environments + 154 tasks
+-- Seed data: Athanor internal org + 7 environments + 174 tasks
 -- Run after migrations: psql < supabase/seed.sql
 -- =============================================================================
 
@@ -16,7 +16,7 @@ INSERT INTO environments (id, organization_id, name, slug, engine, status, confi
   ('00000000-0000-0000-0000-000000000013', '00000000-0000-0000-0000-000000000001', 'Network Protocols',          'congestion-control',      'network-sim','active', '{"tasks": 24, "repo": "athanor-ai/congestion-control"}'),
   ('00000000-0000-0000-0000-000000000014', '00000000-0000-0000-0000-000000000001', 'Distributed Consensus',      'distributed-consensus',   'go-test',    'active', '{"tasks": 26, "repo": "athanor-ai/distributed-consensus"}'),
   ('00000000-0000-0000-0000-000000000015', '00000000-0000-0000-0000-000000000001', 'Authorization Policies',     'cedar-policy-verification','cedar-cli', 'active', '{"tasks": 20, "repo": "athanor-ai/cedar-policy-verification"}'),
-  ('00000000-0000-0000-0000-000000000016', '00000000-0000-0000-0000-000000000001', 'Protein Synthesis & Computational Neuroscience', 'protein-synthesis', 'python-sci', 'active', '{"tasks": 0, "repo": "athanor-ai/protein-synthesis"}')
+  ('00000000-0000-0000-0000-000000000016', '00000000-0000-0000-0000-000000000001', 'Protein Synthesis & Computational Neuroscience', 'protein-synthesis', 'python-sci', 'active', '{"tasks": 20, "repo": "athanor-ai/protein-synthesis"}')
 ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name, slug = EXCLUDED.slug, config = EXCLUDED.config;
 
 -- Internal org has access to all environments

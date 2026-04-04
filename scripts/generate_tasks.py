@@ -16,9 +16,10 @@ ENV_SLUGS = {
     "env-congestion": "congestion-control",
     "env-c2rust": "c-to-rust",
     "env-hwcbmc": "hw-cbmc",
+    "env-protein": "protein-synthesis",
 }
 
-# All 154 tasks with their properties
+# All 174 tasks with their properties
 # Format: (id, env_id, name, slug, difficulty, category, description)
 TASKS = [
     # --- Lean Theorem Proving (30 tasks) ---
@@ -340,6 +341,48 @@ TASKS = [
      "Write SVA assertions for a bus transaction monitor verifying protocol compliance including request-grant handshake and data phase timing. The agent must check that every request receives a response and that data is valid during the acknowledged cycle."),
     ("task-hwcbmc-154", "env-hwcbmc", "Write Assertions Wdogtimer", "write-assertions-wdogtimer", "easy", "assertion-synthesis",
      "Write SVA assertions for a watchdog timer module verifying timeout detection and reset behavior. The agent must prove that the watchdog fires within the configured interval if not refreshed and that a refresh correctly resets the countdown."),
+
+    # --- Protein Synthesis & Computational Neuroscience (20 tasks) ---
+    ("task-protein-155", "env-protein", "Protein Folding Stability", "protein-folding-stability", "hard", "protein",
+     "Predict the thermodynamic stability of a mutant protein by computing the change in folding free energy (ΔΔG) using molecular simulation. The agent must set up the force field, run equilibrium sampling, and apply free energy perturbation methods."),
+    ("task-protein-156", "env-protein", "Binding Affinity Prediction", "binding-affinity-prediction", "hard", "protein",
+     "Estimate the binding affinity of a small-molecule ligand to a target protein using molecular docking and scoring functions. The agent must prepare receptor and ligand structures, run docking simulations, and rank poses by predicted binding energy."),
+    ("task-protein-157", "env-protein", "Membrane Protein Insertion", "membrane-protein-insertion", "expert", "protein",
+     "Simulate the insertion of a transmembrane helix into a lipid bilayer using coarse-grained molecular dynamics. The agent must build the bilayer system, parameterize the protein, and analyze insertion orientation and depth."),
+    ("task-protein-158", "env-protein", "Enzyme Kinetics Fitting", "enzyme-kinetics-fitting", "medium", "protein",
+     "Fit Michaelis-Menten kinetic parameters to experimental enzyme assay data using nonlinear regression. The agent must handle substrate inhibition, estimate Km and Vmax, and compute confidence intervals for the fitted parameters."),
+    ("task-protein-159", "env-protein", "Hodgkin Huxley Simulation", "hodgkin-huxley-simulation", "medium", "neuroscience",
+     "Simulate action potential generation using the Hodgkin-Huxley model of neuronal membrane dynamics. The agent must implement the differential equations for sodium and potassium conductances and reproduce the characteristic spike waveform."),
+    ("task-protein-160", "env-protein", "Neural Circuit Oscillation", "neural-circuit-oscillation", "hard", "neuroscience",
+     "Model oscillatory dynamics in a recurrent inhibitory neural circuit using conductance-based neuron models. The agent must tune synaptic weights and time constants to produce gamma-band oscillations and analyze the power spectrum."),
+    ("task-protein-161", "env-protein", "Synaptic Plasticity STDP", "synaptic-plasticity-stdp", "hard", "neuroscience",
+     "Implement a spike-timing-dependent plasticity (STDP) learning rule in a network simulation and demonstrate its effect on receptive field development. The agent must model pre- and post-synaptic spike timing windows and weight update dynamics."),
+    ("task-protein-162", "env-protein", "Calcium Signaling Cascade", "calcium-signaling-cascade", "medium", "neuroscience",
+     "Model intracellular calcium signaling cascades involving IP3 receptors and SERCA pumps. The agent must implement the De Young-Bhalla model, simulate calcium oscillations, and analyze the frequency dependence on IP3 concentration."),
+    ("task-protein-163", "env-protein", "Gene Regulatory Network", "gene-regulatory-network", "hard", "systems_biology",
+     "Infer the topology of a gene regulatory network from time-series gene expression data using dynamic Bayesian networks. The agent must preprocess expression profiles, fit the network model, and validate inferred edges against known interactions."),
+    ("task-protein-164", "env-protein", "Metabolic Flux Analysis", "metabolic-flux-analysis", "medium", "systems_biology",
+     "Perform flux balance analysis on a genome-scale metabolic model to predict optimal growth rates under nutrient constraints. The agent must formulate the linear program, apply stoichiometric constraints, and identify flux distributions."),
+    ("task-protein-165", "env-protein", "Cell Cycle Modeling", "cell-cycle-modeling", "hard", "systems_biology",
+     "Simulate the mammalian cell cycle using an ODE model of cyclin-CDK interactions and checkpoint controls. The agent must parameterize the model from literature values and reproduce the sequential activation of G1/S and G2/M phase transitions."),
+    ("task-protein-166", "env-protein", "Epidemic SIR Fitting", "epidemic-sir-fitting", "easy", "systems_biology",
+     "Fit a compartmental SIR epidemiological model to time-series infection data and estimate the basic reproduction number R0. The agent must solve the ODEs numerically, optimize parameters against observed data, and quantify uncertainty."),
+    ("task-protein-167", "env-protein", "Population Genetics Drift", "population-genetics-drift", "medium", "population_genetics",
+     "Simulate genetic drift in a finite population using the Wright-Fisher model and compute fixation probabilities for neutral alleles. The agent must implement the stochastic simulation, run ensemble replicates, and compare with theoretical predictions."),
+    ("task-protein-168", "env-protein", "Selection Sweep Detection", "selection-sweep-detection", "hard", "population_genetics",
+     "Detect signatures of positive selection in genomic sequence data using composite likelihood ratio tests. The agent must compute site frequency spectra, calculate CLR statistics along the genome, and identify candidate sweep regions."),
+    ("task-protein-169", "env-protein", "Coalescent Tree Inference", "coalescent-tree-inference", "expert", "population_genetics",
+     "Infer a coalescent genealogy from population genetic samples using Markov chain Monte Carlo methods. The agent must implement the coalescent likelihood, propose tree topology changes, and estimate effective population size from the posterior."),
+    ("task-protein-170", "env-protein", "Connectome Path Analysis", "connectome-path-analysis", "medium", "connectomics",
+     "Analyze shortest paths and communication efficiency in a connectome graph derived from diffusion MRI tractography. The agent must construct the structural connectivity matrix, compute graph-theoretic measures, and identify hub regions."),
+    ("task-protein-171", "env-protein", "Cortical Column Simulation", "cortical-column-simulation", "expert", "connectomics",
+     "Simulate a cortical microcolumn with excitatory and inhibitory neuron populations using a mean-field neural mass model. The agent must implement the Jansen-Rit equations, tune parameters to produce alpha rhythms, and analyze the resulting EEG-like signals."),
+    ("task-protein-172", "env-protein", "Drug Dose Response", "drug-dose-response", "easy", "pharmacology",
+     "Fit a four-parameter logistic dose-response curve to pharmacological assay data and estimate the EC50. The agent must handle Hill coefficient estimation, compute goodness-of-fit statistics, and generate the dose-response plot data."),
+    ("task-protein-173", "env-protein", "PK Compartment Model", "pk-compartment-model", "medium", "pharmacology",
+     "Build and simulate a two-compartment pharmacokinetic model to predict drug concentration time profiles after oral administration. The agent must estimate absorption, distribution, and elimination rate constants from clinical trial data."),
+    ("task-protein-174", "env-protein", "Drug Interaction Prediction", "drug-interaction-prediction", "hard", "pharmacology",
+     "Predict potential drug-drug interactions using a physiologically-based pharmacokinetic model with CYP enzyme inhibition. The agent must parameterize the PBPK model, simulate co-administration scenarios, and quantify changes in drug exposure."),
 ]
 
 
@@ -359,14 +402,14 @@ def generate_tasks_ts() -> str:
     lines = []
 
     lines.append('/**')
-    lines.append(' * Real task definitions — derived from actual task configs in the 6 Athanor repos.')
+    lines.append(' * Real task definitions — derived from actual task configs in the 7 Athanor repos.')
     lines.append(' *')
     lines.append(' * Source: root_data/eval/configs/*.json in each athanor-ai/* repo.')
     lines.append(' * Task names derived from config file slugs.')
     lines.append(' * Difficulty inferred from Claude Sonnet 4.6 run-1 scores.')
     lines.append(' * Categories derived from task-name prefix patterns + repo conventions.')
     lines.append(' *')
-    lines.append(' * Total: 154 tasks across 6 environments.')
+    lines.append(' * Total: 174 tasks across 7 environments.')
     lines.append(' */')
     lines.append('')
     lines.append('import type { Task } from "@/types/database";')
@@ -375,7 +418,7 @@ def generate_tasks_ts() -> str:
     lines.append('const weekAgo = new Date(Date.now() - 604800000).toISOString();')
     lines.append('')
     lines.append('/**')
-    lines.append(' * All 154 real tasks sourced from Athanor environment repos.')
+    lines.append(' * All 174 real tasks sourced from Athanor environment repos.')
     lines.append(' */')
     lines.append('export const realTasks: Task[] = [')
 
