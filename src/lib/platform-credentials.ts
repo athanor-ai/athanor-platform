@@ -21,6 +21,11 @@ export interface PlatformCredential {
   value: string;
   baseUrl?: string;
   baseUrlEnvVar?: string;
+  /** Additional base URLs for providers with multiple endpoints */
+  additionalBaseUrls?: Array<{
+    envVar: string;
+    value: string | undefined;
+  }>;
   /** Models accessible through this credential */
   models: string[];
 }
@@ -45,13 +50,26 @@ export function getPlatformCredentials(): PlatformCredential[] {
 
   const creds: PlatformCredential[] = [];
 
-  // Anthropic (Claude Sonnet 4.6, Claude Sonnet 4, Claude Opus 4)
+  // Anthropic (Claude Sonnet 4.6, Claude Opus 4.6)
+  // Supports direct Anthropic API and Azure-hosted endpoints
   if (process.env.ANTHROPIC_API_KEY) {
     creds.push({
       provider: "anthropic",
       envVar: "ANTHROPIC_API_KEY",
       value: process.env.ANTHROPIC_API_KEY,
-      models: ["claude-sonnet-4-6", "claude-sonnet-4", "claude-opus-4"],
+      baseUrl: process.env.ANTHROPIC_API_BASE,
+      baseUrlEnvVar: "ANTHROPIC_API_BASE",
+      additionalBaseUrls: [
+        {
+          envVar: "AZURE_PROJECT_API_BASE",
+          value: process.env.AZURE_PROJECT_API_BASE,
+        },
+        {
+          envVar: "AZURE_OPENAI_API_BASE",
+          value: process.env.AZURE_OPENAI_API_BASE,
+        },
+      ],
+      models: ["claude-sonnet-4-6", "claude-opus-4-6"],
     });
   }
 
@@ -128,6 +146,13 @@ export function buildRunEnvVars(
     env[cred.envVar] = cred.value;
     if (cred.baseUrl && cred.baseUrlEnvVar) {
       env[cred.baseUrlEnvVar] = cred.baseUrl;
+    }
+    if (cred.additionalBaseUrls) {
+      for (const additional of cred.additionalBaseUrls) {
+        if (additional.value) {
+          env[additional.envVar] = additional.value;
+        }
+      }
     }
   }
 

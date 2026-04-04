@@ -7,6 +7,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthUser } from "@/lib/auth";
 
+interface BaseUrlStatus {
+  envVar: string;
+  label: string;
+  configured: boolean;
+}
+
 interface PlatformKeyStatus {
   provider: string;
   displayName: string;
@@ -15,10 +21,12 @@ interface PlatformKeyStatus {
   status: "live" | "not_configured";
   /** Masked suffix like "AIza...7EI" — only present when status is "live" */
   maskedKey: string | null;
-  /** Base URL env var name, if applicable */
+  /** Base URL env var name, if applicable (single base URL providers) */
   baseUrlEnvVar?: string;
-  /** Whether the base URL is set */
+  /** Whether the base URL is set (single base URL providers) */
   baseUrlConfigured?: boolean;
+  /** Multiple base URLs for providers with several endpoints */
+  baseUrls?: BaseUrlStatus[];
 }
 
 function maskKey(key: string): string {
@@ -36,12 +44,19 @@ const PLATFORM_KEY_DEFINITIONS: Array<{
   altEnvVar?: string;
   models: string[];
   baseUrlEnvVar?: string;
+  /** Multiple base URL env vars for providers with several endpoints */
+  baseUrlEnvVars?: Array<{ envVar: string; label: string }>;
 }> = [
   {
     provider: "anthropic",
     displayName: "Anthropic",
     envVar: "ANTHROPIC_API_KEY",
-    models: ["Claude Sonnet 4.6", "Claude Sonnet 4", "Claude Opus 4"],
+    models: ["Claude Sonnet 4.6", "Claude Opus 4.6"],
+    baseUrlEnvVars: [
+      { envVar: "ANTHROPIC_API_BASE", label: "Anthropic Messages Endpoint" },
+      { envVar: "AZURE_PROJECT_API_BASE", label: "Azure Project Base" },
+      { envVar: "AZURE_OPENAI_API_BASE", label: "Azure OpenAI Base" },
+    ],
   },
   {
     provider: "google",
@@ -94,7 +109,13 @@ export async function GET(request: NextRequest) {
       maskedKey: isConfigured ? maskKey(value) : null,
     };
 
-    if (def.baseUrlEnvVar) {
+    if (def.baseUrlEnvVars) {
+      result.baseUrls = def.baseUrlEnvVars.map((b) => ({
+        envVar: b.envVar,
+        label: b.label,
+        configured: !!process.env[b.envVar],
+      }));
+    } else if (def.baseUrlEnvVar) {
       result.baseUrlEnvVar = def.baseUrlEnvVar;
       result.baseUrlConfigured = !!process.env[def.baseUrlEnvVar];
     }
