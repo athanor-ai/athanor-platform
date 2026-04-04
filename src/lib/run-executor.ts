@@ -249,10 +249,22 @@ export async function executeRun(
       .map(([k, v]) => `export ${k}='${v.replace(/'/g, "'\\''")}'`)
       .join(" && ");
 
+    // Determine task selection flag: --all-tasks or --tasks slug1,slug2,...
+    const runConfig = (run.config ?? {}) as Record<string, unknown>;
+    const selectedTaskIds = runConfig.selected_task_ids as string[] | undefined;
+    let tasksFlag = "--all-tasks";
+    if (Array.isArray(selectedTaskIds) && selectedTaskIds.length > 0) {
+      // Look up task slugs from the database
+      const taskSlugs = await getTaskSlugs(supabase, selectedTaskIds);
+      if (taskSlugs.length > 0) {
+        tasksFlag = `--tasks ${taskSlugs.join(",")}`;
+      }
+    }
+
     const evalCmd = [
       `cd ~/athanor-ai-repos/${repoDir}`,
       envExports,
-      `python3 scripts/evaluate.py . --all-tasks --model '${modelName}' --max-time 900 --output '${outputFile}'`,
+      `python3 scripts/evaluate.py . ${tasksFlag} --model '${modelName}' --max-time 900 --output '${outputFile}'`,
     ].join(" && ");
 
     // 7. Execute via SSH and stream output
@@ -264,13 +276,29 @@ export async function executeRun(
       options.onProgress,
     );
 
-    // 8. Fetch results from the VM
+    // 8. Copy agent traces to persistent storage (non-fatal)
+    try {
+      const tracesDir = `~/agent-traces/${envSlug}/${run.model_name}/${runId}`;
+      await execAsync(
+        `ssh ${sshOpts} ${SSH_TARGET} "mkdir -p ${tracesDir} && cp -r ~/athanor-ai-repos/${repoDir}/.workdirs/* ${tracesDir}/ 2>/dev/null || true"`,
+        { timeout: 60000 },
+      );
+      console.log(`[run ${runId}] Agent traces saved to ${tracesDir}`);
+    } catch (traceErr) {
+      // Non-fatal — traces are best-effort
+      console.error(
+        `[run ${runId}] Warning: failed to copy agent traces:`,
+        traceErr instanceof Error ? traceErr.message : String(traceErr),
+      );
+    }
+
+    // 9. Fetch results from the VM
     const { stdout: resultJson } = await execAsync(
       `ssh ${sshOpts} ${SSH_TARGET} "cat '${outputFile}' 2>/dev/null"`,
       { timeout: 30000, maxBuffer: 10 * 1024 * 1024 },
     );
 
-    // 9. Parse and store results
+    // 10. Parse and store results
     const results = JSON.parse(resultJson);
     const taskResults = (results.results || []).map((r: Record<string, unknown>) => ({
       run_id: runId,
@@ -286,7 +314,7 @@ export async function executeRun(
       await supabase.from("run_results").upsert(taskResults);
     }
 
-    // 10. Calculate mean score and mark complete
+    // 11. Calculate mean score and mark complete
     const scores = taskResults
       .map((r: { raw_score: number }) => r.raw_score)
       .filter((s: number) => s !== null);
@@ -358,6 +386,17 @@ async function getEnvSlug(
     .eq("id", environmentId)
     .single();
   return data?.slug || "";
+}
+
+async function getTaskSlugs(
+  supabase: AnySupabaseClient,
+  taskIds: string[],
+): Promise<string[]> {
+  const { data } = await supabase
+    .from("tasks")
+    .select("slug")
+    .in("id", taskIds);
+  return (data ?? []).map((t: { slug: string }) => t.slug);
 }
 
 async function executeSSHWithProgress(

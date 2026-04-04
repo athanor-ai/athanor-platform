@@ -6,6 +6,8 @@ interface LaunchRunInput {
   model_name: string;
   calibration_profile_id?: string;
   autoShutdown?: boolean;
+  /** Task IDs to run. When undefined, all tasks in the environment are run. */
+  selected_task_ids?: string[];
 }
 
 interface LaunchRunResult {
@@ -44,6 +46,7 @@ export function useLaunchRun() {
           model_name: input.model_name,
           calibration_profile_id: input.calibration_profile_id,
           config: { auto_shutdown: input.autoShutdown ?? true },
+          selected_task_ids: input.selected_task_ids,
         }),
       });
 

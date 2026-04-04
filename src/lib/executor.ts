@@ -86,6 +86,9 @@ export async function prepareRunEnvironment(
 /**
  * Get the evaluate.py command for an environment.
  *
+ * When `taskSlugs` is provided, uses `--tasks slug1,slug2,...` instead of
+ * `--all-tasks`. This allows running a subset of tasks in the environment.
+ *
  * Example:
  *   const cmd = getEvaluateCommand("lean-theorem-proving", "claude-sonnet-4-6", "/output/run.json");
  *   // ["python3", "scripts/evaluate.py", ".", "--all-tasks", "--model", "claude-sonnet-4-6", ...]
@@ -94,15 +97,21 @@ export function getEvaluateCommand(
   envSlug: string,
   modelSlug: string,
   outputPath: string,
+  taskSlugs?: string[],
 ): string[] {
   const repoDir = ENV_REPO_MAP[envSlug];
   if (!repoDir) throw new Error(`Unknown environment: ${envSlug}`);
+
+  const tasksArgs =
+    Array.isArray(taskSlugs) && taskSlugs.length > 0
+      ? ["--tasks", taskSlugs.join(",")]
+      : ["--all-tasks"];
 
   return [
     "python3",
     "scripts/evaluate.py",
     ".",
-    "--all-tasks",
+    ...tasksArgs,
     "--model",
     modelSlug,
     "--max-time",

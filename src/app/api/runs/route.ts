@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
   }
 
   const body = await request.json();
-  const { environment_id, model_name, calibration_profile_id, config } = body;
+  const { environment_id, model_name, calibration_profile_id, config, selected_task_ids } = body;
 
   if (!environment_id || !model_name) {
     return NextResponse.json(
@@ -41,6 +41,20 @@ export async function POST(request: NextRequest) {
     .select("*", { count: "exact", head: true })
     .eq("environment_id", environment_id);
 
+  // If specific tasks are selected, use that count; otherwise use all tasks
+  const effectiveTaskCount =
+    Array.isArray(selected_task_ids) && selected_task_ids.length > 0
+      ? selected_task_ids.length
+      : totalTasks || 0;
+
+  // Store selected_task_ids in the run config so the executor can read them
+  const runConfig = {
+    ...(config || {}),
+    ...(Array.isArray(selected_task_ids) && selected_task_ids.length > 0
+      ? { selected_task_ids }
+      : {}),
+  };
+
   const { data, error } = await supabase
     .from("runs")
     .insert({
@@ -49,9 +63,9 @@ export async function POST(request: NextRequest) {
       model_name,
       calibration_profile_id: calibration_profile_id || null,
       status: "pending",
-      total_tasks: totalTasks || 0,
+      total_tasks: effectiveTaskCount,
       completed_tasks: 0,
-      config: config || {},
+      config: runConfig,
     })
     .select()
     .single();
