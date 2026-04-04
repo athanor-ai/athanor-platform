@@ -119,9 +119,10 @@ export async function stopVM(): Promise<boolean> {
  *
  * Call this after every run completes or before VM shutdown.
  */
-export async function cleanupVM(sshTarget?: string): Promise<string[]> {
+export async function cleanupVM(sshTarget?: string, sshOpts?: string): Promise<string[]> {
   const target = sshTarget || process.env.AZURE_VM_SSH_TARGET;
   if (!target) return ["No SSH target configured"];
+  const opts = sshOpts || "-o StrictHostKeyChecking=no -o ConnectTimeout=30";
 
   const cleanupCommands = [
     // 1. Remove all workdirs across all envs (student work artifacts)
@@ -150,7 +151,7 @@ export async function cleanupVM(sshTarget?: string): Promise<string[]> {
   for (const cmd of cleanupCommands) {
     try {
       const { stdout } = await execAsync(
-        `ssh ${target} '${cmd}'`,
+        `ssh ${opts} ${target} '${cmd}'`,
         { timeout: 60000 },
       );
       results.push(stdout.trim());
@@ -165,7 +166,7 @@ export async function cleanupVM(sshTarget?: string): Promise<string[]> {
 /**
  * Check VM resource health.
  */
-export async function checkVMHealth(sshTarget?: string): Promise<{
+export async function checkVMHealth(sshTarget?: string, sshOpts?: string): Promise<{
   diskUsagePercent: number;
   memoryUsedMB: number;
   activeProcesses: number;
@@ -175,25 +176,26 @@ export async function checkVMHealth(sshTarget?: string): Promise<{
   if (!target) {
     return { diskUsagePercent: 0, memoryUsedMB: 0, activeProcesses: 0, warnings: ["No SSH target"] };
   }
+  const opts = sshOpts || "-o StrictHostKeyChecking=no -o ConnectTimeout=30";
 
   const warnings: string[] = [];
 
   try {
     const { stdout: diskOut } = await execAsync(
-      `ssh ${target} "df / --output=pcent | tail -1 | tr -d ' %'"`,
+      `ssh ${opts} ${target} "df / --output=pcent | tail -1 | tr -d ' %'"`,
       { timeout: 10000 },
     );
     const diskUsagePercent = parseInt(diskOut.trim()) || 0;
     if (diskUsagePercent > 85) warnings.push(`Disk usage high: ${diskUsagePercent}%`);
 
     const { stdout: memOut } = await execAsync(
-      `ssh ${target} "free -m | awk '/Mem:/ {print \\$3}'"`,
+      `ssh ${opts} ${target} "free -m | awk '/Mem:/ {print \\$3}'"`,
       { timeout: 10000 },
     );
     const memoryUsedMB = parseInt(memOut.trim()) || 0;
 
     const { stdout: procOut } = await execAsync(
-      `ssh ${target} "ps aux | grep -c 'dryrun\\|evaluate' | head -1"`,
+      `ssh ${opts} ${target} "ps aux | grep -c 'dryrun\\|evaluate' | head -1"`,
       { timeout: 10000 },
     );
     const activeProcesses = parseInt(procOut.trim()) || 0;

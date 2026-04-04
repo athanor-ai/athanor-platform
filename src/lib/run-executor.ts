@@ -12,6 +12,9 @@
  */
 
 import { exec, spawn } from "child_process";
+import { writeFileSync, unlinkSync, mkdtempSync } from "fs";
+import { tmpdir } from "os";
+import { join } from "path";
 import { promisify } from "util";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { prepareRunEnvironment, ENV_REPO_MAP } from "./executor";
@@ -30,13 +33,34 @@ function getServiceClient() {
 }
 
 const SSH_TARGET = process.env.AZURE_VM_SSH_TARGET || "azureuser@52.234.26.150";
-const SSH_OPTS = "-o StrictHostKeyChecking=no -o ConnectTimeout=30";
 
 interface ProgressUpdate {
   completed_tasks: number;
   total_tasks: number;
   current_task?: string;
   current_score?: number;
+}
+
+/**
+ * Write the SSH private key from env to a temp file for authentication.
+ * Returns the path to the key file, or null if AZURE_VM_SSH_KEY is not set.
+ */
+function writeSshKeyToTempFile(): string | null {
+  const sshKey = process.env.AZURE_VM_SSH_KEY;
+  if (!sshKey) return null;
+
+  const tmpDir = mkdtempSync(join(tmpdir(), "ssh-"));
+  const keyPath = join(tmpDir, "id_rsa");
+  writeFileSync(keyPath, sshKey + "\n", { mode: 0o600 });
+  return keyPath;
+}
+
+/**
+ * Build SSH options string, optionally including a private key file.
+ */
+function buildSshOpts(sshKeyPath: string | null): string {
+  const base = "-o StrictHostKeyChecking=no -o ConnectTimeout=30";
+  return sshKeyPath ? `${base} -i ${sshKeyPath}` : base;
 }
 
 /**
@@ -54,6 +78,10 @@ export async function executeRun(
 ): Promise<void> {
   const supabase = getServiceClient();
   const autoShutdown = options.autoShutdown ?? true;
+
+  // Write SSH key to temp file for authentication (Vercel serverless pattern)
+  const sshKeyPath = writeSshKeyToTempFile();
+  const sshOpts = buildSshOpts(sshKeyPath);
 
   try {
     // 1. Mark run as starting
@@ -73,7 +101,7 @@ export async function executeRun(
     }
 
     // 3. Wait for SSH to be ready (up to 2 min)
-    await waitForSSH();
+    await waitForSSH(sshOpts);
 
     // 4. Prepare credentials and env vars
     const { envVars, run } = await prepareRunEnvironment(runId);
@@ -101,12 +129,13 @@ export async function executeRun(
       evalCmd,
       runId,
       supabase,
+      sshOpts,
       options.onProgress,
     );
 
     // 7. Fetch results from the VM
     const { stdout: resultJson } = await execAsync(
-      `ssh ${SSH_OPTS} ${SSH_TARGET} "cat '${outputFile}' 2>/dev/null"`,
+      `ssh ${sshOpts} ${SSH_TARGET} "cat '${outputFile}' 2>/dev/null"`,
       { timeout: 30000, maxBuffer: 10 * 1024 * 1024 },
     );
 
@@ -149,8 +178,13 @@ export async function executeRun(
     }).eq("id", runId);
     console.error(`Run ${runId} failed:`, e);
   } finally {
-    // Always cleanup
-    await cleanupVM(SSH_TARGET);
+    // Clean up SSH key temp file
+    if (sshKeyPath) {
+      try { unlinkSync(sshKeyPath); } catch { /* best-effort cleanup */ }
+    }
+
+    // Always cleanup VM
+    await cleanupVM(SSH_TARGET, sshOpts);
 
     // Check if any other runs are pending before shutting down
     if (autoShutdown) {
@@ -167,12 +201,12 @@ export async function executeRun(
   }
 }
 
-async function waitForSSH(maxWaitMs = 120000): Promise<void> {
+async function waitForSSH(sshOpts: string, maxWaitMs = 120000): Promise<void> {
   const start = Date.now();
   while (Date.now() - start < maxWaitMs) {
     try {
       await execAsync(
-        `ssh ${SSH_OPTS} ${SSH_TARGET} "echo ready"`,
+        `ssh ${sshOpts} ${SSH_TARGET} "echo ready"`,
         { timeout: 10000 },
       );
       return;
@@ -199,13 +233,14 @@ async function executeSSHWithProgress(
   command: string,
   runId: string,
   supabase: AnySupabaseClient,
+  sshOpts: string,
   onProgress?: (update: ProgressUpdate) => void,
 ): Promise<number> {
   return new Promise((resolve, reject) => {
     const proc = spawn(
       "ssh",
       [
-        ...SSH_OPTS.split(" "),
+        ...sshOpts.split(" "),
         SSH_TARGET,
         command,
       ],
