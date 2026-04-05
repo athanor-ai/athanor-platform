@@ -135,9 +135,13 @@ export async function POST(request: NextRequest) {
         .from("tasks")
         .select("id, slug")
         .eq("environment_id", envRow.id);
-      const taskSlugToId = new Map(
-        (envTasks || []).map((t) => [t.slug, t.id]),
-      );
+      // Build slug→id map with both underscore and hyphen variants
+      const taskSlugToId = new Map<string, string>();
+      for (const t of envTasks || []) {
+        taskSlugToId.set(t.slug, t.id);
+        taskSlugToId.set(t.slug.replace(/_/g, "-"), t.id);
+        taskSlugToId.set(t.slug.replace(/-/g, "_"), t.id);
+      }
 
       // Check for existing run with same source_file (dedup)
       const { data: existingRuns } = await service
@@ -448,9 +452,13 @@ print(json.dumps(out))
             .select("id, slug")
             .eq("environment_id", envRow.id);
 
-          const taskSlugToId = new Map(
-            (envTasks || []).map((t) => [t.slug, t.id]),
-          );
+          // Build slug→id map with both underscore and hyphen variants
+          const taskSlugToId = new Map<string, string>();
+          for (const t of envTasks || []) {
+            taskSlugToId.set(t.slug, t.id);
+            taskSlugToId.set(t.slug.replace(/_/g, "-"), t.id);
+            taskSlugToId.set(t.slug.replace(/-/g, "_"), t.id);
+          }
 
           // Check for existing synced runs to avoid duplicates
           const { data: existingRuns } = await service
