@@ -106,7 +106,7 @@ export async function GET() {
     .from("runs")
     .select("*")
     .order("created_at", { ascending: false })
-    .limit(50);
+    .limit(200);
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
