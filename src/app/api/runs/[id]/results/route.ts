@@ -3,27 +3,34 @@
  * GET  /api/runs/:id/results — Get all results for a run
  */
 import { NextRequest, NextResponse } from "next/server";
-import { getSupabaseServerClient } from "@/lib/supabase-server";
+import { getAuthUser } from "@/lib/auth";
+import { createClient } from "@supabase/supabase-js";
+
+function getServiceClient() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  );
+}
 
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
   const { id: runId } = await params;
-  const supabase = await getSupabaseServerClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) {
+  const authUser = await getAuthUser(request);
+  if (!authUser) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const service = getServiceClient();
+
   // Verify run exists and belongs to user's org
-  const { data: run } = await supabase
+  const { data: run } = await service
     .from("runs")
     .select("id")
     .eq("id", runId)
+    .eq("organization_id", authUser.organizationId)
     .single();
 
   if (!run) {
@@ -47,7 +54,7 @@ export async function POST(
     error: r.error ?? null,
   }));
 
-  const { error } = await supabase
+  const { error } = await service
     .from("run_results")
     .upsert(rows, { onConflict: "run_id,task_id" });
 
@@ -59,20 +66,17 @@ export async function POST(
 }
 
 export async function GET(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
   const { id: runId } = await params;
-  const supabase = await getSupabaseServerClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) {
+  const authUser = await getAuthUser(request);
+  if (!authUser) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { data, error } = await supabase
+  const service = getServiceClient();
+  const { data, error } = await service
     .from("run_results")
     .select("*")
     .eq("run_id", runId)
