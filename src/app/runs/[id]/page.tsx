@@ -19,7 +19,7 @@ import {
   synthesizeTrace,
   type TraceEntry,
 } from "@/lib/trace-synthesis";
-import { ENVIRONMENT_BY_ID } from "@/data/environments";
+// Environment lookup now uses live data from useEnvironments()
 
 /* ------------------------------------------------------------------ */
 /*  Utilities                                                          */
@@ -66,12 +66,30 @@ function deriveToolUseSummary(
 }
 
 /** Build the trace for a single result — shared helper. */
-function buildTrace(result: RunResult, envSlug: string): TraceEntry[] {
-  if (result.trajectory.length > 0) {
-    return result.trajectory as TraceEntry[];
+function buildTrace(result: RunResult, envSlug: string, taskSlugMap?: Map<string, string>): TraceEntry[] {
+  const traj = result.trajectory;
+  if (Array.isArray(traj) && traj.length > 0) {
+    // Real trajectory data: could be TraceEntry objects or plain strings from evaluate.py
+    if (typeof traj[0] === "string") {
+      // Convert string summaries to TraceEntry-like objects
+      return (traj as string[]).map((s, i) => ({
+        step: i + 1,
+        timestamp_ms: i * 5000,
+        action: s.startsWith("bash") ? "terminal" as const
+          : s.startsWith("edit") ? "edit" as const
+          : s.startsWith("read") ? "observation" as const
+          : "tool_call" as const,
+        tool: s.split(":")[0],
+        input_summary: s,
+        output_summary: "",
+        duration_ms: 5000,
+        success: true,
+      }));
+    }
+    return traj as TraceEntry[];
   }
-  const taskSlug =
-    result.task_id.split("-").slice(1).join("-") || result.task_id;
+  // No trajectory — synthesize one
+  const taskSlug = taskSlugMap?.get(result.task_id) ?? result.task_id.slice(0, 8);
   return synthesizeTrace(
     taskSlug,
     envSlug,
@@ -477,6 +495,11 @@ export default function RunDetailPage() {
     [tasks.data],
   );
 
+  const taskSlugMap = useMemo(
+    () => new Map((tasks.data ?? []).map((t) => [t.id, t.slug])),
+    [tasks.data],
+  );
+
   if (isPending) {
     return <LoadingState message="Loading run details..." />;
   }
@@ -500,8 +523,10 @@ export default function RunDetailPage() {
   const resultList = results.data ?? [];
   const shortId = runData.id.slice(0, 8);
   const envName = envMap.get(runData.environment_id) ?? "Unknown";
-  const envDef = ENVIRONMENT_BY_ID.get(runData.environment_id);
-  const envSlug = envDef?.slug ?? runData.environment_id;
+  const envEntry = (environments.data ?? []).find(
+    (e) => e.id === runData.environment_id,
+  );
+  const envSlug = envEntry?.slug ?? runData.environment_id;
   const duration = computeRunDuration(
     runData.started_at,
     runData.completed_at,
