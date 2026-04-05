@@ -4,7 +4,7 @@ import { Suspense, useMemo, useState, useEffect, useRef, useCallback } from "rea
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import clsx from "clsx";
-import { PiCaretDown, PiCaretRight, PiGithubLogo } from "react-icons/pi";
+import { PiCaretDown, PiCaretRight } from "react-icons/pi";
 import { useTasks } from "@/hooks/useTasks";
 import { useRuns } from "@/hooks/useRuns";
 import { useEnvironments } from "@/hooks/useEnvironments";
@@ -394,19 +394,9 @@ function TaskRow({
                   <div className="text-[10px] font-medium uppercase tracking-wider text-text-tertiary">
                     Description
                   </div>
-                  <a
-                    href={task.github_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => e.stopPropagation()}
-                    className="inline-flex items-center gap-1 rounded-sm border border-border bg-background px-1.5 py-0.5 text-[10px] font-medium text-text-secondary transition-colors hover:border-accent/30 hover:text-accent"
-                  >
-                    <PiGithubLogo className="h-3 w-3" />
-                    Source
-                  </a>
                 </div>
                 <p className="mt-1 text-xs leading-relaxed text-text-secondary">
-                  {task.description}
+                  {task.description || "No description available."}
                 </p>
               </div>
 
