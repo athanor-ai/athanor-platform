@@ -1,41 +1,31 @@
 /**
- * GET /api/environments — List environments the user's org has access to.
+ * GET /api/environments — List environments for the user's organization.
  *
- * Uses organization_environments join table for tenant filtering.
- * Admin orgs see all environments. Regular orgs see only purchased ones.
+ * RLS on environments table handles org scoping automatically.
  */
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { getSupabaseServerClient } from "@/lib/supabase-server";
-import { getAuthUser } from "@/lib/auth";
 
-export async function GET(request: NextRequest) {
-  const authUser = await getAuthUser(request);
-  if (!authUser) {
+export async function GET() {
+  const supabase = await getSupabaseServerClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const supabase = await getSupabaseServerClient();
+  // RLS policy on environments enforces org scoping via auth_user_org_id()
+  const { data, error } = await supabase
+    .from("environments")
+    .select("*")
+    .eq("status", "active")
+    .order("name");
 
-  if (authUser.isAdmin) {
-    // Internal/admin: return all environments
-    const { data: envs } = await supabase
-      .from("environments")
-      .select("*")
-      .eq("status", "active")
-      .order("name");
-
-    return NextResponse.json(envs || []);
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  // Regular customer: return only purchased environments
-  const { data: access } = await supabase
-    .from("organization_environments")
-    .select("environment_id, environments(id, name, slug, engine, status)")
-    .eq("organization_id", authUser.organizationId);
-
-  const envs = (access || [])
-    .map((a) => (a as Record<string, unknown>).environments)
-    .filter(Boolean);
-
-  return NextResponse.json(envs);
+  return NextResponse.json(data || []);
 }
