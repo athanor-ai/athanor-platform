@@ -38,7 +38,8 @@ export async function GET(request: NextRequest) {
   const { data, error } = await service
     .from("run_results")
     .select("id, run_id, task_id, raw_score, steps_used, duration_ms, error")
-    .in("run_id", runIds);
+    .in("run_id", runIds)
+    .limit(10000);
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
