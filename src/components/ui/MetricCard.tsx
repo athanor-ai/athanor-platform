@@ -19,7 +19,7 @@ export function MetricCard({
       <div className="text-[11px] font-medium uppercase tracking-wider text-text-tertiary">
         {label}
       </div>
-      <div className="mt-1 text-2xl font-semibold tracking-tight text-text-primary">
+      <div className="mt-1 text-2xl font-semibold tracking-tight text-text-primary truncate" title={String(value)}>
         {value}
       </div>
       {(subtext || trend) && (
