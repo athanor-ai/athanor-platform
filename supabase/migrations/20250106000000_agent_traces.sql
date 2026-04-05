@@ -2,8 +2,8 @@
 CREATE UNIQUE INDEX IF NOT EXISTS idx_run_results_run_task
     ON run_results(run_id, task_id);
 
--- Agent traces: full conversation logs from student evaluation runs.
--- Linked to run_results for per-task traces, or standalone for bulk imports.
+-- Agent traces: metadata for full conversation logs stored in Supabase Storage.
+-- The actual messages JSON is in the agent-traces bucket; storage_path points to it.
 
 CREATE TABLE IF NOT EXISTS agent_traces (
     id               UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -12,11 +12,11 @@ CREATE TABLE IF NOT EXISTS agent_traces (
     task_id          UUID REFERENCES tasks(id) ON DELETE SET NULL,
     environment_id   UUID REFERENCES environments(id) ON DELETE CASCADE,
     model            TEXT NOT NULL,
-    messages         JSONB NOT NULL DEFAULT '[]',
+    storage_path     TEXT NOT NULL,
     score            FLOAT8,
     token_count      INT,
+    message_count    INT,
     source_file      TEXT,
-    recorded_at      TIMESTAMPTZ,
     created_at       TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
@@ -27,7 +27,6 @@ CREATE INDEX IF NOT EXISTS idx_agent_traces_model ON agent_traces(model);
 
 ALTER TABLE agent_traces ENABLE ROW LEVEL SECURITY;
 
--- Service role and org members can read traces for their environments
 CREATE POLICY agent_traces_org_read ON agent_traces
     FOR SELECT USING (
         environment_id IN (
@@ -35,4 +34,16 @@ CREATE POLICY agent_traces_org_read ON agent_traces
             JOIN profiles p ON p.organization_id = oe.organization_id
             WHERE p.id = auth.uid()
         )
+    );
+
+-- Storage bucket for trace JSON files
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('agent-traces', 'agent-traces', false)
+ON CONFLICT (id) DO NOTHING;
+
+-- RLS: authenticated users can read traces for their org's environments
+CREATE POLICY agent_traces_bucket_read ON storage.objects
+    FOR SELECT USING (
+        bucket_id = 'agent-traces'
+        AND auth.role() = 'authenticated'
     );

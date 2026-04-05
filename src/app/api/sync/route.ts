@@ -210,19 +210,39 @@ export async function POST(request: NextRequest) {
         resultsSynced++;
       }
 
-      // Insert agent traces if provided
+      // Upload agent traces to Storage, insert metadata row
       let tracesSynced = 0;
       if (traces && Array.isArray(traces)) {
         for (const trace of traces) {
           const taskId = taskSlugToId.get(trace.task_id);
+          const taskSlug = trace.task_id || "unknown";
+          const safeModel = model.replace(/\//g, "-");
+          const ts = new Date().toISOString().replace(/[:.]/g, "-");
+          const storagePath = `${registry.slug}/${safeModel}/${taskSlug}_${ts}.json`;
+
+          // Upload messages JSON to Storage bucket
+          const blob = JSON.stringify(trace.messages);
+          const { error: uploadError } = await service.storage
+            .from("agent-traces")
+            .upload(storagePath, blob, {
+              contentType: "application/json",
+              upsert: false,
+            });
+
+          if (uploadError) {
+            continue; // Skip this trace, don't fail the whole ingest
+          }
+
+          // Insert metadata row
           await service.from("agent_traces").insert({
             run_id: runId,
             environment_id: envRow.id,
             task_id: taskId || null,
             model,
-            messages: trace.messages,
+            storage_path: storagePath,
             score: trace.score,
             token_count: trace.token_count,
+            message_count: Array.isArray(trace.messages) ? trace.messages.length : null,
             source_file,
           });
           tracesSynced++;
