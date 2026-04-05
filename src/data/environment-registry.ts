@@ -172,6 +172,44 @@ export const ENVIRONMENT_REGISTRY: EnvironmentConfig[] = [
     ],
     vmDirName: "computational-biology",
   },
+  {
+    id: "env-neuro",
+    name: "Computational Neuroscience",
+    slug: "neuroscience",
+    description:
+      "Computational neuroscience environment for evaluating neural circuit modeling, synaptic plasticity, optogenetics, connectomics, and behavioral analysis.",
+    engine: "python-sci",
+    domain: "neuroscience",
+    repo: "athanor-ai/neuroscience",
+    dockerPrefix: "athanor/neuroscience",
+    taskFamilies: [
+      "neural-circuits",
+      "synaptic-plasticity",
+      "optogenetics",
+      "connectomics",
+      "behavioral-analysis",
+    ],
+    vmDirName: "neuroscience",
+  },
+  {
+    id: "env-sysbio",
+    name: "Systems Biology",
+    slug: "systems-biology",
+    description:
+      "Systems biology environment for evaluating gene regulation, signal transduction, protein dynamics, population genetics, and molecular simulations with formal verification.",
+    engine: "python-sci",
+    domain: "systems-biology",
+    repo: "athanor-ai/systems-biology",
+    dockerPrefix: "athanor/systems-biology",
+    taskFamilies: [
+      "gene-regulation",
+      "signal-transduction",
+      "protein-dynamics",
+      "population-genetics",
+      "neuro-symbolic",
+    ],
+    vmDirName: "systems-biology",
+  },
 ];
 
 /* ------------------------------------------------------------------ */
