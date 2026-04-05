@@ -135,8 +135,8 @@ export default function EnvironmentDetailPage() {
       render: (t) => <StatusBadge status={t.difficulty} />,
     },
     {
-      key: "download",
-      header: "Download",
+      key: "source",
+      header: "Source",
       render: (t) => (
         <a
           href={t.github_url}
@@ -174,15 +174,15 @@ export default function EnvironmentDetailPage() {
         <MetricCard label="Latest Version" value={latestVersion} />
       </div>
 
-      {/* Download section */}
+      {/* Source section */}
       <Card className="mb-6">
         <CardHeader>
-          <CardTitle>Download</CardTitle>
+          <CardTitle>Source</CardTitle>
         </CardHeader>
         <div className="space-y-3 px-6 pb-6">
           <p className="text-sm text-text-secondary">
-            Download task files for this environment. Each task is available as a
-            source file on GitHub.
+            Download releases or browse the source code for this environment on
+            GitHub.
           </p>
           <div className="flex gap-2">
             {repoUrl && (
@@ -190,10 +190,12 @@ export default function EnvironmentDetailPage() {
                 <Button
                   variant="primary"
                   size="sm"
-                  onClick={() => window.open(repoUrl, "_blank")}
+                  onClick={() =>
+                    window.open(`${repoUrl}/releases`, "_blank")
+                  }
                 >
                   <PiDownloadSimple className="mr-1.5 h-4 w-4" />
-                  Browse All Files
+                  Download Release
                 </Button>
                 <Button
                   variant="secondary"
@@ -201,7 +203,7 @@ export default function EnvironmentDetailPage() {
                   onClick={() => window.open(repoUrl, "_blank")}
                 >
                   <PiGithubLogo className="mr-1.5 h-4 w-4" />
-                  GitHub Repo
+                  View Source Code
                 </Button>
               </>
             )}

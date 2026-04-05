@@ -5,10 +5,11 @@
  *   { action: "tasks" }   — Pull task definitions from all env repos and upsert into DB
  *   { action: "scores" }  — Pull latest run data from all env repos (on VM or local)
  *   { action: "runs" }    — Import result JSON files from the VM into runs + run_results tables
+ *   { action: "ingest-run" } — Ingest a single run POSTed from evaluate.py (Bearer auth via CRON_SECRET)
  *   { action: "validate" } — Run validate_env.py on all envs
  *   { action: "rebuild-containers" } — Rebuild all container images
  *
- * Admin-only. Used after new runs complete or env-builder changes are pushed.
+ * Admin-only except ingest-run (Bearer token). Used after new runs complete or env-builder changes are pushed.
  */
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseServerClient } from "@/lib/supabase-server";
@@ -64,12 +65,28 @@ async function runOnVM(cmd: string): Promise<string> {
   return stdout;
 }
 
-export async function POST(request: NextRequest) {
-  if (!(await verifyAdmin())) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+/** Verify Bearer token auth against CRON_SECRET. */
+function verifyCronSecret(request: NextRequest): boolean {
+  const authHeader = request.headers.get("authorization") ?? "";
+  const token = authHeader.replace(/^Bearer\s+/i, "");
+  const cronSecret = process.env.CRON_SECRET;
+  return Boolean(cronSecret && token === cronSecret);
+}
 
-  const { action } = await request.json();
+export async function POST(request: NextRequest) {
+  const body = await request.json();
+  const { action } = body;
+
+  // ingest-run uses Bearer token auth; all other actions use admin session auth
+  if (action === "ingest-run") {
+    if (!verifyCronSecret(request)) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+  } else {
+    if (!(await verifyAdmin())) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+  }
 
   switch (action) {
     case "tasks": {
@@ -411,11 +428,181 @@ print(json.dumps(out))
       return NextResponse.json({ action: "rebuild-containers", results });
     }
 
+    case "ingest-run": {
+      // Ingest a single run POSTed directly from evaluate.py.
+      // Payload: { action, model, environment_dir, results, source_file }
+      const {
+        model: ingestModel,
+        environment_dir: environmentDir,
+        results: ingestResults,
+        source_file: sourceFile,
+      } = body as {
+        model: string;
+        environment_dir: string;
+        results: {
+          task?: string;
+          score?: number;
+          status?: string;
+          time_seconds?: number;
+          tool_calls_total?: number;
+          tool_calls_summary?: unknown[];
+          errors?: string[];
+        }[];
+        source_file: string;
+      };
+
+      if (!environmentDir || !ingestResults || !sourceFile) {
+        return NextResponse.json(
+          { error: "Missing required fields: environment_dir, results, source_file" },
+          { status: 400 },
+        );
+      }
+
+      // Look up environment via registry vmDirName → slug → DB row
+      const registry = DIR_TO_REGISTRY.get(environmentDir);
+      if (!registry) {
+        return NextResponse.json(
+          { error: `Unknown environment_dir: ${environmentDir}` },
+          { status: 400 },
+        );
+      }
+
+      const service = getServiceClient();
+
+      // Look up the environment row in DB
+      const { data: envRow } = await service
+        .from("environments")
+        .select("id, organization_id")
+        .eq("slug", registry.slug)
+        .single();
+
+      if (!envRow) {
+        return NextResponse.json(
+          { error: `Environment slug '${registry.slug}' not found in DB` },
+          { status: 404 },
+        );
+      }
+
+      // Use the environment's org, or fall back to first org with access
+      const orgId = envRow.organization_id;
+
+      // Deduplicate by source_file
+      const { data: existingRuns } = await service
+        .from("runs")
+        .select("id, config")
+        .eq("environment_id", envRow.id);
+
+      const existingSourceFiles = new Set(
+        (existingRuns || [])
+          .map((r) => (r.config as Record<string, unknown>)?.source_file)
+          .filter(Boolean),
+      );
+
+      if (existingSourceFiles.has(sourceFile)) {
+        return NextResponse.json({
+          action: "ingest-run",
+          status: "skipped",
+          reason: `source_file '${sourceFile}' already ingested`,
+        });
+      }
+
+      // Load tasks for this environment (slug → id mapping)
+      const { data: envTasks } = await service
+        .from("tasks")
+        .select("id, slug")
+        .eq("environment_id", envRow.id);
+
+      const taskSlugToId = new Map(
+        (envTasks || []).map((t) => [t.slug, t.id]),
+      );
+
+      // Calculate scores
+      const scores = ingestResults
+        .map((r) => r.score)
+        .filter((s): s is number => s !== null && s !== undefined);
+      const meanScore =
+        scores.length > 0
+          ? scores.reduce((a, b) => a + b, 0) / scores.length
+          : null;
+
+      // Insert the run
+      const { data: runRow, error: runError } = await service
+        .from("runs")
+        .insert({
+          organization_id: orgId,
+          environment_id: envRow.id,
+          model_name: ingestModel || "unknown",
+          status: "completed",
+          started_at: new Date().toISOString(),
+          completed_at: new Date().toISOString(),
+          total_tasks: ingestResults.length,
+          completed_tasks: scores.length,
+          mean_score: meanScore,
+          config: { source: "ingest-run", source_file: sourceFile },
+        })
+        .select("id")
+        .single();
+
+      if (runError || !runRow) {
+        return NextResponse.json(
+          { error: `Failed to insert run: ${runError?.message || "unknown"}` },
+          { status: 500 },
+        );
+      }
+
+      // Build run_results rows
+      const resultRows = ingestResults
+        .map((r) => {
+          const taskSlug = r.task || "";
+          const taskId = taskSlugToId.get(taskSlug);
+          if (!taskId) return null;
+
+          return {
+            run_id: runRow.id,
+            task_id: taskId,
+            raw_score: r.score ?? 0,
+            steps_used: r.tool_calls_total ?? 0,
+            duration_ms: ((r.time_seconds as number) || 0) * 1000,
+            trajectory: r.tool_calls_summary || [],
+            error: (r.errors as string[])?.join("; ") || null,
+          };
+        })
+        .filter((row): row is NonNullable<typeof row> => row !== null);
+
+      const unmatchedTasks = ingestResults.filter(
+        (r) => r.task && !taskSlugToId.has(r.task),
+      );
+
+      if (resultRows.length > 0) {
+        const { error: resultsError } = await service
+          .from("run_results")
+          .insert(resultRows);
+
+        if (resultsError) {
+          return NextResponse.json(
+            { error: `Failed to insert run_results: ${resultsError.message}` },
+            { status: 500 },
+          );
+        }
+      }
+
+      return NextResponse.json({
+        action: "ingest-run",
+        status: "ok",
+        run_id: runRow.id,
+        results_inserted: resultRows.length,
+        results_total: ingestResults.length,
+        ...(unmatchedTasks.length > 0 && {
+          unmatched_tasks: unmatchedTasks.map((t) => t.task),
+        }),
+      });
+    }
+
     default:
       return NextResponse.json(
         {
           error:
-            "Unknown action. Use: tasks, scores, runs, validate, rebuild-containers",
+            "Unknown action. Use: tasks, scores, runs, ingest-run, validate, rebuild-containers",
         },
         { status: 400 },
       );
