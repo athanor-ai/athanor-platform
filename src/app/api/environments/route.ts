@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
     // Internal/admin: return all environments
     const { data: envs } = await supabase
       .from("environments")
-      .select("id, name, slug, engine, status")
+      .select("*")
       .eq("status", "active")
       .order("name");
 

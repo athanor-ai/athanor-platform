@@ -6,15 +6,23 @@ import {
 } from "@/data/mock";
 import type { Environment, EnvironmentVersion } from "@/types/database";
 
-// In V1, return mock data. Swap to Supabase fetch when ready.
 async function fetchEnvironments(): Promise<Environment[]> {
-  // Simulate network delay
-  await new Promise((r) => setTimeout(r, 300));
+  try {
+    const res = await fetch("/api/environments");
+    if (res.ok) return res.json();
+  } catch {
+    // Fall back to mock
+  }
   return mockEnvironments;
 }
 
 async function fetchEnvironment(id: string): Promise<Environment | undefined> {
-  await new Promise((r) => setTimeout(r, 200));
+  try {
+    const res = await fetch(`/api/environments/${id}`);
+    if (res.ok) return res.json();
+  } catch {
+    // Fall back to mock
+  }
   return mockEnvironments.find((e) => e.id === id);
 }
 
