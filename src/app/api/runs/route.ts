@@ -91,20 +91,23 @@ export async function POST(request: NextRequest) {
   );
 }
 
-export async function GET() {
-  const supabase = await getSupabaseServerClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) {
+export async function GET(request: NextRequest) {
+  const { getAuthUser } = await import("@/lib/auth");
+  const authUser = await getAuthUser(request);
+  if (!authUser) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  // RLS enforces org scoping
-  const { data, error } = await supabase
+  const { createClient } = await import("@supabase/supabase-js");
+  const service = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  );
+
+  const { data, error } = await service
     .from("runs")
     .select("*")
+    .eq("organization_id", authUser.organizationId)
     .order("created_at", { ascending: false })
     .limit(200);
 

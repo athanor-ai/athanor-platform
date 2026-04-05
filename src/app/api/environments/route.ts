@@ -1,25 +1,32 @@
 /**
  * GET /api/environments — List environments for the user's organization.
  *
- * RLS on environments table handles org scoping automatically.
+ * Supports all auth methods: Supabase session, Cloudflare headers, middleware bridge.
  */
-import { NextResponse } from "next/server";
-import { getSupabaseServerClient } from "@/lib/supabase-server";
+import { NextRequest, NextResponse } from "next/server";
+import { getAuthUser } from "@/lib/auth";
+import { createClient } from "@supabase/supabase-js";
 
-export async function GET() {
-  const supabase = await getSupabaseServerClient();
+function getServiceClient() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  );
+}
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) {
+export async function GET(request: NextRequest) {
+  const authUser = await getAuthUser(request);
+  if (!authUser) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  // RLS policy on environments enforces org scoping via auth_user_org_id()
-  const { data, error } = await supabase
+  const service = getServiceClient();
+
+  // Get environments for this user's org
+  const { data, error } = await service
     .from("environments")
     .select("*")
+    .eq("organization_id", authUser.organizationId)
     .eq("status", "active")
     .order("name");
 
