@@ -349,7 +349,7 @@ function TaskResultRow({
         </div>
         <div className="flex items-center gap-4">
           <span className="font-mono text-[11px] text-accent">
-            {result.calibrated_score.toFixed(3)}
+            {(result.calibrated_score ?? result.raw_score ?? 0).toFixed(3)}
           </span>
           <span className="text-[11px] text-text-tertiary">
             {toolCallCount} tool call{toolCallCount !== 1 ? "s" : ""}
@@ -443,7 +443,7 @@ function TaskResultRow({
                   message={
                     result.error
                       ? `Task "${taskName}" failed \u2014 ${result.error}`
-                      : `Task "${taskName}" completed \u2014 score ${result.calibrated_score.toFixed(3)}, ${formatDuration(result.duration_ms)}`
+                      : `Task "${taskName}" completed \u2014 score ${(result.calibrated_score ?? result.raw_score ?? 0).toFixed(3)}, ${formatDuration(result.duration_ms)}`
                   }
                 />
                 {runData.completed_at && (
