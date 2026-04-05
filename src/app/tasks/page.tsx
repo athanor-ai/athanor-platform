@@ -85,7 +85,7 @@ function TasksPageContent() {
     taskParam ?? null,
   );
 
-  const isPending = tasks.isPending || environments.isPending || runs.isPending;
+  const isPending = tasks.isPending || environments.isPending || runs.isPending || runResults.isPending;
 
   const envMap = useMemo(
     () => new Map((environments.data ?? []).map((e) => [e.id, e.name])),
