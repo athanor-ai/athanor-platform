@@ -111,6 +111,18 @@ export function getPlatformCredentials(): PlatformCredential[] {
     });
   }
 
+  // Azure-hosted Anthropic (Claude Sonnet 4.6)
+  if (process.env.ANTHROPIC_API_KEY) {
+    creds.push({
+      provider: "anthropic",
+      envVar: "ANTHROPIC_API_KEY",
+      value: process.env.ANTHROPIC_API_KEY,
+      baseUrl: process.env.ANTHROPIC_BASE_URL,
+      baseUrlEnvVar: "ANTHROPIC_BASE_URL",
+      models: ["claude-sonnet-4-6"],
+    });
+  }
+
   // HuggingFace (for future model hosting)
   if (process.env.HF_TOKEN) {
     creds.push({
@@ -159,7 +171,7 @@ export function buildRunEnvVars(
   // Customer keys override platform keys
   // Map provider -> env var using the same mapping as providers.ts
   const providerEnvMap: Record<string, { key: string; base?: string }> = {
-    anthropic: { key: "ANTHROPIC_API_KEY" },
+    anthropic: { key: "ANTHROPIC_API_KEY", base: "ANTHROPIC_BASE_URL" },
     google: { key: "GOOGLE_API_KEY" },
     mistral: { key: "MISTRAL_API_KEY" },
     moonshot: { key: "MOONSHOT_API_KEY" },

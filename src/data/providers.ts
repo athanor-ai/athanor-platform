@@ -49,10 +49,11 @@ const DIRECT_PROVIDERS: ProviderConfig[] = [
     requiresBaseUrl: false,
     keyPlaceholder: "sk-ant-api03-...",
     keyLabel: "API Key",
-    baseUrlPlaceholder: "",
-    baseUrlHelp: "",
+    baseUrlPlaceholder: "https://api.anthropic.com (or Azure endpoint)",
+    baseUrlHelp:
+      "Optional. Leave blank for native Anthropic API. For Azure-hosted Claude, enter your Azure endpoint (e.g. https://your-resource.services.ai.azure.com/anthropic).",
     modelHint: "Claude model family (Sonnet 4.6, Sonnet 4, Opus 4)",
-    envVars: { key: "ANTHROPIC_API_KEY" },
+    envVars: { key: "ANTHROPIC_API_KEY", base: "ANTHROPIC_BASE_URL" },
   },
   {
     key: "google",
