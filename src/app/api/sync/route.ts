@@ -220,7 +220,6 @@ export async function POST(request: NextRequest) {
             environment_id: envRow.id,
             task_id: taskId || null,
             model,
-            task_slug: trace.task_id,
             messages: trace.messages,
             score: trace.score,
             token_count: trace.token_count,

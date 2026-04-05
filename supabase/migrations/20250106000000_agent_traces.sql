@@ -12,7 +12,6 @@ CREATE TABLE IF NOT EXISTS agent_traces (
     task_id          UUID REFERENCES tasks(id) ON DELETE SET NULL,
     environment_id   UUID REFERENCES environments(id) ON DELETE CASCADE,
     model            TEXT NOT NULL,
-    task_slug        TEXT NOT NULL,
     messages         JSONB NOT NULL DEFAULT '[]',
     score            FLOAT8,
     token_count      INT,
@@ -24,7 +23,7 @@ CREATE TABLE IF NOT EXISTS agent_traces (
 CREATE INDEX IF NOT EXISTS idx_agent_traces_run_result ON agent_traces(run_result_id);
 CREATE INDEX IF NOT EXISTS idx_agent_traces_run ON agent_traces(run_id);
 CREATE INDEX IF NOT EXISTS idx_agent_traces_env ON agent_traces(environment_id);
-CREATE INDEX IF NOT EXISTS idx_agent_traces_model_task ON agent_traces(model, task_slug);
+CREATE INDEX IF NOT EXISTS idx_agent_traces_model ON agent_traces(model);
 
 ALTER TABLE agent_traces ENABLE ROW LEVEL SECURITY;
 
