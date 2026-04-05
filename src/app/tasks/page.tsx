@@ -8,7 +8,7 @@ import { PiCaretDown, PiCaretRight, PiGithubLogo } from "react-icons/pi";
 import { useTasks } from "@/hooks/useTasks";
 import { useRuns } from "@/hooks/useRuns";
 import { useEnvironments } from "@/hooks/useEnvironments";
-import { mockRunResults } from "@/data/mock";
+import { useQuery } from "@tanstack/react-query";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Card } from "@/components/ui/Card";
 import { StatusBadge } from "@/components/ui/StatusBadge";
@@ -64,6 +64,17 @@ function TasksPageContent() {
   const tasks = useTasks();
   const runs = useRuns();
   const environments = useEnvironments();
+  const runResults = useQuery({
+    queryKey: ["run-results"],
+    queryFn: async () => {
+      try {
+        const res = await fetch("/api/run-results");
+        if (res.ok) return res.json();
+      } catch { /* fall through */ }
+      return [];
+    },
+    staleTime: 1000 * 60 * 5,
+  });
   const searchParams = useSearchParams();
 
   const taskParam = searchParams.get("task");
@@ -103,7 +114,7 @@ function TasksPageContent() {
       { runId: string; shortId: string; modelName: string }[]
     >();
 
-    for (const rr of mockRunResults) {
+    for (const rr of (runResults.data ?? []) as { run_id: string; task_id: string }[]) {
       const run = runMap.get(rr.run_id);
       if (!run) continue;
 
@@ -119,7 +130,7 @@ function TasksPageContent() {
     }
 
     return map;
-  }, [runs.data]);
+  }, [runs.data, runResults.data]);
 
   const filteredTasks = useMemo(() => {
     let list = tasks.data ?? [];
