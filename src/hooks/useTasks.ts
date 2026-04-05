@@ -4,12 +4,25 @@ import { mockTasks } from "@/data/mock";
 import type { Task } from "@/types/database";
 
 async function fetchTasks(): Promise<Task[]> {
-  await new Promise((r) => setTimeout(r, 300));
+  try {
+    const res = await fetch("/api/tasks");
+    if (res.ok) return res.json();
+  } catch {
+    // Fall back to mock
+  }
   return mockTasks;
 }
 
 async function fetchTasksByEnvironment(envId: string): Promise<Task[]> {
-  await new Promise((r) => setTimeout(r, 200));
+  try {
+    const res = await fetch("/api/tasks");
+    if (res.ok) {
+      const tasks: Task[] = await res.json();
+      return tasks.filter((t) => t.environment_id === envId);
+    }
+  } catch {
+    // Fall back to mock
+  }
   return mockTasks.filter((t) => t.environment_id === envId);
 }
 
