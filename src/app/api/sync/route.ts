@@ -64,14 +64,180 @@ async function runOnVM(cmd: string): Promise<string> {
   return stdout;
 }
 
+/** Check Bearer token auth (for evaluate.py pushing results with CRON_SECRET). */
+function verifyCronSecret(request: NextRequest): boolean {
+  const cronSecret = process.env.CRON_SECRET;
+  if (!cronSecret) return false;
+  const auth = request.headers.get("authorization");
+  return auth === `Bearer ${cronSecret}`;
+}
+
 export async function POST(request: NextRequest) {
-  if (!(await verifyAdmin())) {
+  const body = await request.json();
+  const { action } = body;
+
+  // Auth: CRON_SECRET bearer token (evaluate.py, cron) or admin session (dashboard)
+  const hasCronSecret = verifyCronSecret(request);
+  if (!hasCronSecret && !(await verifyAdmin())) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { action } = await request.json();
-
   switch (action) {
+    case "ingest-run": {
+      // Accept results + traces pushed directly from evaluate.py after a run.
+      // Payload: { action, model, environment_dir, results, source_file, traces? }
+      const service = getServiceClient();
+      const { model, environment_dir, results, source_file, traces } = body as {
+        model: string;
+        environment_dir: string;
+        results: Array<{
+          task?: string;
+          score?: number;
+          status?: string;
+          time_seconds?: number;
+          tool_calls_total?: number;
+          tool_calls_summary?: unknown[];
+          errors?: string[];
+        }>;
+        source_file: string;
+        traces?: Array<{
+          task_id: string;
+          messages: unknown[];
+          score?: number;
+          token_count?: number;
+        }>;
+      };
+
+      // Look up environment by directory name
+      const registry = DIR_TO_REGISTRY.get(environment_dir);
+      if (!registry) {
+        return NextResponse.json(
+          { error: `Unknown environment_dir: ${environment_dir}` },
+          { status: 400 },
+        );
+      }
+
+      const { data: envRow } = await service
+        .from("environments")
+        .select("id, organization_id")
+        .eq("slug", registry.slug)
+        .single();
+
+      if (!envRow) {
+        return NextResponse.json(
+          { error: `Environment '${registry.slug}' not in DB` },
+          { status: 404 },
+        );
+      }
+
+      // Load task slug → id mapping
+      const { data: envTasks } = await service
+        .from("tasks")
+        .select("id, slug")
+        .eq("environment_id", envRow.id);
+      const taskSlugToId = new Map(
+        (envTasks || []).map((t) => [t.slug, t.id]),
+      );
+
+      // Check for existing run with same source_file (dedup)
+      const { data: existingRuns } = await service
+        .from("runs")
+        .select("id")
+        .eq("environment_id", envRow.id)
+        .eq("config->>source_file", source_file)
+        .limit(1);
+
+      let runId: string;
+      if (existingRuns && existingRuns.length > 0) {
+        runId = existingRuns[0].id;
+      } else {
+        // Create the run record
+        const scores = (results || [])
+          .map((r) => r.score)
+          .filter((s): s is number => s !== null && s !== undefined);
+        const meanScore =
+          scores.length > 0
+            ? scores.reduce((a, b) => a + b, 0) / scores.length
+            : null;
+
+        const { data: runRow, error: runError } = await service
+          .from("runs")
+          .insert({
+            organization_id: envRow.organization_id,
+            environment_id: envRow.id,
+            model_name: model,
+            status: "completed",
+            started_at: new Date().toISOString(),
+            completed_at: new Date().toISOString(),
+            total_tasks: (results || []).length,
+            completed_tasks: scores.length,
+            mean_score: meanScore,
+            config: { source: "evaluate-py", source_file },
+          })
+          .select("id")
+          .single();
+
+        if (runError || !runRow) {
+          return NextResponse.json(
+            { error: `Failed to create run: ${runError?.message}` },
+            { status: 500 },
+          );
+        }
+        runId = runRow.id;
+      }
+
+      // Upsert run_results
+      let resultsSynced = 0;
+      for (const r of results || []) {
+        const taskSlug = r.task || "";
+        const taskId = taskSlugToId.get(taskSlug);
+        if (!taskId || r.score === null || r.score === undefined) continue;
+
+        await service
+          .from("run_results")
+          .upsert(
+            {
+              run_id: runId,
+              task_id: taskId,
+              raw_score: r.score ?? 0,
+              steps_used: r.tool_calls_total ?? 0,
+              duration_ms: ((r.time_seconds as number) || 0) * 1000,
+              trajectory: r.tool_calls_summary || [],
+              error: (r.errors as string[])?.join("; ") || null,
+            },
+            { onConflict: "run_id,task_id" },
+          );
+        resultsSynced++;
+      }
+
+      // Insert agent traces if provided
+      let tracesSynced = 0;
+      if (traces && Array.isArray(traces)) {
+        for (const trace of traces) {
+          const taskId = taskSlugToId.get(trace.task_id);
+          await service.from("agent_traces").insert({
+            run_id: runId,
+            environment_id: envRow.id,
+            task_id: taskId || null,
+            model,
+            task_slug: trace.task_id,
+            messages: trace.messages,
+            score: trace.score,
+            token_count: trace.token_count,
+            source_file,
+          });
+          tracesSynced++;
+        }
+      }
+
+      return NextResponse.json({
+        action: "ingest-run",
+        run_id: runId,
+        results_synced: resultsSynced,
+        traces_synced: tracesSynced,
+      });
+    }
+
     case "tasks": {
       // Pull task definitions from each env repo and upsert into Supabase tasks table.
       // Each repo stores configs in root_data/eval/configs/*.json.
